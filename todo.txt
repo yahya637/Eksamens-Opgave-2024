@@ -3,3 +3,5 @@
 - Få lavet en samlet kodebase fra bunden af
 
 - Få styr på inplementating af server og API til koden
+
+- TEST
