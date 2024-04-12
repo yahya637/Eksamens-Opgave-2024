@@ -1,0 +1,146 @@
+/* Baseline styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+body {
+    background-color:#FFFFFF
+}
+
+.navbar {
+    background-color: #DEF6D8; 
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    height: 110px;
+}
+
+/* logoet */
+
+.logo-and-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.5em;
+    color:#91C789
+}
+
+.Strawberry{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: 0.5rem; 
+    font-size: 24px; 
+    color: white;
+}
+
+/* Nav bar links*/
+
+.navlinks{
+    color:#333;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    border-radius: 5px;
+}
+
+.navlinks a {
+    color: grey;         
+    text-decoration: none;  
+    margin-right: 20px;
+    margin-left: 80px;
+}
+
+
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto; 
+    padding: 0 20px;
+}
+
+.title {
+    color:black;
+    margin: 20px 0; 
+}
+
+/* Nutri report design */
+main {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.nutrition-report-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    background-color:#FFFFFF;
+    margin-top: 5px;
+}
+
+.nutrition-report-header p {
+    flex:1;
+    text-align: center;
+    margin: 0;
+    padding: 0 5px;
+}
+
+
+/* Styling af tabellen */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #91C789;
+    color: white;
+}
+
+td {
+    background-color: #e7ffe7;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+
+
+#Overskrifter th, #nutritionReport th {
+    width: 16.66%; /* Dividerer bredden ligeligt for 6 kolonner (100% / 6) */
+    text-align: left;
+}
+
+#Titles, #nutritionReport {
+    width: 100%; 
+    table-layout: fixed; 
+}
+
+#Titles {
+    background-color: #FFFFFF; 
+}
+
+#Titles th {
+    background-color: #FFFFFF; 
+    color: grey; 
+}
+
+
