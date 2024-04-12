@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+body{
+    font-family: 'Nunito', sans-serif;
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hjem {
+    display: flex;
+    justify-content: center; /* Center the children elements (logo and navbar) */
+    padding: 20px 2%; /* Adjusted padding and set 2% to indirectly set width to 96% */
+    background-color: #DEF6D8;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0; /* Ensures the header extends to the right edge */
+    z-index: 100;
+}
+
+.logo {
+    position: absolute; /* Absolute positioning to place the logo */
+    left: 40px; /* Space from the left edge */
+    color: #91c789;
+    font-size: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    order: 1;
+}
+
+
+.navbar a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 60px; /* Provides space between the links */
+    transition: all 0.3s ease;
+    
+}
+
+
+nav a:hover {
+    color: #76b66c;
+    text-decoration: underline;
+    text-shadow: darkgreen   0px 0px 1px;
+}
+
+
+#nutriHome {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    margin-top: 60px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 18px;
+    color: #666;
+}
+
+.body-a {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: blue;
+}
+
+.body-a:hover {
+    text-decoration: underline;
+}
