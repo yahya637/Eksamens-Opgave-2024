@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NutriTracker - Nutri Report</title>
+    <link rel="stylesheet" href="FoodInspector.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo-and-title">
+            <span>NutriTracker</span>
+            <img src="JORDBÆR.png" class="Strawberry">
+        </div>
+            <div class="navlinks">
+                <a href="Dashboard.html">Dashboard</a>
+                <a href="Meal-creator.html">Meal Creator</a>
+                <a href="Meal-tracker.html">Meal Tracker</a>
+                <a href="Nutri-report.html">Nutri Report</a>
+                <a href="FoodInspector.html"> Food Inspector</a>
+            </div>
+        </nav>
+    </header>
+    <body>
+        <div id="mealCreatorContainer">
+            <h1>Food Inspector</h1>
+            <!-- Search bar -->
+            <input type="text" id="foodInput" list="foodItemsList" placeholder="Search for food items...">
+            <datalist id="foodItemsList"></datalist>
+            <div id="foodDetails" class="food-details-container"></div>
+        </div>
+        <script src="FoodInspector.js"></script>
+    </body>
+    </html>
+    
+
