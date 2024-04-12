@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MealCreator</title>
+    <link rel="stylesheet" href="MealCreator.css">
+    <script src="MealCreator.js" defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/more-vertical-o.css' rel='stylesheet'> <!-- for the icons -->
+</head>
+
+<body>
+    
+    <header class="hjem">
+        <a href="/HomePage/NutriHome.html" class="logo">NutriTracker</a>
+
+        <nav class="navbar">
+            <div class="navbar-h">
+            <a href="/MealCreator/MealCreator.html" id="nav-meal-creator">Meal Creator</a>
+            <a href="/Mealtracker/MealTracker.html">Meal Tracker</a>
+            <a href="/DailyNutri/DailyNutri.html">Daily Nutri</a>
+            </div>
+
+
+        </nav>
+
+        
+
+    </header>
+
+  <div id="mealCreator">
+        <div class="header-row">
+            <h2>Meal Creator</h2>
+            <div class="button-row">
+
+                <button id="addMealButton" title="Add Meal">
+                    <i class="gg-add"></i>                
+                </button> 
+
+                <button id="showcaseIngredientsButton" title="Show all ingredients">
+                    <span class="material-symbols-outlined">menu_book</span>
+                </button>
+                
+                <div id="ingredientsInfo" style="display:none;">
+                    <button id="close-foodItemsContainer">Close</button>
+                    <h3>All Ingredients</h3>
+                    <h4>Click on an ingredient to see its nutritional value</h4>
+                    <div id="foodItemsContainer"></div>
+                </div>
+
+            </div>
+        </div>
+
+   <!-- Here is the form which is hidden, therefor display is set to none -->
+<div id="addMealForm" style="display: none;"> <!-- husk at sætte display:"none"-->
+    <form>
+        <label id="mealName-label" for="mealName">Meal Name:</label>
+        <input type="text" id="mealNameInput" placeholder="Enter Drink or Meal name" name="mealName">
+
+        <!-- Search field for ingredients -->
+        <label id="ingredientInput-label" for="ingredientInput">Search Ingredients:</label>
+        <input type="text" id="ingredientInput" placeholder="Search for ingredients"><br><br>
+
+         <!-- Dropdown to show search results -->
+        <label id="ingredientDropdown-label" >Select Ingredient:</label>
+        <select id="ingredientDropdown" size="7" style="display: none;"></select><br><br>
+    
+        <!-- Ingriedent weight -->
+        <label id="ingredientWeightLabel">Ingredient Weight (g):</label>
+        <input type="number" id="ingredientWeightInput" placeholder="Weight in grams">
+
+        <!-- Button to add selected ingredient -->
+        <button id="addIngredientButton" type="button" onclick="addSelectedIngredient()">Add Ingredient</button><br><br>
+    
+        <!-- List or table to display selected ingredients -->
+        <div id="selectedIngredients">
+            <!-- Dynamically add selected ingredients here -->
+            <p id="selectedIngredients-p">Selected Ingredients:</p>
+
+        </div><br>
+        <!-- Total nutri before submitting  -->
+        <div id="totalNutri">
+            <label id="totalNutriLabel">Total Nutritional Value:</p>
+            <p id="totalNutri-p"></p>
+            <!-- Dynamically show the total nutri here -->
+        </div><br>
+        <!-- Submit button -->
+<button id="subBtn" type="button" >Submit Meal</button>
+    </form>
+</div>
+
+<div class="div-meal">
+    <div class="meal-grid">
+        <!-- Table Header -->
+        <div class="meal-header">
+            <span></span>
+            <span>Meal Name</span>
+            <span>Total kcal/100g</span>
+            <span>Added On</span>
+            <span># Ingredients</span>
+            <span></span>
+        </div>
+        
+        <div class="meal-table">
+            <!-- Table Body for Meal Entries -->
+            <div class="meal-body"></div>
+            <!-- Meal Entries will appear here -->
+        </div>
+    </div>
+</div>
+
+<!-- Details Div -->
+<div id="details" style=" display:none;" >
+    <h3><!-- from js file--></h3>
+    <div class="ingredient-table">
+        <!-- Ingredient Header -->
+        <div class="ingredient-header">
+            <h4>Ingredient and Weight (g)</h4>
+        </div>
+
+    </div>
+    <div id="nutriDetails">
+        <h4>Total Nutritional for the meal:</h4>
+        <p id="totalNutritionSentence"></p>
+        <!--  show the total nutri here -->
+    </div>
+    <button id="closeDetailsBtn">Close</button>
+</div>
+
+
+
+
+</body>
+</html>
