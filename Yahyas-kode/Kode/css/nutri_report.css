@@ -1,0 +1,84 @@
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+h1 {
+    margin: 30px;
+}
+
+.top-right {
+    width: calc(100% - 40px);
+    margin: 10px auto;
+    background-color: #DEF6D8;
+    border-radius: 15px;
+    display: flex;
+}
+
+.links {
+    margin-left: 20px;
+    padding: 20px;
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+html, body {
+    width: 100%;
+    height: 100%; /* Adjusted to ensure the container can fill the entire page */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.daily-report-container {
+    margin: 0 auto; /* Ensures it is centered horizontally */
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box; /* Ensures padding does not add to the width */
+    display: flex;
+    flex-direction: column; /* Organizes child elements vertically */
+    justify-content: center; /* Centers content vertically in the container */
+}
+
+.daily-report-container h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#mealDetailsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#mealDetailsTable thead {
+    background-color: #f8b7b7; 
+    color: black;
+}
+
+#mealDetailsTable th, #mealDetailsTable td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; 
+}
+
+#mealDetailsTable tbody tr {
+    background-color: #f8b7b7; 
+    color: black;
+    border-radius: 5px; 
+    margin-bottom: 10px;
+}
+
+#mealDetailsTable tbody tr:nth-child(odd) {
+    background-color: #fce4e4; 
+}
+
+#mealDetailsTable tbody tr:last-child {
+    font-weight: bold;
+    border-bottom: 2px solid #f8b7b7;
+}
+
+.header-item {
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
