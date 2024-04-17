@@ -1,16 +1,17 @@
 #signUp {
-    background-color: #f2fff5; /* Light green background for the form */
+    background-color: #f2fff5;
     padding: 20px;
     border-radius: 8px;
     max-width: 400px;
     margin: 20px auto;
 }
 
-#signUp input[type="text"] {
+#signUp input[type="text"],
+#signUp input[type="password"] { 
     width: 100%;
     padding: 15px;
     margin-bottom: 20px;
-    border: 2px solid #91c789; /* Primary green for input borders */
+    border: 2px solid #91c789; 
     border-radius: 4px;
     font-size: 16px;
     box-sizing: border-box;
@@ -20,7 +21,6 @@
     color: #757575;
 }
 
-/* Adjust specific elements if needed */
 #emailID {
     color: #91c789;
 }
@@ -57,10 +57,12 @@
     text-align: left; 
 }
 
+
+
 .p-login {
-    font-family: Arial, sans-serif;
     text-align: center;
     color: #424242; 
+    font-size: 18px;
 }
 
 .p-login a {
