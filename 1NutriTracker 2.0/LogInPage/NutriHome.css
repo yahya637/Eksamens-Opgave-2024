@@ -10,7 +10,7 @@ body{
 
 .hjem {
     display: flex;
-    justify-content: center; /* Center the children elements (logo and navbar) */
+    justify-content: right; /* Center the children elements (logo and navbar) */
     padding: 20px 2%; /* Adjusted padding and set 2% to indirectly set width to 96% */
     background-color: #DEF6D8;
     position: fixed;
@@ -32,6 +32,8 @@ body{
 
 
 .navbar a {
+    /* display to the rigth*/
+
     text-decoration: none;
     color: #000;
     font-size: 20px;
@@ -44,7 +46,6 @@ body{
 
 nav a:hover {
     color: #76b66c;
-    text-decoration: underline;
     text-shadow: darkgreen   0px 0px 1px;
 }
 
