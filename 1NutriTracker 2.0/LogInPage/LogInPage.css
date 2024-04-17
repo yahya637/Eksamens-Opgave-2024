@@ -50,3 +50,17 @@
     text-align: center;
     margin-top: 20px;
 }
+.p-signup {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: #424242; /* Mørk grå fra sort farveskala */
+}
+
+.p-signup a {
+    color: #91c789; /* Primær grøn farve */
+    text-decoration: none;
+}
+
+.p-signup a:hover {
+    text-decoration: underline;
+}
