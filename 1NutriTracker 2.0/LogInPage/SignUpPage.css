@@ -6,13 +6,6 @@
     margin: 20px auto;
 }
 
-#signUp label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 18px;
-    color: #91c789; /* Primary green for all labels */
-}
-
 #signUp input[type="text"] {
     width: 100%;
     padding: 15px;
@@ -54,4 +47,12 @@
 
 #SignUpButton:hover {
     background-color: #80a672; /* A darker shade of green for hover effect */
+}
+
+#signUp label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #91c789; /* Primary green for all labels */
+    text-align: left; /* Align text to the left */
 }
