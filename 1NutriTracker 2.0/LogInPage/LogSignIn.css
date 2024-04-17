@@ -1,0 +1,47 @@
+#LogInForm {
+    font-family: Arial, sans-serif;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #F2FFF5; /* Let mint grøn, fra de sekundære farver */
+}
+
+#LogInForm form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    color: #424242; /* Mørk grå fra sort farveskala */
+}
+
+input[type="text"],
+input[type="password"] {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #757575; /* Grå fra sort farveskala */
+    border-radius: 4px;
+    background-color: #FFFFFF; /* Hvid fra sort farveskala */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #91c789; /* Primær grøn farve */
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #91c789; /* Primær grøn farve */
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #569BD5; /* Blå fra sekundære farver */
+}
+x
