@@ -1,13 +1,21 @@
-#signUp {
-    background-color: #f2fff5;
+#LogInForm {
+    background-color: #DEF6D8;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 15px;
     max-width: 400px;
     margin: 20px auto;
 }
 
-#signUp input[type="text"],
-#signUp input[type="password"] { 
+#LogInForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #2b2b2b; 
+
+}
+
+#LogInForm input[type="text"],
+#LogInForm input[type="password"] { 
     width: 100%;
     padding: 15px;
     margin-bottom: 20px;
@@ -17,23 +25,11 @@
     box-sizing: border-box;
 }
 
-#signUp input::placeholder {
+#LogInForm input::placeholder {
     color: #757575;
 }
 
-#emailID {
-    color: #91c789;
-}
-
-#passwordID {
-    color: #91c789;
-}
-
-#ConfirmPassword {
-    color: #91c789;
-}
-
-#SignUpButton {
+#LogInForm button {
     width: 100%;
     padding: 15px;
     border: none;
@@ -45,32 +41,23 @@
     margin-top: 10px;
 }
 
-#SignUpButton:hover {
+#LogInForm button:hover {
     background-color: #80a672; 
 }
 
-#signUp label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 18px;
-    color: #91c789; 
-    text-align: left; 
-}
 
 
-
-.p-login {
+.p-signup {
     text-align: center;
     color: #424242; 
     font-size: 18px;
 }
 
-.p-login a {
+.p-signup a {
     color: #91c789; 
     text-decoration: none;
 }
 
-.p-login a:hover {
+.p-signup a:hover {
     text-decoration: underline;
 }
-
