@@ -1,4 +1,4 @@
-#LogInForm {
+#signUp {
     background-color: #f2fff5; /* Light green background for the form */
     padding: 20px;
     border-radius: 8px;
@@ -6,15 +6,14 @@
     margin: 20px auto;
 }
 
-#LogInForm label {
+#signUp label {
     display: block;
     margin-bottom: 5px;
     font-size: 18px;
     color: #91c789; /* Primary green for all labels */
 }
 
-#LogInForm input[type="text"],
-#LogInForm input[type="password"] { /* Style for both text and password fields */
+#signUp input[type="text"] {
     width: 100%;
     padding: 15px;
     margin-bottom: 20px;
@@ -24,11 +23,24 @@
     box-sizing: border-box;
 }
 
-#LogInForm input::placeholder {
+#signUp input::placeholder {
     color: #757575;
 }
 
-#LogInForm button {
+/* Adjust specific elements if needed */
+#emailID {
+    color: #91c789;
+}
+
+#passwordID {
+    color: #91c789;
+}
+
+#ConfirmPassword {
+    color: #91c789;
+}
+
+#SignUpButton {
     width: 100%;
     padding: 15px;
     border: none;
@@ -40,13 +52,6 @@
     margin-top: 10px;
 }
 
-#LogInForm button:hover {
+#SignUpButton:hover {
     background-color: #80a672; /* A darker shade of green for hover effect */
-}
-
-#LogInForm p {
-    color: #424242; /* A darker color for paragraph text */
-    font-size: 14px;
-    text-align: center;
-    margin-top: 20px;
 }

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HomePage</title>
     <link rel="stylesheet" href="NutriHome.css">
+    <link rel="stylesheet" href="SignUpPage.css">
+
 </head>
 <body>
 
@@ -14,7 +16,7 @@
         <nav class="navbar">
             <div>
             <a href="/1NutriTracker 2.0/LogInPage/LogInPage.html">Log In</a>
-            <a href="/1NutriTracker 2.0/LogInPage/SignUpPage.html">Sign Up</a>
+            <a href="/1NutriTracker 2.0/LogInPage/SignUpPage.html">Sign up</a>
             </div>
 
         </nav>
@@ -25,15 +27,31 @@
 <div>
     <div id="nutriHome">
         <div class="lo">
-            <h1>Welcome to NutriTracker</h1>
-            <p>Here you can create meals, track your meals and see your daily nutrition</p>
+            <h1>Sign up</h1>
+            <h2>To get started</h2>
+
+            <div id="signUp">
+                <form>
+                    <label id="emailID" >Email:</label>
+                    <input type="text" id="emailInput" placeholder="Enter Email" name="emailName">
+            
+                    <label id="passwordID" >Password:</label>
+                    <input type="text" id="PasswordInput" placeholder="" name="passwordName">
+            
+                    <label id="ConfirmPassword">Confirm Password:</label>    
+                    <input type="text" id="confirmPasswordInput" placeholder="" name="confirmPasswordName">
+
+                    <button id="SignUpButton">Sign up</button>
+
+            </div>
 
          
         </div>
     </div>
 </div>
 
-  
+
+        
     
 </body>
 </html>
