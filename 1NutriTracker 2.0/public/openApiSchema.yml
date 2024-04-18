@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: User Profiles API
+paths:
+  /:
+    get:
+      summary: Get all user profiles
+      responses:
+        '200':
+          description: A list of user profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+    post:
+      summary: Create a new user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileCreate'
+      responses:
+        '201':
+          description: User profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a user profile by ID
+      responses:
+        '200':
+          description: Detailed information about a user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User profile not found
+    put:
+      summary: Update a user profile by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdate'
+      responses:
+        '200':
+          description: User profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User profile not found
+    delete:
+      summary: Delete a user profile by ID
+      responses:
+        '204':
+          description: User profile deleted
+        '404':
+          description: User profile not found
+components:
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+        email:
+          type: string
+        profile:
+          type: object
+          properties:
+            age:
+              type: integer
+            weight:
+              type: integer
+            gender:
+              type: string
+    UserProfileCreate:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        profile:
+          type: object
+          properties:
+            age:
+              type: integer
+            weight:
+              type: integer
+            gender:
+              type: string
+    UserProfileUpdate:
+      type: object
+      properties:
+        email:
+          type: string
+        profile:
+          type: object
+          properties:
+            age:
+              type: integer
+            weight:
+              type: integer
+            gender:
+              type: string

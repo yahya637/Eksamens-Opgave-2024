@@ -13,10 +13,10 @@ const database = new Database(config);
 
 router.get('/', async (_, res) => {
   try {
-    // Return a list of items
-    const items = await database.readAll();
-    console.log(`items: ${JSON.stringify(items)}`);
-    res.status(200).json(items);
+    // Return a list of signups
+    const signups = await database.readAll();
+    console.log(`Signups: ${JSON.stringify(signups)}`);
+    res.status(200).json(signups);
   } catch (err) {
     res.status(500).json({ error: err?.message });
   }
@@ -24,10 +24,10 @@ router.get('/', async (_, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    // Create a todo
-    const item = req.body;
-    console.log(`item: ${JSON.stringify(item)}`);
-    const rowsAffected = await database.create(item);
+    // Create a signup entry
+    const signupData = req.body;
+    console.log(`Signup Data: ${JSON.stringify(signupData)}`);
+    const rowsAffected = await database.create(signupData);
     res.status(201).json({ rowsAffected });
   } catch (err) {
     res.status(500).json({ error: err?.message });
@@ -36,15 +36,19 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    // Get the todo with the specified ID
-    const itemId = req.params.id;
-    console.log(`itemId: ${itemId}`);
-    if (itemId) {
-      const result = await database.read(itemId);
-      console.log(`items: ${JSON.stringify(result)}`);
-      res.status(200).json(result);
+    // Get the signup entry with the specified ID
+    const signupId = req.params.id;
+    console.log(`Signup ID: ${signupId}`);
+    if (signupId) {
+      const result = await database.read(signupId);
+      console.log(`Signup: ${JSON.stringify(result)}`);
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({ message: "Signup not found" });
+      }
     } else {
-      res.status(404);
+      res.status(404).json({ message: "Invalid ID" });
     }
   } catch (err) {
     res.status(500).json({ error: err?.message });
@@ -53,18 +57,16 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    // Update the todo with the specified ID
-    const itemId = req.params.id;
-    console.log(`itemId: ${itemId}`);
-    const item = req.body;
+    // Update the signup entry with the specified ID
+    const signupId = req.params.id;
+    const signupData = req.body;
+    console.log(`Updating Signup ID: ${signupId} with Data: ${JSON.stringify(signupData)}`);
 
-    if (itemId && item) {
-      delete item.id;
-      console.log(`todo: ${JSON.stringify(item)}`);
-      const rowsAffected = await database.update(itemId, item);
+    if (signupId && signupData) {
+      const rowsAffected = await database.update(signupId, signupData);
       res.status(200).json({ rowsAffected });
     } else {
-      res.status(404);
+      res.status(404).json({ message: "Invalid request" });
     }
   } catch (err) {
     res.status(500).json({ error: err?.message });
@@ -73,15 +75,15 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    // Delete the todo with the specified ID
-    const itemId = req.params.id;
-    console.log(`itemId: ${itemId}`);
+    // Delete the signup entry with the specified ID
+    const signupId = req.params.id;
+    console.log(`Deleting Signup ID: ${signupId}`);
 
-    if (!itemId) {
-      res.status(404);
-    } else {
-      const rowsAffected = await database.delete(itemId);
+    if (signupId) {
+      const rowsAffected = await database.delete(signupId);
       res.status(204).json({ rowsAffected });
+    } else {
+      res.status(404).json({ message: "Invalid ID" });
     }
   } catch (err) {
     res.status(500).json({ error: err?.message });
