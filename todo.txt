@@ -5,3 +5,5 @@
 - Få styr på inplementating af server og API til koden
 
 . Start med bruge
+
+test
