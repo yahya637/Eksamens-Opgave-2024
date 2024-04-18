@@ -56,4 +56,53 @@
         
     
 </body>
+
+<script>
+    document.getElementById('SignUpButton').addEventListener('click', function(event) {
+        // Prevent default form submission
+        event.preventDefault();
+    
+        // Get the values from the form
+        var name = document.getElementById('nameInput').value;
+        var email = document.getElementById('emailInput').value;
+        var password = document.getElementById('PasswordInput').value;
+        var confirmPassword = document.getElementById('confirmPasswordInput').value;
+    
+        // Optionally validate the input
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+    
+        // Create the payload
+        var data = {
+            name: name,
+            email: email,
+            password: password
+        };
+    
+        // Make the AJAX request
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Registration successful!');
+            // Optionally redirect or clear the form here
+        })
+
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Error submitting form!');
+        });
+    });
+    
+    </script>
+    
+
 </html>
