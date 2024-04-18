@@ -1,7 +1,7 @@
 // Defines a function to display meal details from local storage
 function displayMealDetails() {
     // Retrieve 'meals' array from local storage, parse it into a JavaScript object, or default to an empty array if not found
-    const meals = JSON.parse(localStorage.getItem('meal')) || [];
+    const meals = JSON.parse(localStorage.getItem('meals')) || [];
     // Initialize counters for total meals, total water intake, and total kcal
     let totalMeals = 0;
     let totalWaterIntake = 0;
