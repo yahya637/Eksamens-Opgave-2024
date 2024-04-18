@@ -1,6 +1,6 @@
-// Defines a function to display meal details from local storage
+// Define a function to display meal details from local storage
 function displayMealDetails() {
-    // Retrieve 'meals' array from local storage, parse it into a JavaScript object, or default to an empty array if not found
+    // Retrieve the 'meals' array from local storage, parse it into a JavaScript object, or default to an empty array if not found
     const meals = JSON.parse(localStorage.getItem('meals')) || [];
     // Initialize counters for total meals, total water intake, and total kcal
     let totalMeals = 0;
@@ -14,21 +14,21 @@ function displayMealDetails() {
 
     // Iterate over each meal object in the meals array
     meals.forEach(meal => {
-        // Increment total meals counter
+        // Increment the total meals counter
         totalMeals++;
         // Parse water intake from the meal object, defaulting to 0 if undefined
         const waterIntake = parseFloat(meal.water) || 0;
         // Add the current meal's water intake to the total water intake
         totalWaterIntake += waterIntake;
         // Calculate the energy (kcal) for the current meal, defaulting to 0 if undefined and adjust for meal weight
-        const calculatedEnergy = (parseFloat(meal.energy) || 0) * (meal.weight / 100);
+        const calculatedEnergy = (parseFloat(meal.totalNutrition) || 0) * (meal.weight / 100);
         // Add the calculated energy to the total kcal
         totalKcal += calculatedEnergy;
 
         // Default meal time to 'Unknown Time' and update if a timestamp is present
         let mealTime = 'Unknown Time';
-        if (meal.timestamp) {
-            const date = new Date(meal.timestamp);
+        if (meals.timeAdded) {
+            const date = new Date(meals.timeAdded);
             mealTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
         
