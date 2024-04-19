@@ -1,59 +1,65 @@
-// Define a function to display meal details from local storage
 function displayMealDetails() {
-    // Retrieve the 'meals' array from local storage, parse it into a JavaScript object, or default to an empty array if not found
     const meals = JSON.parse(localStorage.getItem('meals')) || [];
-    // Initialize counters for total meals, total water intake, and total kcal
+    console.log('Retrieved meals:', meals);
+    
     let totalMeals = 0;
     let totalWaterIntake = 0;
     let totalKcal = 0;
 
-    // Get the table body element where meal details will be inserted
     const tableBody = document.getElementById('mealDetailsTable').querySelector('tbody');
-    // Clear any existing content in the table body to prepare for new data
     tableBody.innerHTML = '';
 
-    // Iterate over each meal object in the meals array
-    meals.forEach(meal => {
-        // Increment the total meals counter
+    meals.forEach((meal, index) => {
+        console.log(`Processing meal ${index + 1}:`, meal);
+
         totalMeals++;
-        // Parse water intake from the meal object, defaulting to 0 if undefined
-        const waterIntake = parseFloat(meal.water) || 0;
-        // Add the current meal's water intake to the total water intake
+        const waterIntake = isNaN(parseFloat(meal.water)) ? 0 : parseFloat(meal.water);
+
+        if (isNaN(waterIntake)) {
+            console.error('Invalid water data for meal', index + 1, ':', meal.water);
+        }
+
+        const consumedEnergy = isNaN(parseFloat(meal.consumedEnergy)) ? 0 : parseFloat(meal.consumedEnergy);
+        const consumedWeight = isNaN(parseFloat(meal.totalMealWeight)) ? 0 : parseFloat(meal.totalMealWeight);
+
+        if (isNaN(consumedEnergy) || isNaN(consumedWeight)) {
+            console.error('Invalid energy or weight data for meal', index + 1, ':', meal.consumedEnergy, meal.totalMealWeight);
+        }
+
+        const calculatedEnergy = consumedEnergy * (consumedWeight / 100);
+
+        if (isNaN(calculatedEnergy)) {
+            console.error('Calculation error for meal', index + 1);
+        }
+
         totalWaterIntake += waterIntake;
-        // Calculate the energy (kcal) for the current meal, defaulting to 0 if undefined and adjust for meal weight
-        const calculatedEnergy = (parseFloat(meal.totalNutrition) || 0) * (meal.weight / 100);
-        // Add the calculated energy to the total kcal
         totalKcal += calculatedEnergy;
 
-        // Default meal time to 'Unknown Time' and update if a timestamp is present
         let mealTime = 'Unknown Time';
-        if (meals.timeAdded) {
-            const date = new Date(meals.timeAdded);
-            mealTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (meal.timeAdded) {
+            mealTime = meal.timeAdded;
+        } else {
+            console.error('Time added missing for meal', index + 1);
         }
-        
-        // Insert a new row into the table body for the current meal
+
         const row = tableBody.insertRow();
-        // Set the inner HTML of the row to display meal time, a fixed string '1 Meal', water intake, and calculated energy
         row.innerHTML = `
             <td>${mealTime}</td>
             <td>1 Meal</td>
-            <td>${waterIntake}</td>
-            <td>${calculatedEnergy.toFixed(2)}</td>
+            <td>${waterIntake.toFixed(2)} ml</td>
+            <td>${calculatedEnergy.toFixed(2)} kcal</td>
         `;
     });
 
-    // After iterating through all meals, insert a final row to display total values
     const totalRow = tableBody.insertRow();
     totalRow.innerHTML = `
         <td>Total</td>
         <td>${totalMeals} Meals</td>
-        <td>${totalWaterIntake}ml</td>
-        <td>${totalKcal.toFixed(2)}</td>
+        <td>${totalWaterIntake.toFixed(2)} ml</td>
+        <td>${totalKcal.toFixed(2)} kcal</td>
     `;
 }
 
-// Add an event listener for the DOMContentLoaded event to automatically display meal details once the document is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     displayMealDetails();
 });
