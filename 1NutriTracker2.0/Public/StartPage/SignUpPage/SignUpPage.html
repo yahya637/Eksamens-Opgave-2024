@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HomePage</title>
-    <link rel="stylesheet" href="/1NutriTracker2.0/Public/StartPage/HomePage/NutriHome.css">
-    <link rel="stylesheet" href="/1NutriTracker2.0/Public/StartPage/SignUpPage/SignUpPage.css">
+    <link rel="stylesheet" href="NutriHome.css">
+    <link rel="stylesheet" href="SignUpPage.css">
 
 </head>
 <body>
@@ -33,8 +33,7 @@
 </div>
 
 <div id="signUp">
-    <form action="/signup" method="POST">
-
+    <form id="signUpForm">
         <label id="nameID">Enter Name:</label>
         <input type="text" id="nameInput" placeholder="Enter Full Name" name="nameS">
 
@@ -61,51 +60,43 @@
 </body>
 
 <script>
-    document.getElementById('SignUpButton').addEventListener('click', function(event) {
-        // Prevent default form submission
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('signUpForm');
+    form.addEventListener('submit', function(event) {
         event.preventDefault();
-    
-        // Get the values from the form
-        var name = document.getElementById('nameInput').value;
-        var email = document.getElementById('emailInput').value;
-        var password = document.getElementById('PasswordInput').value;
-        var confirmPassword = document.getElementById('confirmPasswordInput').value;
-    
-        // Optionally validate the input
-        if (password !== confirmPassword) {
+
+        const data = {
+            username: document.getElementById('usernameInput').value,
+            email: document.getElementById('emailInput').value,
+            password: document.getElementById('PasswordInput').value
+        };
+
+        if (data.password !== document.getElementById('confirmPasswordInput').value) {
             alert('Passwords do not match!');
             return;
         }
-    
-        // Create the payload
-        var data = {
-            name: name,
-            email: email,
-            password: password
-        };
-    
-        // Make the AJAX request
-        fetch('/signup', {
+
+        fetch('/signuppage', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.parse(data)
         })
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            alert('Registration successful!');
-            // Optionally redirect or clear the form here
+            alert('Signup successful!');
+            form.reset();
         })
-
         .catch((error) => {
             console.error('Error:', error);
-            alert('Error submitting form!');
+            alert('Signup failed!');
         });
     });
+});
 
     </script>
+    
     
 
 </html>

@@ -22,9 +22,8 @@ router.get('/', async (_, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/signuppage', async (req, res) => {
   try {
-    // Create a signup entry
     const signupData = req.body;
     console.log(`Signup Data: ${JSON.stringify(signupData)}`);
     const rowsAffected = await database.create(signupData);
@@ -33,6 +32,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: err?.message });
   }
 });
+
 
 router.get('/:id', async (req, res) => {
   try {
