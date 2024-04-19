@@ -1,9 +1,0 @@
-- Få styr på brugerstyring til at starte med
-
-- Få lavet en samlet kodebase fra bunden af
-
-- Få styr på inplementating af server og API til koden
-
-. Start med bruge
-
-test

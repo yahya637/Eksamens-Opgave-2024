@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="/1NutriTracker2.0/Public/StartPage/HomePage/NutriHome.css">
+    <link rel="stylesheet" href="/1NutriTracker2.0/Public/StartPage/SignUpPage/SignUpPage.css">
+
+</head>
+<body>
+
+    <header class="hjem">
+        <a href="/1NutriTracker2.0/Public/StartPage/HomePage/NutriHome.html" class="logo">NutriTracker</a>
+
+        <nav class="navbar">
+            <div>
+            <a href="/1NutriTracker2.0/Public/StartPage/LogInPage/LogInPage.html">Log In</a>
+            <a href="/1NutriTracker2.0/Public/StartPage/SignUpPage/SignUpPage.html">Sign Up</a>
+            </div>
+
+        </nav>        
+
+    </header>
+
+<div>
+    <div id="nutriHome">
+        <div class="lo">
+            <h1>Sign up</h1>
+            <p>Start your path to a healthier lifestyle today.</p>
+        </div>
+    </div>
+</div>
+
+<div id="signUp">
+    <form action="/signup" method="POST">
+
+        <label id="nameID">Enter Name:</label>
+        <input type="text" id="nameInput" placeholder="Enter Full Name" name="nameS">
+
+        <label id="usernameID">Enter Username:</label>
+        <input type="text" id="usernameInput" placeholder="Enter Username" name="usernameS">
+
+        <label id="emailID" >Email:</label>
+        <input type="text" id="emailInput" placeholder="Enter Email" name="emailNameS">
+
+        <label id="passwordID" >Password:</label>
+        <input type="password" id="PasswordInput" placeholder="Password" name="passwordS">
+
+        <label id="ConfirmPassword">Confirm Password:</label>    
+        <input type="password" id="confirmPasswordInput" placeholder="Password" name="confirmPasswordS">
+
+        <button id="SignUpButton">Sign up</button>
+        
+        <p class="p-login">Already have an account?
+            <a href="/1NutriTracker2.0/Public/StartPage/LogInPage/LogInPage.html">Log in</a>
+        </p>
+</div>
+        
+    
+</body>
+
+<script>
+    document.getElementById('SignUpButton').addEventListener('click', function(event) {
+        // Prevent default form submission
+        event.preventDefault();
+    
+        // Get the values from the form
+        var name = document.getElementById('nameInput').value;
+        var email = document.getElementById('emailInput').value;
+        var password = document.getElementById('PasswordInput').value;
+        var confirmPassword = document.getElementById('confirmPasswordInput').value;
+    
+        // Optionally validate the input
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+    
+        // Create the payload
+        var data = {
+            name: name,
+            email: email,
+            password: password
+        };
+    
+        // Make the AJAX request
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Registration successful!');
+            // Optionally redirect or clear the form here
+        })
+
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Error submitting form!');
+        });
+    });
+
+    </script>
+    
+
+</html>
