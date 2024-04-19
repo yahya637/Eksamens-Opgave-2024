@@ -80,7 +80,7 @@
         fetch('/signuppage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.parse(data)
+            body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(data => {
