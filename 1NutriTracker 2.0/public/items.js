@@ -38,14 +38,14 @@ router.get('/:id', async (req, res) => {
   try {
     // Get the signup entry with the specified ID
     const signupId = req.params.id;
-    console.log(`Signup ID: ${signupId}`);
+    console.log(`User ID: ${signupId}`);
     if (signupId) {
       const result = await database.read(signupId);
-      console.log(`Signup: ${JSON.stringify(result)}`);
+      console.log(`User: ${JSON.stringify(result)}`);
       if (result) {
         res.status(200).json(result);
       } else {
-        res.status(404).json({ message: "Signup not found" });
+        res.status(404).json({ message: "UserID not found" });
       }
     } else {
       res.status(404).json({ message: "Invalid ID" });
@@ -60,7 +60,7 @@ router.put('/:id', async (req, res) => {
     // Update the signup entry with the specified ID
     const signupId = req.params.id;
     const signupData = req.body;
-    console.log(`Updating Signup ID: ${signupId} with Data: ${JSON.stringify(signupData)}`);
+    console.log(`Updating User ID: ${signupId} with Data: ${JSON.stringify(signupData)}`);
 
     if (signupId && signupData) {
       const rowsAffected = await database.update(signupId, signupData);
@@ -77,7 +77,7 @@ router.delete('/:id', async (req, res) => {
   try {
     // Delete the signup entry with the specified ID
     const signupId = req.params.id;
-    console.log(`Deleting Signup ID: ${signupId}`);
+    console.log(`Deleting USER ID: ${signupId}`);
 
     if (signupId) {
       const rowsAffected = await database.delete(signupId);

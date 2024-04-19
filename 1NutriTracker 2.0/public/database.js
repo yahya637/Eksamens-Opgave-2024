@@ -47,11 +47,13 @@ export default class Database {
   async create(data) {
     await this.connect();
     const request = this.poolconnection.request();
-    request.input('Email', sql.Char(50), data.Email);
-    request.input('fullName', sql.Char(50), data.fullName);
+    request.input('username', sql.VarChar(50), data.username);
+    request.input('email', sql.VarChar(50), data.email);
+    request.input('fullName', sql.VarChar(50), data.fullName);
+    
 
     const result = await request.query(
-      `INSERT INTO Nutri.Signup (Email, fullName) VALUES (@Email, @fullName)`
+      `INSERT INTO Nutri.Signup (username, email, fullName) VALUES (@username, @email, @fullName)`
     );
     return result.rowsAffected[0];
   }
@@ -69,8 +71,8 @@ export default class Database {
     await this.connect();
     const request = this.poolconnection.request();
     const result = await request
-      .input('signup_id', sql.Int, id)
-      .query(`SELECT * FROM Nutri.Signup WHERE signup_id = @signup_id`);
+      .input('user_id', sql.Int, id)
+      .query(`SELECT * FROM Nutri.Signup WHERE user_id = @user_id`);
 
     return result.recordset[0];
   }
@@ -80,23 +82,24 @@ export default class Database {
   async update(id, data) {
     await this.connect();
     const request = this.poolconnection.request();
-    request.input('signup_id', sql.Int, id);
-    request.input('Email', sql.Char(50), data.Email);
-    request.input('fullName', sql.Char(50), data.fullName);
+    request.input('user_id', sql.Int, id);  // Make sure 'id' is used here, not data.user_id
+    request.input('username', sql.VarChar(50), data.username);
+    request.input('email', sql.VarChar(50), data.email);
+    request.input('fullName', sql.VarChar(50), data.fullName);
 
     const result = await request.query(
-      `UPDATE Nutri.Signup SET Email=@Email, fullName=@fullName WHERE signup_id = @signup_id`
+        `UPDATE Nutri.Signup SET username=@username, email=@email, fullName=@fullName WHERE user_id = @user_id`
     );
     return result.rowsAffected[0];
-  }
+}
 
 // DELETE
 
   async delete(id) {
     await this.connect();
     const request = this.poolconnection.request();
-    request.input('signup_id', sql.Int, id);
-    const result = await request.query(`DELETE FROM Nutri.Signup WHERE signup_id = @signup_id`);
+    request.input('user_id', sql.Int, id);
+    const result = await request.query(`DELETE FROM Nutri.Signup WHERE user_id = @user_id`);
     return result.rowsAffected[0];
   }
 }
