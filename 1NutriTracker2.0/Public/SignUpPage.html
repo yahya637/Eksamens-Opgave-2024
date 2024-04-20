@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,101 +9,117 @@
     <link rel="stylesheet" href="SignUpPage.css">
 
 </head>
+
 <body>
 
     <header class="hjem">
         <a href="../NutriHome.html" class="logo">NutriTracker</a>
         <nav class="navbar">
             <div>
-            <a href="../LogInPage.html">Log In</a>
-            <a href="../SignUpPage.html">Sign Up</a>
+                <a href="../LogInPage.html">Log In</a>
+                <a href="../SignUpPage.html">Sign Up</a>
             </div>
-        </nav>        
+        </nav>
     </header>
 
-<div>
-    <div id="nutriHome">
-        <div class="lo">
-            <h1>Sign up</h1>
-            <p>Start your path to a healthier lifestyle today.</p>
+    <div>
+        <div id="nutriHome">
+            <div class="lo">
+                <h1>Sign up</h1>
+                <p>Start your path to a healthier lifestyle today.</p>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="signUp">
-    <form id="signUpForm">
-        <label id="nameID">Enter Name:</label>
-        <input type="text" id="nameInput" placeholder="Enter Full Name" name="nameS">
+    <div id="signUp">
+        <form id="signUpForm">
+            <label id="nameID">Enter Full Name:</label>
+            <input type="text" id="nameInput" placeholder="Enter Full Name" name="nameS">
 
-        <label id="usernameID">Enter Username:</label>
-        <input type="text" id="usernameInput" placeholder="Enter Username" name="usernameS">
+            <label id="usernameID">Enter Username:</label>
+            <input type="text" id="usernameInput" placeholder="Enter Username" name="usernameS">
 
-        <label id="emailID" >Email:</label>
-        <input type="text" id="emailInput" placeholder="Enter Email" name="emailNameS">
+            <label id="emailID">Email:</label>
+            <input type="text" id="emailInput" placeholder="Enter Email" name="emailNameS">
 
-        <label id="passwordID" >Password:</label>
-        <input type="password" id="PasswordInput" placeholder="Password" name="passwordS">
+            <label id="passwordID">Password:</label>
+            <input type="password" id="PasswordInput" placeholder="Password" name="passwordS">
 
-        <label id="ConfirmPassword">Confirm Password:</label>    
-        <input type="password" id="confirmPasswordInput" placeholder="Password" name="confirmPasswordS">
+            <label id="ConfirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPasswordInput" placeholder="Password" name="confirmPasswordS">
 
-        <button id="SignUpButton">Sign up</button>
-        
-        <p class="p-login">Already have an account?
-            <a href="../LogInPage.html">Log in</a>
-        </p>
-</div>
-    
+            <label for="birthdate">Birthdate:</label>
+            <input type="date" id="birthdate" name="birthdate">
 
-    
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="Man">Man</option>
+                <option value="Woman">Woman</option>
+                <option value="Woman">Other</option>
+            </select>
+            <label for="'weight">Weight:</label>
+            <input type="number" id="weight" placeholder="Weight in kg" name="weight">
+
+            <button id="SignUpButton">Sign up</button>
+
+            <p class="p-login">Already have an account?
+                <a href="../LogInPage.html">Log in</a>
+            </p>
+    </div>
+
+
+
 </body>
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('signUpForm');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('signUpForm');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        const data = {
-            username: document.getElementById('usernameInput').value,
-            email: document.getElementById('emailInput').value,
-            fullName: document.getElementById('nameInput').value, // DENNE KODE MANGLEDE TIDLIGERE 
-            password: document.getElementById('PasswordInput').value,
-        };
+            const data = {
+                fullName: document.getElementById('nameInput').value,
+                username: document.getElementById('usernameInput').value,
+                email: document.getElementById('emailInput').value,
+                password: document.getElementById('PasswordInput').value,
+                birthdate: document.getElementById('birthdate').value,
+                gender: document.getElementById('gender').value,
+                weight: document.getElementById('weight').value // Tilføjelse af vægtfelt
+            };
 
-        // Check if the passwords match
-        if (data.password !== document.getElementById('confirmPasswordInput').value) {
-            alert('Passwords do not match!');
-            return;
-        }
+            // Check if the passwords match
+            if (data.password !== document.getElementById('confirmPasswordInput').value) {
+                alert('Passwords do not match!');
+                return;
+            }
 
-        // Check if any of the fields are empty
-        if (data.username === '' || data.email === '' || data.password === '') {
-            alert('Please fill in all fields!');
-            return;
-        }
+            // Check if any of the fields are empty
+            if (data.username === '' || data.email === '' || data.password === '') {
+                alert('Please fill in all fields!');
+                return;
+            }
 
-        fetch('/users/signuppage', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert('Signup successful!');
-            form.reset();
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Signup failed!');
+            fetch('/users/signuppage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    alert('Signup successful!');
+                    form.reset();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Signup failed!');
+                });
         });
     });
-});
 
-    </script>
-    
-    
+</script>
+
+
 
 </html>

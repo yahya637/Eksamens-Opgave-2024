@@ -47,6 +47,28 @@
     text-align: left; 
 }
 
+#signUp input[type="text"],
+#signUp input[type="password"],
+#signUp input[type="date"],
+#signUp input[type="number"],
+
+
+#signUp select {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 2px solid #91c789; 
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#signUp select {
+    -webkit-appearance: none; /* Removes default styling on iOS */
+    -moz-appearance: none;    /* Removes default styling in Firefox */
+    appearance: none;         /* Removes default styling */
+    /* You might need to add custom arrow for select. */
+}
 
 
 .p-login {
