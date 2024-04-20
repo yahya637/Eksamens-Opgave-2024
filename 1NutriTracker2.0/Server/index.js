@@ -15,9 +15,17 @@ import { fileURLToPath } from 'url';
 // Define __dirname in ES module
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+<<<<<<< Updated upstream
 // 
 app.use(express.static("/Users/gumer/Desktop/Eksamens-Opgave-2024/1NutriTracker2.0/Public/StartPage/SignUpPage"));
 app.use(express.static("/Users/gumer/Desktop/Eksamens-Opgave-2024/1NutriTracker2.0/Public/StartPage/HomePage"));
+=======
+
+// Vi skal ændre det her, til /Public
+app.use(express.static(path.join(__dirname, "../Public/StartPage/SignUpPage")));
+app.use(express.static(path.join(__dirname, "../Public/StartPage/HomePage")));
+
+>>>>>>> Stashed changes
 
 app.use("/items", items); // Route for the right route
 // Start the server
