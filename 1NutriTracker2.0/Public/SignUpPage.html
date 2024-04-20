@@ -31,6 +31,7 @@
         </div>
     </div>
 
+    <!-- All tabels that are made  -->
     <div id="signUp">
         <form id="signUpForm">
             <label id="nameID">Enter Full Name:</label>
@@ -53,10 +54,12 @@
 
             <label for="gender">Gender:</label>
             <select id="gender" name="gender">
+                <option value="" disabled selected>Choose a gender</option>
                 <option value="Man">Man</option>
                 <option value="Woman">Woman</option>
-                <option value="Woman">Other</option>
+                <option value="Other">Other</option>
             </select>
+            
             <label for="'weight">Weight:</label>
             <input type="number" id="weight" placeholder="Weight in kg" name="weight">
 
@@ -85,7 +88,7 @@
                 password: document.getElementById('PasswordInput').value,
                 birthdate: document.getElementById('birthdate').value,
                 gender: document.getElementById('gender').value,
-                weight: document.getElementById('weight').value // Tilføjelse af vægtfelt
+                weight: document.getElementById('weight').value 
             };
 
             // Check if the passwords match
