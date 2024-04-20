@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="/1NutriTracker2.0/Public/StartPage/HomePage/NutriHome.css">
+    <link rel="stylesheet" href="/1NutriTracker2.0/Public/StartPage/LogInPage/LogInPage.css">
+</head>
+<body>
+
+    <header class="hjem">
+        <a href="/1NutriTracker2.0/Public/StartPage/HomePage/NutriHome.html" class="logo">NutriTracker</a>
+
+        <nav class="navbar">
+            <div>
+            <a href="/1NutriTracker2.0/Public/StartPage/LogInPage/LogInPage.html">Log In</a>
+            <a href="/1NutriTracker2.0/Public/StartPage/SignUpPage/SignUpPage.html">Sign Up</a>
+            </div>
+
+        </nav>
+        
+
+    </header>
+
+<div>
+    <div id="nutriHome">
+        <div class="lo">
+            <h1>Welcome Back</h1>
+            <p>Log in to access your meal plans and nutritional data.</p>
+        </div>
+    </div>
+</div>
+
+<div id="LogInForm">
+    <form>
+        <!-- label and input for the emia and password   -->
+
+        <label id="Username-label">Username:</label>
+        <input type="text" id="UsernameInput" placeholder="Enter Username">
+
+        <label id="password-label" for="password">Password:</label>
+        <input type="password" id="passwordInput" placeholder="Enter Password">
+
+        <button id="LogInButton">Log In</button>
+
+        <p class="p-signup">Don't have an account?
+            <a href="/1NutriTracker2.0/Public/StartPage/SignUpPage/SignUpPage.html">Create a profile</a> 
+        </p>
+        
+    </form>
+</div>
+    
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('loginForm');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+    
+            const username = document.getElementById('UsernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+    
+            const data = { username, password };
+    
+            fetch('/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Login successful:', data);
+                    alert('Login successful!');
+                    // Redirect to another page or update the UI accordingly
+                } else {
+                    throw new Error(data.message || 'Failed to login');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Login failed: ' + error.message);
+            });
+        });
+    });
+    </script>
+    
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MealTracker</title>
+    <link rel="stylesheet" href="MealTracker2.0.css">
+    <script src="MealTracker2.0.js" defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/trash.css' rel='stylesheet'>
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/pen.css' rel='stylesheet'>
+</head>
+
+<body>
+    
+    <header class="hjem">
+        <a href="/1NutriTracker2.0/Public/StartPage/HomePage/NutriHome.html" class="logo">NutriTracker</a>
+    
+            <nav class="navbar">
+                <div class="navbar-h">
+                <a href="/1NutriTracker2.0/Public/MealCreator2.0/MealCreator2.0.html" id="nav-meal-creator">Meal Creator</a>
+                <a href="/1NutriTracker2.0/Public//MealTracker2.0/MealTracker2.0.html">Meal Tracker</a>
+                <a href="/1NutriTracker2.0/Public/Daily Nutri/Daily.html">Daily Nutri</a>
+                </div>
+            </nav>
+
+
+        </nav>
+        
+        
+    </header>
+
+
+    <div id="mealTracker">
+        <div class="header-row">
+            <h2>Meal Tracker</h2>
+            <div class="button-row">
+                <button id="IntakeMealButton" title="Intake Meal">
+                    <i class="gg-add"></i>                </button>
+                <button id="IntakeIngredientButton" title="Intake Ingredient">
+                    <i class="gg-add"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Here is the form which is hidden, therefor display is set to none (Krav a) -->
+        <div id="IntakeMealForm" style="display: none;">
+            <form>
+                <label for="mealSelection">Select Meal:</label>
+                <select id="mealSelection" aria-placeholder="Select Created Meal">
+                <!-- From localStorage, meals can be choosen -->
+                <option value="0">Select Created Meal ↓</option>
+                </select>
+
+                <label for="mealWeight">Weight consumed (g):</label> <!-- How much of the meal consumed -->
+                <input type="number" id="mealWeight" placeholder="Enter weight in grams">
+
+                
+                <!-- Date and time of when the intake took place (Krav d). Date and time will be submitted from javascript -->
+                <label for="intakeDateTime">Date and Time of Intake will be autofilled</label>
+                
+                <!-- Location of the intake (Krav e). This should be fetched from browsers Geolocation -->
+                <input type="hidden" id="intakeLocation">
+
+                <button type="button" id="submitIntakeMeal">Submit</button>
+            </form>
+        </div>
+
+        <!-- register ingredient (krav b) -->
+        <div id="IntakeIngredientForm" style="display: none;">
+            <form>
+                <!-- Search field for ingredients -->
+                <label id="ingredientInput-label" for="ingredientInput">Search Ingredients:</label>
+                <input type="text" id="ingredientInput" placeholder="Search for ingredients"><br><br>
+
+                <!-- Dropdown to show search results -->
+                <label id="ingredientDropdown-label" >Select Ingredient:</label>
+                <select id="ingredientDropdown" size="7" style="display: none;"></select><br><br>
+            
+                <!-- Ingriedent weight -->
+                <label id="ingredientWeightLabel">Ingredient Weight (g):</label>
+                <input type="number" id="ingredientWeightInput" placeholder="Weight in grams">
+                        
+                <!-- Date and time of when the intake took place (Krav d). Date and time will be submitted from javascript -->
+                <label for="ingredientIntakeDateTime">Date and Time of Intake will be autofilled</label>
+                
+                <!-- Location of the intake (Krav e). This should be fetched from browsers Geolocation -->
+                <input type="hidden" id="ingredientIntakeLocation">
+
+                <button id="submitIngredientIntakeMeal">Submit</button>
+
+            </form>
+        </div>
+
+
+
+        <div class="meal-grid">
+            <div class="meal-table">
+                <!-- Table Header -->
+                <div class="meal-header">
+                    <span>Meal</span>
+                    <span>Weight & Energy</span>
+                    <span>Protien, Fat & Fiber</span>
+                    <span>Added On</span>
+                    <span>Location</span>
+                    <span></span>
+                </div>
+        
+                <!-- Dynamic Meal Entries will appear here -->
+                <div class="intake-entries">
+                    <!-- Meal entries generated by JavaScript will go here -->
+                </div>
+
+                <h3>Ingredient Intake:</h3>
+
+                <!-- Dynamic Ingredient Entries will appear here -->
+                <div class="intake-entries2">
+                    <!-- Ingredient entries generated by JavaScript will go here -->
+                </div>
+
+            </div>
+        </div>
+        
+
+    </div>
+    </div>
+  
+
+
+</body>
+</html>
