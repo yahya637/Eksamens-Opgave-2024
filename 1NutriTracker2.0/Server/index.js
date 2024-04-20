@@ -17,6 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(path.join(__dirname, "../Public/StartPage/SignUpPage")));
 app.use(express.static(path.join(__dirname, "../Public/StartPage/HomePage")));
+app.use(express.static(path.join(__dirname, "../Public/StartPage/LoginPage")));
 
 
 app.use("/items", items); // Route for the right route

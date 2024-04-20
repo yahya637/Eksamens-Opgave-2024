@@ -22,14 +22,41 @@ router.get('/', async (_, res) => {
   }
 });
 
+import bcrypt from 'bcrypt'; // for hashing passwords
+
 router.post('/signuppage', async (req, res) => {
   try {
-    const signupData = req.body;
+    const { username, email, fullName, password } = req.body; // 
+    const hashedPassword = await bcrypt.hash(password, 10); // 10
+
+    const signupData = { username, email, fullName, password: hashedPassword };
     console.log(`Signup Data: ${JSON.stringify(signupData)}`);
     const rowsAffected = await database.create(signupData);
+
     res.status(201).json({ rowsAffected });
   } catch (err) {
-    res.status(500).json({ error: err?.message });
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await database.getUserByUsername(username); // Assume this function retrieves user data by username
+
+    if (user && await bcrypt.compare(password, user.password)) {
+      // Passwords match
+      // Here you can create a session or token to keep the user logged in
+      res.status(200).json({ message: "Login successful" });
+    } else {
+      // Passwords do not match or user does not exist
+      res.status(401).json({ error: "Invalid username or password" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
 });
 
