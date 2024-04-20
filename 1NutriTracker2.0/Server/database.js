@@ -116,5 +116,4 @@ export default class Database {
     request.input('user_id', sql.Int, id);
     const result = await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id`);
     return result.rowsAffected[0];
-  }
-}
+   }}
