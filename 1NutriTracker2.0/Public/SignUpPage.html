@@ -11,16 +11,13 @@
 <body>
 
     <header class="hjem">
-        <a href="/1NutriTracker2.0/Public/StartPage/HomePage/NutriHome.html" class="logo">NutriTracker</a>
-
+        <a href="../NutriHome.html" class="logo">NutriTracker</a>
         <nav class="navbar">
             <div>
-            <a href="/1NutriTracker2.0/Public/StartPage/LogInPage/LogInPage.html">Log In</a>
-            <a href="/1NutriTracker2.0/Public/StartPage/SignUpPage/SignUpPage.html">Sign Up</a>
+            <a href="../LogInPage.html">Log In</a>
+            <a href="../SignUpPage.html">Sign Up</a>
             </div>
-
         </nav>        
-
     </header>
 
 <div>
@@ -52,10 +49,11 @@
         <button id="SignUpButton">Sign up</button>
         
         <p class="p-login">Already have an account?
-            <a href="/1NutriTracker2.0/Public/StartPage/LogInPage/LogInPage.html">Log in</a>
+            <a href="../LogInPage.html">Log in</a>
         </p>
 </div>
-        
+    
+
     
 </body>
 
@@ -69,7 +67,8 @@
         const data = {
             username: document.getElementById('usernameInput').value,
             email: document.getElementById('emailInput').value,
-            password: document.getElementById('PasswordInput').value
+            password: document.getElementById('PasswordInput').value,
+            fullName: document.getElementById('nameInput').value
         };
 
         // Check if the passwords match

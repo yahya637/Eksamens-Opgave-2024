@@ -16,8 +16,8 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Vi skal ændre det her, til /Public
-app.use(express.static(path.join(__dirname, "../Public/StartPage/SignUpPage")));
-app.use(express.static(path.join(__dirname, "../Public/StartPage/HomePage")));
+app.use(express.static(path.join(__dirname, "../Public")));
+app.use(express.static(path.join(__dirname, "../Public/")));
 
 app.use("/users", items); // Route for the right route
 // Start the server
