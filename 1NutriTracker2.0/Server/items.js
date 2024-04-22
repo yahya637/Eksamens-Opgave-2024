@@ -33,6 +33,21 @@ router.post('/signuppage', async (req, res) => {
   }
 });
 
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const loginResult = await database.loginUser(username, password);
+    if (loginResult.success) {
+      res.status(200).json({ message: 'Login successful', userId: loginResult.user_id });
+    } else {
+      res.status(401).json({ message: loginResult.message });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 router.get('/:id', async (req, res) => {
   try {

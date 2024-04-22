@@ -29,23 +29,60 @@
 </div>
 
 <div id="LogInForm">
-    <form>
-        <!-- label and input for the emia and password   -->
-
+    <form method="POST" action="/users/login">
         <label id="Username-label">Username:</label>
-        <input type="text" id="UsernameInput" placeholder="Enter Username">
-
+        <input type="text" id="UsernameInput" name="username" placeholder="Enter Username">
         <label id="password-label" for="password">Password:</label>
-        <input type="password" id="passwordInput" placeholder="Enter Password">
-
-        <button id="LogInButton">Log In</button>
-
-        <p class="p-signup">Don't have an account?
-            <a href="../SignUpPage.html">Create a profile</a> 
-        </p>
-        
+        <input type="password" id="passwordInput" name="password" placeholder="Enter Password">
+        <button type="submit" id="LogInButton">Log In</button>
     </form>
+    
 </div>
     
 </body>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loginForm = document.getElementById('loginForm'); // Sørg for at give dit login-form et ID
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Forhindre standard formular afsendelse
+    
+            const username = document.getElementById('UsernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+    
+            // Tjek for tomme felter
+            if (username === '' || password === '') {
+                alert('Please fill in all required fields.');
+                return;
+            }
+    
+            fetch('/users/login', {  // Sørg for at dit endpoint matcher det i din serverkonfiguration
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Login failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                alert('Login successful!');
+                // Antager at "Daily.html" er det sted du ønsker at omdirigere brugeren
+                window.location.href = "1NutriTracker2.0\Public\Daily.html"; // Ændr denne sti til den korrekte relative sti baseret på filstrukturen
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Login failed: ' + error.message);
+            });
+        });
+    });
+    </script>
+    
+
 </html>

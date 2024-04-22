@@ -108,6 +108,28 @@ export default class Database {
     return result.rowsAffected[0];
   }
 
+
+// LOGIN USER
+async loginUser(username, password) {
+  await this.connect();
+  const request = this.poolconnection.request();
+  request.input('username', sql.VarChar(50), username);
+
+  const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
+  if (result.recordset.length > 0) {
+    const { passwordHash, user_id } = result.recordset[0];
+    const isMatch = await bcrypt.compare(password, passwordHash);  // Sikre at bcrypt er importeret og opsat korrekt
+    if (isMatch) {
+      return { success: true, user_id: user_id };  // Success med user ID
+    } else {
+      return { success: false, message: 'Invalid credentials' };  // Forkert password
+    }
+  } else {
+    return { success: false, message: 'User not found' };  // Ingen bruger fundet
+  }
+}
+
+
 // DELETE USER
 
   async delete(id) {
