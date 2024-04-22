@@ -45,8 +45,6 @@ export default class Database {
     return result.rowsAffected[0];
   }
 
-  // CREATE USER 
-
 // CREATE USER
 async create(data) {
   try {
@@ -78,7 +76,26 @@ async create(data) {
       throw new Error('Error creating user in database');
   }
 }
+// CHECK IF USER EXISTS
 
+async userExists(username, email) {
+  try {
+      await this.connect();
+      const request = this.poolconnection.request();
+      request.input('username', sql.VarChar(50), username);
+      request.input('email', sql.VarChar(50), email);
+
+      const result = await request.query(`
+          SELECT COUNT(*) as count FROM Nutri.Users WHERE username = @username OR email = @email
+      `);
+
+      console.log(result.recordset); // Check what's actually returned
+      return result.recordset[0].count > 0;
+  } catch (error) {
+      console.error('Error checking user existence:', error);
+      throw error;
+  }
+}
 
   // READ ALL USER
 

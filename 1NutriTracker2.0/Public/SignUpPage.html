@@ -103,23 +103,32 @@
                 return;
             }
 
+
             fetch('/users/signuppage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                    alert('Signup successful!');
-                    form.reset();
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert('Signup failed!');
-                });
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Signup failed!');  // If response not OK, throw error to be caught
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.message) {
+                alert(data.message);  // Display server-provided message
+                if (data.message === 'Signup successful!') {
+                    form.reset();  // Reset form only on successful signup
+                }
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert(error.message || 'Signup failed!');  // Provide error feedback
         });
     });
+});
 
 </script>
 

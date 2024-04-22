@@ -1,4 +1,4 @@
-#loginform {
+#loginForm {
     background-color: #DEF6D8;
     padding: 20px;
     border-radius: 15px;
@@ -6,7 +6,7 @@
     margin: 20px auto;
 }
 
-#loginform label {
+#loginForm label {
     display: block;
     margin-bottom: 5px;
     font-size: 18px;
@@ -14,8 +14,8 @@
 
 }
 
-#loginform input[type="text"],
-#loginform input[type="password"] { 
+#loginForm input[type="text"],
+#loginForm input[type="password"] { 
     width: 100%;
     padding: 15px;
     margin-bottom: 20px;
@@ -25,11 +25,11 @@
     box-sizing: border-box;
 }
 
-#loginform input::placeholder {
+#loginForm input::placeholder {
     color: #757575;
 }
 
-#loginform button {
+#loginForm button {
     width: 100%;
     padding: 15px;
     border: none;
@@ -41,7 +41,7 @@
     margin-top: 10px;
 }
 
-#loginform button:hover {
+#loginForm button:hover {
     background-color: #80a672; 
 }
 

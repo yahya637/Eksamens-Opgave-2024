@@ -28,8 +28,8 @@
     </div>
 </div>
 
-<div id="loginform">
-    <form method="POST" action="/users/login">
+<div id="loginForm">
+    <form>
         <label id="Username-label">Username:</label>
         <input type="text" id="UsernameInput" name="username" placeholder="Enter Username">
         <label id="password-label" for="password">Password:</label>
@@ -77,8 +77,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             console.log('Success:', data);
             alert('Login successful!');
-            // Corrected the path and file name for redirection
-            window.location.href = "../MealCreator.html";
+
+            window.location.href = "../MealCreator2.0.html";
         })
         .catch((error) => {
             console.error('Error:', error);
