@@ -91,6 +91,28 @@ export default class Database {
         `UPDATE Nutri.Signup SET username=@username, email=@email, fullName=@fullName WHERE user_id = @user_id`
     );
     return result.rowsAffected[0];
+<<<<<<< Updated upstream
+=======
+  }
+// LOGIN USER
+async loginUser(username, password) {
+  await this.connect();
+  const request = this.poolconnection.request();
+  request.input('username', sql.VarChar(50), username);
+
+  const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
+  if (result.recordset.length > 0) {
+    const { passwordHash, user_id } = result.recordset[0];
+    const isMatch = await bcrypt.compare(password, passwordHash);  // Sikre at bcrypt er importeret og opsat korrekt
+    if (isMatch) {
+      return { success: true, user_id: user_id };  // Success med user ID
+    } else {
+      return { success: false, message: 'Invalid credentials' };  // Forkert password
+    }
+  } else {
+    return { success: false, message: 'User not found' };  // Ingen bruger fundet
+  }
+>>>>>>> Stashed changes
 }
 
 // DELETE
@@ -101,5 +123,10 @@ export default class Database {
     request.input('user_id', sql.Int, id);
     const result = await request.query(`DELETE FROM Nutri.Signup WHERE user_id = @user_id`);
     return result.rowsAffected[0];
+<<<<<<< Updated upstream
   }
 }
+=======
+   }}
+
+>>>>>>> Stashed changes
