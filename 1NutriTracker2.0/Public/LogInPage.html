@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<div id="LogInForm">
+<div id="loginform">
     <form method="POST" action="/users/login">
         <label id="Username-label">Username:</label>
         <input type="text" id="UsernameInput" name="username" placeholder="Enter Username">
@@ -43,45 +43,49 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const loginForm = document.getElementById('loginForm'); // Sørg for at give dit login-form et ID
-        loginForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Forhindre standard formular afsendelse
-    
-            const username = document.getElementById('UsernameInput').value;
-            const password = document.getElementById('passwordInput').value;
-    
-            // Tjek for tomme felter
-            if (username === '' || password === '') {
-                alert('Please fill in all required fields.');
-                return;
-            }
-    
-            fetch('/users/login', {  // Sørg for at dit endpoint matcher det i din serverkonfiguration
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Login failed');
+
+document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.getElementById('loginForm');  // Ensure the form has this ID
+    loginForm.addEventListener('submit', function (event) {
+        event.preventDefault();  // Prevent form from submitting traditionally
+
+        const username = document.getElementById('UsernameInput').value.trim();
+        const password = document.getElementById('passwordInput').value;
+
+        if (username === '' || password === '') {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        fetch('/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Invalid username or password');
+                } else {
+                    throw new Error('Server error, please try again later');
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data);
-                alert('Login successful!');
-                // Antager at "Daily.html" er det sted du ønsker at omdirigere brugeren
-                window.location.href = "1NutriTracker2.0\Public\Daily.html"; // Ændr denne sti til den korrekte relative sti baseret på filstrukturen
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Login failed: ' + error.message);
-            });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            alert('Login successful!');
+            // Corrected the path and file name for redirection
+            window.location.href = "../MealCreator.html";
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Login failed: ' + error.message);
         });
     });
+});
     </script>
     
 

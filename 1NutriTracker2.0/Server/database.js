@@ -1,4 +1,7 @@
 import sql from 'mssql';
+import bcrypt from 'bcrypt';
+
+
 
 export default class Database {
   config = {};
@@ -44,22 +47,38 @@ export default class Database {
 
   // CREATE USER 
 
-  async create(data) {
-    await this.connect();
-    const request = this.poolconnection.request();
-    request.input('username', sql.VarChar(50), data.username);
-    request.input('email', sql.VarChar(50), data.email);
-    request.input('fullName', sql.VarChar(50), data.fullName);
-    request.input('passwordHash', sql.VarChar(256), data.passwordHash);
-    request.input('birthdate', sql.Date, data.birthdate);
-    request.input('gender', sql.VarChar(10), data.gender);
-    request.input('weight', sql.Decimal(5, 2), data.weight);
+// CREATE USER
+async create(data) {
+  try {
+      await this.connect();
+      const request = this.poolconnection.request();
 
-    const result = await request.query(
-      `INSERT INTO Nutri.Users (username, email, fullName, passwordHash, birthdate, gender, weight) VALUES (@username, @email, @fullName, @passwordHash, @birthdate, @gender, @weight)`
-    );
-    return result.rowsAffected[0];
+      // Hash the password before storing it
+      const saltRounds = 10;  // Adjust saltRounds as needed
+      const passwordHash = await bcrypt.hash(data.password, saltRounds);
+
+      // Bind all parameters to the query
+      request.input('username', sql.VarChar(50), data.username);
+      request.input('email', sql.VarChar(50), data.email);
+      request.input('fullName', sql.VarChar(50), data.fullName);
+      request.input('passwordHash', sql.VarChar(256), passwordHash);  // Use the hashed password
+      request.input('birthdate', sql.Date, data.birthdate);
+      request.input('gender', sql.VarChar(10), data.gender);
+      request.input('weight', sql.Decimal(5, 2), data.weight);
+
+      // Execute the SQL query
+      const result = await request.query(
+          `INSERT INTO Nutri.Users (username, email, fullName, passwordHash, birthdate, gender, weight)
+           VALUES (@username, @email, @fullName, @passwordHash, @birthdate, @gender, @weight)`
+      );
+
+      return result.rowsAffected[0];  // Return the number of rows affected
+  } catch (error) {
+      console.error('Failed to create user:', error);
+      throw new Error('Error creating user in database');
   }
+}
+
 
   // READ ALL USER
 
@@ -111,23 +130,35 @@ export default class Database {
 
 // LOGIN USER
 async loginUser(username, password) {
-  await this.connect();
-  const request = this.poolconnection.request();
-  request.input('username', sql.VarChar(50), username);
+  try {
+    await this.connect();  // Ensure the database is connected
+    const request = this.poolconnection.request();
+    request.input('username', sql.VarChar(50), username);  // Correctly set up the input parameter
 
-  const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
-  if (result.recordset.length > 0) {
-    const { passwordHash, user_id } = result.recordset[0];
-    const isMatch = await bcrypt.compare(password, passwordHash);  // Sikre at bcrypt er importeret og opsat korrekt
-    if (isMatch) {
-      return { success: true, user_id: user_id };  // Success med user ID
+    const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
+    if (result.recordset.length > 0) {
+      const { passwordHash, user_id } = result.recordset[0];
+
+      // Check if the passwordHash is actually retrieved and not null
+      if (!passwordHash) {
+        return { success: false, message: 'No password set for this user.' };
+      }
+
+      const isMatch = await bcrypt.compare(password, passwordHash);
+      if (isMatch) {
+        return { success: true, user_id: user_id };  // Success with user ID
+      } else {
+        return { success: false, message: 'Invalid credentials' };  // Incorrect password
+      }
     } else {
-      return { success: false, message: 'Invalid credentials' };  // Forkert password
+      return { success: false, message: 'User not found' };  // No user found
     }
-  } else {
-    return { success: false, message: 'User not found' };  // Ingen bruger fundet
+  } catch (error) {
+    console.error('Database connection or query failed:', error);
+    return { success: false, message: 'Login failed due to server error' };
   }
 }
+
 
 
 // DELETE USER
@@ -139,3 +170,7 @@ async loginUser(username, password) {
     const result = await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id`);
     return result.rowsAffected[0];
    }}
+
+ 
+  
+
