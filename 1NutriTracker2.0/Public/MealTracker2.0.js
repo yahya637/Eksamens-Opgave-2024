@@ -44,7 +44,7 @@ function processMealForm() {
     const weightInput = document.getElementById('mealWeight').value;
     const weightConsumed = parseFloat(weightInput);
 
-    //Check if the weight input is a number and if it is greater than 0
+    //Check if the weight input is a number and if it is greater than 0.
     if (isNaN(weightConsumed) || weightConsumed <= 0) {
         console.error('Invalid weight consumed:', weightInput);
         return;
