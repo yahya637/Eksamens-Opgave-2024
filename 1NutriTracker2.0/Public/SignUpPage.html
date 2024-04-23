@@ -111,7 +111,7 @@
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Signup failed!');  // If response not OK, throw error to be caught
+                throw new Error('Signup failed username or email already exists !');  // If response not OK, throw error to be caught
             }
             return response.json();
         })
