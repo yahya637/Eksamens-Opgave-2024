@@ -52,6 +52,14 @@ nav a:hover {
     text-shadow: darkgreen   0px 0px 1px;
 }
 
+.navbar-h a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 24px;
+}
+
 
 .header-row {
     width: 100%;

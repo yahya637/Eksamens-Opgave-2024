@@ -1,3 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+
+.hjem {
+    display: flex;
+    justify-content: center;
+    padding: 20px 2%;
+    background-color: #def6d8;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0; 
+    z-index: 100;
+}
+
+.logo {
+    position: absolute; /* Absolute positioning to place the logo */
+    left: 40px; /* Space from the left edge */
+    color: #91c789;
+    font-size: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    order: 1;
+}
+
+
+.navbar a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 60px; 
+    transition: all 0.3s ease;
+    
+}
+
+
+nav a:hover {
+    color: #76b66c;
+    text-shadow: darkgreen   0px 0px 1px;
+}
+
+.navbar-h a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 24px;
+}
+
 .remove-button{
     background-color: #f44336;
     color: white;
@@ -6,67 +56,164 @@
     padding: 5px;
     margin: 5px;
     cursor: pointer;
+    margin-left: 270px;
+}
+
+body{
+    font-family: 'Nunito', sans-serif;
+    background-color: whitesmoke;
+    /* Have the div centered */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.header-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    padding-left: 5px;
+    padding-right: 5;
+    margin-top: 10px;
+}
+.button-row {
+    display: flex;
+    gap: 10px;
+}
+
+#h2 {
+    color: #2b2b2b;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#registerButton{
+    background-color: #91c789;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 15px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 
+.activityTracker {
+    margin-top: 150px;
+    width: 60em;
+    margin: auto;
+    padding: 20px;
+    border: 2px solid #99d9de;
+    border-radius: 10px;
+    position: relative;
+    top: 150px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
 
 .labelAT {
-    display: flex;
-    font-size: 16px;
-    color: #333;
+    display: block; /* Only one display property is needed, 'block' is used for labels */
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #2b2b2b; 
+    text-align: left;
     margin-top: 20px;
-    margin-bottom: 8px;
+    font-size: 18px;
+    font-weight: bold;
     display: block;
-    justify-content: center;
+}
+
+:focus {
+    border-color: #569BD5;
+    background-color: #ffffff;
+}
+
+#sex{
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 2px solid #91c789;
+    border-radius: 10px;
+    font-size: 16px;
+    width: calc(100% - 25px);
+    background-color: transparent;
+
     
 }
 
 input[type="number"],
 select {
     width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 2;
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 2px solid #91c789;
+    border-radius: 10px;
+    font-size: 16px;
+    width: calc(100% - 25px);
+    margin-bottom: 25px;
+
 }
 
-input::placeholder {
-    color: #888;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: block;
+.labelAT {
+    display: block; /* Makes the label display as a block element */
+    margin-bottom: 10px; /* Adds some space below the label */
+  }
+  
+  section {
+    display: flex; /* Enables flexbox layout */
+    align-items: center; /* Aligns children vertically in the center */
+    gap: 10px; /* Adds space between the children */
+  }
+  
+  #activity-select {
     width: 100%;
-    margin-top: 10px;
+    padding: 15px;
+    border: 2;
+    padding: 10px;
+    border: 2px solid #91c789;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: transparent;
+    border-radius: 10px;
+
+
+  }
+  
+  #add-activity{
+    height: 45px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #91c789;
+    width: 200px;
+    border-radius: 15px;
+}
+    
+
+#add-activity:hover{
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+    text-decoration: none;
+    opacity: 0.8;
 }
 
-button:hover {
-    background-color: #45a049;
+  
+#selected-activities-list {
+    list-style: none; /* Removes the default list bullet points */
+    padding-left: 0; /* Removes the default padding */
 }
+  
 
-h2 {
-    color: #333;
-    font-size: 20px;
-    margin-top: 30px;
-    margin-bottom: 10px;
-}
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-ul li {
-    padding: 8px;
-    border-bottom: 1px solid #eee;
-}
-
-ul li:last-child {
-    border-bottom: none;
-}

@@ -1,9 +1,6 @@
 /* Importing the specified font from Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
-
-
-
 /* Base styles for the entire page */
 body{
     font-family: 'Nunito', sans-serif;
@@ -11,32 +8,6 @@ body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-/* Styles for the header/navbar */
-.hjem {
-    display: flex;
-    justify-content: center;
-    padding: 20px 2%;
-    background-color: #def6d8;
-    background-image: url('Images/svg.png/');
-    background-repeat: no-repeat;
-    background-position: bottom;
-    background-size: cover;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0; 
-    z-index: 100;
-}
-
-.logo {
-    position: absolute; 
-    left: 40px; 
-    color: #91c789;
-    font-size: 30px;
-    font-weight: 700;
-    text-decoration: none;
-    order: 1;
 }
 
 .hjem {
@@ -61,6 +32,8 @@ body{
     order: 1;
 }
 
+
+
 .navbar a {
     text-decoration: none;
     color: #000;
@@ -76,6 +49,15 @@ nav a:hover {
     color: #76b66c;
     text-shadow: darkgreen   0px 0px 1px;
 }
+
+.navbar-h a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 24px;
+}
+
 
 
 #mealCreator {
@@ -155,7 +137,7 @@ button:hover{
 #mealNameInput {
     padding: 10px;
     border: 2px solid #91c789;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 16px;
     width: calc(100% - 25px);
     margin-bottom: 25px;
@@ -164,7 +146,6 @@ button:hover{
 #mealNameInput:focus {
     border-color: #569BD5;
     background-color: #F2FFF5;
-    box-shadow: 0 0 21px #569BD5;  
 }
 
 /* Styles for the ingredientInput label */
@@ -179,7 +160,7 @@ button:hover{
 #ingredientInput {
     padding: 10px;
     border: 2px solid #91c789;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 16px;
     width: calc(100% - 24px);
     margin-bottom: 10px;
@@ -188,7 +169,6 @@ button:hover{
 #ingredientInput:focus {
     border-color: #569BD5;
     background-color: #F2FFF5;
-    box-shadow: 0 0 21px #569BD5;  
 }
 #ingredientDropdown-label {
     font-size: 18px;
@@ -199,7 +179,7 @@ button:hover{
 #ingredientDropdown {
     padding: 10px;
     border: 2px solid #91c789;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 16px;
     background-color: #F2FFF5;
     width: calc(100% - 24px); /* Adjust width considering padding and border */
@@ -235,7 +215,7 @@ button:hover{
 #ingredientWeightInput {
     padding: 10px;
     border: 2px solid #91c789; 
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 16px;
     width: calc(100% - 24px); 
     margin-bottom: 20px; 
@@ -244,14 +224,13 @@ button:hover{
 #ingredientWeightInput:focus {
     border-color: #569BD5; 
     background-color: #F2FFF5; 
-    box-shadow: 0 0 8px #569BD5; 
 }
 
 /* Styles for the selected ingredients list */
 #selectedIngredients {
     padding: 10px;
     border: 2px solid #91c789;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: white;
     margin-bottom: 20px;
     width: 700px;
@@ -306,7 +285,7 @@ button:hover{
 #totalNutri {
     padding: 10px;
     border: 2px solid #91c789;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: white;
     margin-bottom: 20px;
     width: 700px;

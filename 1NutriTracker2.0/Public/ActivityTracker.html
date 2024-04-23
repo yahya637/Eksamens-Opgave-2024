@@ -4,51 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity and BMR Calculator</title>
-    <link rel="stylesheet" href="NutriHome.css">
     <link rel="stylesheet" href="ActivityTracker.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../ActivityTracker.js" defer></script>
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+
 </head>
 
 
 <body>
     <header class="hjem">
-        <a href="../NutriHome.html" class="logo">NutriTracker</a>
+        <a href="NutriHome.html" class="logo">NutriTracker</a>
         <nav class="navbar">
-            <div>
-                <a href="MealCreator2.0.html" id="nav-meal-creator">Meal Creator</a>
-                <a href="MealTracker2.0.html">Meal Tracker</a>
-                <a href="Daily.html">Daily Nutri</a>
-                <a href="../MyProfile.html">My Profile</a> 
+            <div class="navbar-h">
+            <a href="MealCreator2.0.html" id="nav-meal-creator">Meal Creator</a>
+            <a href="MealTracker2.0.html">Meal Tracker</a>
+            <a href="Daily.html">Daily Nutri</a>
+            <a href="ActivityTracker.html">Activity Tracker</a>
+            <a href="MyProfile.html">My Profile</a>
             </div>
-        </nav>        
-    </header>
+        </nav>
+    </nav>
+</header>
 
-    <div class="divAT">
-            <label class="labelAT" for="sex" >Sex:</label>
-            <select id="sex">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
+    <div class="activityTracker">
+            <div class="header-row">
+                <h2 id="h2">Activity Tracker</h2>
+                <div class="button-row">
+                    <button id="registerButton" title="Register Activity">
+                        <i class="gg-add"></i>                </button>
+                </div>
+            </div>
 
-            <label class="labelAT" for="age">Age:</label>
-            <input type="number" id="age" placeholder="Enter your age">
+    <div id="activity-form" style="display: none;">
+        <label class="labelAT" for="sex" >Sex:</label>
+        <select id="sex">
+            <option value="0" disabled selected >Select Sex ↓</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
 
-            <label class="labelAT" for="weight">Weight (kg):</label>
-            <input type="number" id="weight" placeholder="Enter your weight">
+        <label class="labelAT" for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age">
 
-            <label class="labelAT" for="height">Height (cm):</label>
-            <input type="number" id="height" placeholder="Enter your height">
+        <label class="labelAT" for="weight">Weight (kg):</label>
+        <input type="number" id="weight" placeholder="Enter your weight">
+
+        <label class="labelAT" for="height">Height (cm):</label>
+        <input type="number" id="height" placeholder="Enter your height">
 
         <label class="labelAT" for="activity-select">Choose an activity:</label>
-        <select id="activity-select">
-        </select>
-        <button id="add-activity">Add Activity</button>
 
-        <h2>Selected Activities and Calories Burned:</h2>
-        <ul id="selected-activities-list"></ul>
+        <section>
+            <select id="activity-select">
+                <option value="0" disabled selected >Select an activity ↓</option>
+            </select>
+            
+            <button id="add-activity">Add Activity</button>
+        </section>
 
     </div>
+
+
+    <div id="list">
+    <label class="labelAT">Selected Activities and Calories Burned:</label>
+        <ul id="selected-activities-list"></ul>
+    </div>
+</div>
+
 
     
 </body>
