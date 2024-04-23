@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="../NutriHome.css">
+    <link rel="stylesheet" href="../LogInPage.css">
+</head>
+<body>
+
+    <header class="hjem">
+        <a href="../NutriHome.html" class="logo">NutriTracker</a>
+        <nav class="navbar">
+            <div>
+                <a href="MealCreator2.0.html" id="nav-meal-creator">Meal Creator</a>
+                <a href="MealTracker2.0.html">Meal Tracker</a>
+                <a href="Daily.html">Daily Nutri</a>
+                <a href="../MyProfile.html">My Profile</a> 
+            </div>
+        </nav>        
+    </header>
+
+<div>
+    <div id="nutriHome">
+        <div class="lo">
+            <h1>My Profile</h1>
+            <p>Manage your profile information and settings.</p>
+        </div>
+    </div>
+</div>
+
+<div id="profileForm">
+    <form>
+        <button type="button">Manage profile</button>
+        <button type="button" onclick="confirm('Are you sure you want to delete your profile?') && deleteProfile();">Delete Profile</button>
+    </form>
+</div>
+
+<div id="signUp" style="display: none;">
+    <form id="signUpForm">
+        <label id="nameID">Enter Full Name:</label>
+        <input type="text" id="nameInput" placeholder="Enter Full Name" name="nameS">
+
+        <label id="usernameID">Enter Username:</label>
+        <input type="text" id="usernameInput" placeholder="Enter Username" name="usernameS">
+
+        <label id="emailID">Email:</label>
+        <input type="text" id="emailInput" placeholder="Enter Email" name="emailNameS">
+
+        <label for="birthdate">Birthdate:</label>
+        <input type="date" id="birthdate" name="birthdate">
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender">
+            <option value="" disabled selected>Choose a gender</option>
+            <option value="Man">Man</option>
+            <option value="Woman">Woman</option>
+            <option value="Other">Other</option>
+        </select>
+        
+        <label for="'weight">Weight:</label>
+        <input type="number" id="weight" placeholder="Weight in kg" name="weight">
+
+        <button id="profileButton">Sign up</button>
+
+<script>
+
+const profileForm = document.getElementById('profileForm');
+const profileButton = document.getElementById('profileButton');
+
+function hideAndShowForm(){ 
+    if(profileForm.style.display === 'none'){
+        profileForm.style.display = 'block';
+    } else {
+        profileForm.style.display = 'none';
+    }  
+    
+    // The input fields should be populated with the user's current profile information when opening the form
+    // This can be done by fetching the user's profile information from the server
+}
+profileButton.addEventListener('click', hideAndShowForm);
+
+function deleteProfile() {
+    // Implement the logic to delete the profile
+    // This might involve making a fetch request to a server endpoint that handles profile deletion
+    console.log('Profile deletion initiated...');
+}
+</script>
+
+</body>
+</html>
