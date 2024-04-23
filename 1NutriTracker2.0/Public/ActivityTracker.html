@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity and BMR Calculator</title>
     <link rel="stylesheet" href="NutriHome.css">
-
+    <link rel="stylesheet" href="ActivityTracker.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../ActivityTracker.js" defer></script>
 </head>
 
-<body class="bg-gray-100 p-8">
+
+<body>
     <header class="hjem">
         <a href="../NutriHome.html" class="logo">NutriTracker</a>
         <nav class="navbar">
@@ -22,45 +23,32 @@
             </div>
         </nav>        
     </header>
-    
 
-
-    <div id="">
-        <div id="">
-            <label for="sex" id="">Sex:</label>
+    <div>
+            <label class="labelAT" for="sex" >Sex:</label>
             <select id="sex">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
-        </div>
-    
-        <div id="">
-            <label for="age" id="">Age:</label>
+
+            <label class="labelAT" for="age">Age:</label>
             <input type="number" id="age" placeholder="Enter your age">
-        </div>
-    
-        <div id="">
-            <label for="weight" id="">Weight (kg):</label>
+
+            <label class="labelAT" for="weight">Weight (kg):</label>
             <input type="number" id="weight" placeholder="Enter your weight">
-        </div>
-    
-        <div id="">
-            <label for="height" id="">Height (cm):</label>
+
+            <label class="labelAT" for="height">Height (cm):</label>
             <input type="number" id="height" placeholder="Enter your height">
-        </div>
-    
-        <label for="activity-select" id="">Choose an activity:</label>
+
+        <label class="labelAT" for="activity-select">Choose an activity:</label>
         <select id="activity-select">
-            <!-- Options will be dynamically loaded here -->
         </select>
         <button id="add-activity">Add Activity</button>
-    
-        <h2 id="">Selected Activities and Calories Burned:</h2>
-        <ul id="selected-activities-list">
-            <!-- Selected activities and kcal/hour will be listed here -->
-        </ul>
+
+        <h2>Selected Activities and Calories Burned:</h2>
+        <ul id="selected-activities-list"></ul>
+
     </div>
-    
 
     
 </body>

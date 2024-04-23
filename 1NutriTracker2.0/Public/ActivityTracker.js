@@ -119,12 +119,13 @@ const activities = [
             listItem.textContent = `${activity.name} - ${caloriesBurnedPerHour.toFixed(2)} kcal burned/hour based on BMR`;
             const removeButton = document.createElement('button');
             removeButton.textContent = 'Remove';
-            removeButton.className = 'ml-2 text-red-600 hover:text-red-800';
+            removeButton.className = 'remove-button';
             removeButton.onclick = () => removeActivityFromList(activity.name);
             listItem.appendChild(removeButton);
             list.appendChild(listItem);
         });
     }
+    
 
     function calculateCaloriesBurnedPerHour(activityKcalPerHour) {
         const sex = document.getElementById('sex').value;
