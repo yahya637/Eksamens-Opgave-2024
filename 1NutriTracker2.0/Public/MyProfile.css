@@ -10,6 +10,7 @@ body{
     box-sizing: border-box;
 }
 
+
 .hjem {
     display: flex;
     justify-content: center; 

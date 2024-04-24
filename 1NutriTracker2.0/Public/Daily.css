@@ -71,17 +71,23 @@ nav a:hover {
     padding-right: 5
 }
 
-.daily-report-container {
-    margin-top: 100px; /* Adjust this value as needed */
+#daily{
+    width: 60em;
+    margin: auto;
     padding: 20px;
-    text-align: center;
-    box-sizing: border-box; /* Ensures padding does not add to the width */
+    border: 2px solid #99d9de;
+    border-radius: 10px;
+    position: relative;
+    top: 150px;
     display: flex;
-    flex-direction: column; /* Organizes child elements vertically */
-    justify-content: center; /* Centers content vertically in the container */
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
 }
 
-.daily-report-container h1 {
+
+
+h1 {
     color: #333;
     margin-bottom: 20px;
 }
