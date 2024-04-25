@@ -124,8 +124,6 @@ async userExists(username, email) {
     request.input('user_id', sql.Int, id);
     request.input('username', sql.VarChar(50), data.username);
     request.input('email', sql.VarChar(50), data.email);
-    request.input('fullName', sql.VarChar(50), data.fullName);
-    request.input('passwordHash', sql.VarChar(256), data.passwordHash); // Assuming you want to update the passwordHash
     request.input('birthdate', sql.Date, data.birthdate);
     request.input('gender', sql.VarChar(10), data.gender);
     request.input('weight', sql.Decimal(5, 2), data.weight);
@@ -134,8 +132,6 @@ async userExists(username, email) {
       `UPDATE Nutri.Users SET 
         username=@username, 
         email=@email, 
-        fullName=@fullName,
-        passwordHash=@passwordHash,
         birthdate=@birthdate,
         gender=@gender,
         weight=@weight
@@ -160,7 +156,7 @@ async loginUser(username, password) {
 
     const { passwordHash, user_id } = result.recordset[0];
     console.log('Retrieved user_id:', user_id); // Log user_id for debugging
-    
+
     if (!passwordHash) {
       console.log('Password hash not found for user:', username);
       return { success: false, message: 'No password set for this user.' };
