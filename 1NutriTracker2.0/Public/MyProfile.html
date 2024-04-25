@@ -22,10 +22,11 @@
 </header>
 
 <div>
-    <div id="nutriHome">
-        <div class="lo">
-            <h1>My Profile</h1>
-            <p>Manage your profile information and settings.</p>
+  <div id="nutriHome">
+      <div class="lo">
+          <h1>My Profile</h1>
+          <p>Manage your profile information and settings.</p>
+          <p id="welcomeMessage"></p>
         </div>
     </div>
 </div>
@@ -64,6 +65,19 @@
 </div>
 
 <script>
+// Skal omskrrives, dette er en test 
+document.addEventListener('DOMContentLoaded', function () {
+    displayWelcomeMessage();
+});
+
+function displayWelcomeMessage() {
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const username = localStorage.getItem('username');
+    if (username) {
+        welcomeMessage.textContent = `Welcome, ${username}!`;
+    }
+}
+
 // Function to show/hide profile form
 const profileForm = document.getElementById('profileForm');
 const profileButton = document.getElementById('manageProfileButton');

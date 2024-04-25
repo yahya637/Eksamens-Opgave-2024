@@ -65,9 +65,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         })
         .then(data => {
-            if (data.user_id) { // Kontrollér, at du modtager både token og user_id
-                localStorage.setItem('userId', data.user_id); // Gem user_id i localStorage
-                alert('Login successful!');
+            if (data.user_id) { 
+                localStorage.setItem('userId', data.user_id); 
+                localStorage.setItem('username', data.username); 
+                alert(`Login successful! Welcome ${data.username}`);
                 window.location.href = "../MyProfile.html"; // Omdiriger brugeren
             } else {
                 alert('Login failed: ' + data.message);

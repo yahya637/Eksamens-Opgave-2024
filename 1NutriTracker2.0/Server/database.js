@@ -164,9 +164,9 @@ async loginUser(username, password) {
     const isMatch = await bcrypt.compare(password, passwordHash);
     if (!isMatch) {
       console.log('Password does not match for user:', username);
-      return { success: false, message: 'Invalid credentials' };
+      return { success: false, message: 'Invalid credentials' }; 
     }
-    return { success: true, user_id: user_id }; // Return user_id directly
+    return { success: true, user_id: user_id, username: username }; // This is also used for session management and displaying user data on the front-end
   } catch (error) {
     console.error('Database connection or query failed:', error);
     throw error;

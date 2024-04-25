@@ -53,8 +53,8 @@ router.post('/login', async (req, res) => {
   try {
     const loginResult = await database.loginUser(username, password);
     if (loginResult.success) {
-      req.session.userId = loginResult.user_id;  // Gemmer bruger-id i session
-      req.session.username = loginResult.username // Gemmer brugernavn i session FUNGERER IKKE!!!!!!!!!!!!!!!!!!!!!!!!
+      req.session.userId = loginResult.user_id;  
+      req.session.username = loginResult.username;
       res.status(200).json({ message: 'Login successful', username: loginResult.username, user_id: loginResult.user_id });  // Tilføj user_id til respons
     } else {
       res.status(401).json({ message: loginResult.message });
