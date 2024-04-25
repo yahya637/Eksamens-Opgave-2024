@@ -8,19 +8,19 @@
 </head>
 <body>
 
-    <header class="hjem">
-        <a href="NutriHome.html" class="logo">NutriTracker</a>
-        <nav class="navbar">
-            <div class="navbar-h">
+<header class="hjem">
+    <a href="NutriHome.html" class="logo">NutriTracker</a>
+    <nav class="navbar">
+        <div class="navbar-h">
             <a href="MealCreator2.0.html" id="nav-meal-creator">Meal Creator</a>
             <a href="MealTracker2.0.html">Meal Tracker</a>
             <a href="Daily.html">Daily Nutri</a>
             <a href="ActivityTracker.html">Activity Tracker</a>
             <a class="split" href="MyProfile.html">My Profile</a>
-            </div>
-        </nav>
+        </div>
     </nav>
 </header>
+
 <div>
     <div id="nutriHome">
         <div class="lo">
@@ -32,59 +32,82 @@
 
 <div id="homeButtons">
     <form>
-        <button type="button" id="mangeProfileButton">Manage profile</button>
-        <button type="button" id="deleteProfileButton" onclick="confirm('Are you sure you want to delete your profile?') && deleteProfile();">Delete Profile</button>
+        <button type="button" id="manageProfileButton">Manage profile</button>
+        <button type="button" id="deleteProfileButton">Delete Profile</button>
     </form>
 </div>
 
+<!-- Profile form -->
 <div id="profileForm" style="display: none;">
     <form>
-        <label id="nameID">Full Name:</label>
-        <input type="text" id="nameInput" placeholder="Change Full Name" name="nameS">
-
-        <label id="usernameID">Username:</label>
-        <input type="text" id="usernameInput" placeholder="Change Username" name="usernameS">
-
-        <label id="emailID">Email:</label>
-        <input type="text" id="emailInput" placeholder="Change Email" name="emailNameS">
-
-        <label for="birthdate">Birthdate:</label>
-        <input type="date" id="birthdate" name="birthdate">
-
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender">
-            <option value="" disabled selected>Choose a gender</option>
-            <option value="Man">Man</option>
-            <option value="Woman">Woman</option>
-            <option value="Other">Other</option>
-        </select>
-        
-        <label for="'weight">Weight:</label>
-        <input type="number" id="weight" placeholder="Weight in kg" name="weight">
-
-        <button id="confrimButton">Sign up</button>
+    <label id="nameID">Full Name:</label>
+    <input type="text" id="nameInput" placeholder="Change Full Name" name="nameS">
+    
+    <label id="usernameID">Username:</label>
+    <input type="text" id="usernameInput" placeholder="Change Username" name="usernameS">
+    
+    <label id="emailID">Email:</label>
+    <input type="text" id="emailInput" placeholder="Change Email" name="emailNameS">
+    
+    <label for="birthdate">Birthdate:</label>
+    <input type="date" id="birthdate" name="birthdate">
+    
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+    <option value="" disabled selected>Choose a gender</option>
+    <option value="Man">Man</option>
+    <option value="Woman">Woman</option>
+    <option value="Other">Other</option>
+    </select>
+    <label for="'weight">Weight:</label>
+    <input type="number" id="weight" placeholder="Weight in kg" name="weight">
+    
+    <button id="confirmButton">Sign up</button>
+    </form>
+</div>
 
 <script>
-
+// Function to show/hide profile form
 const profileForm = document.getElementById('profileForm');
-const profileButton = document.getElementById('mangeProfileButton');
+const profileButton = document.getElementById('manageProfileButton');
 
-function hideAndShowForm(){ 
-    if(profileForm.style.display === 'none'){
+function hideAndShowForm() {
+    if (profileForm.style.display === 'none') {
         profileForm.style.display = 'block';
     } else {
         profileForm.style.display = 'none';
-    }  
-    
-    // The input fields should be populated with the user's current profile information when opening the form
-    // This can be done by fetching the user's profile information from the server
+    }
 }
 profileButton.addEventListener('click', hideAndShowForm);
 
+document.getElementById('deleteProfileButton').addEventListener('click', deleteProfile);
+
+// Function to delete profile
 function deleteProfile() {
-    // Implement the logic to delete the profile
-    // This might involve making a fetch request to a server endpoint that handles profile deletion
-    console.log('Profile deletion initiated...');
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        alert('User not logged in');
+        return;
+    }
+
+    if (confirm('Are you sure you want to delete your profile?')) {
+        fetch(`/users/${userId}`, { method: 'DELETE' })
+        .then(response => {
+            if (response.ok) {
+                alert('Profile deleted successfully');
+                localStorage.removeItem('userId'); // Remove user_id from local storage
+                window.location.href = "/NutriHome.html"; // Redirect the user
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.message);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete profile: ' + error.message);
+        });
+    }
 }
 </script>
 

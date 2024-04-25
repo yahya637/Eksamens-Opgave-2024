@@ -9,15 +9,15 @@
 </head>
 <body>
 
-    <header class="hjem">
-        <a href="../NutriHome.html" class="logo">NutriTracker</a>
-        <nav class="navbar">
-            <div>
+<header class="hjem">
+    <a href="../NutriHome.html" class="logo">NutriTracker</a>
+    <nav class="navbar">
+        <div>
             <a href="../LogInPage.html">Log In</a>
             <a href="../SignUpPage.html">Sign Up</a>
-            </div>
-        </nav>        
-    </header>
+        </div>
+    </nav>        
+</header>
 
 <div>
     <div id="nutriHome">
@@ -29,26 +29,20 @@
 </div>
 
 <div id="loginForm">
-    <form>
-        <label id="Username-label">Username:</label>
+    <form id="loginForm">
+        <label for="UsernameInput">Username:</label>
         <input type="text" id="UsernameInput" name="username" placeholder="Enter Username">
-        <label id="password-label" for="password">Password:</label>
+        <label for="passwordInput">Password:</label>
         <input type="password" id="passwordInput" name="password" placeholder="Enter Password">
         <button type="submit" id="LogInButton">Log In</button>
     </form>
-    
 </div>
     
-</body>
-
-
 <script>
-
 document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.getElementById('loginForm');  // Ensure the form has this ID
+    const loginForm = document.getElementById('loginForm');
     loginForm.addEventListener('submit', function (event) {
-        event.preventDefault();  // Prevent form from submitting traditionally
-
+        event.preventDefault();
         const username = document.getElementById('UsernameInput').value.trim();
         const password = document.getElementById('passwordInput').value;
 
@@ -59,26 +53,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fetch('/users/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ username, password })
         })
         .then(response => {
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error('Invalid username or password');
-                } else {
-                    throw new Error('Server error, please try again later');
-                }
+            if (response.ok) {
+                return response.json();
             }
-            return response.json();
+            return response.text().then(text => {
+                throw new Error('Failed to login, server response: ' + text);
+            });
         })
         .then(data => {
-            console.log('Success:', data);
-            alert('Login successful!');
-
-            window.location.href = "../MyProfile.html";
+            if (data.user_id) { // Kontrollér, at du modtager både token og user_id
+                localStorage.setItem('userId', data.user_id); // Gem user_id i localStorage
+                alert('Login successful!');
+                window.location.href = "../MyProfile.html"; // Omdiriger brugeren
+            } else {
+                alert('Login failed: ' + data.message);
+            }
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -87,8 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-    </script>
-    
-
+</script>
+</body>
 </html>
-

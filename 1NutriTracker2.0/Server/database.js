@@ -144,38 +144,40 @@ async userExists(username, email) {
     return result.rowsAffected[0];
   }
 
-
 // LOGIN USER
 async loginUser(username, password) {
   try {
-    await this.connect();  // Ensure the database is connected
+    await this.connect();
     const request = this.poolconnection.request();
-    request.input('username', sql.VarChar(50), username);  // Correctly set up the input parameter
+    request.input('username', sql.VarChar(50), username);
 
     const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
-    if (result.recordset.length > 0) {
-      const { passwordHash, user_id } = result.recordset[0];
-
-      // Check if the passwordHash is actually retrieved and not null
-      if (!passwordHash) {
-        return { success: false, message: 'No password set for this user.' };
-      }
-
-      const isMatch = await bcrypt.compare(password, passwordHash);
-      if (isMatch) {
-        return { success: true, user_id: user_id };  // Success with user ID
-      } else {
-        return { success: false, message: 'Invalid credentials' };  // Incorrect password
-      }
-    } else {
-      return { success: false, message: 'User not found' };  // No user found
+    console.log('Database query result:', result.recordset); // Log result recordset for debugging
+    if (result.recordset.length === 0) {
+      console.log('No user found for username:', username);
+      return { success: false, message: 'User not found' };
     }
+
+    const { passwordHash, user_id } = result.recordset[0];
+    console.log('Retrieved user_id:', user_id); // Log user_id for debugging
+    
+    if (!passwordHash) {
+      console.log('Password hash not found for user:', username);
+      return { success: false, message: 'No password set for this user.' };
+    }
+    const isMatch = await bcrypt.compare(password, passwordHash);
+    if (!isMatch) {
+      console.log('Password does not match for user:', username);
+      return { success: false, message: 'Invalid credentials' };
+    }
+    return { success: true, user_id: user_id }; // Return user_id directly
   } catch (error) {
     console.error('Database connection or query failed:', error);
-    return { success: false, message: 'Login failed due to server error' };
+    throw error;
+  } finally {
+    await this.disconnect();
   }
 }
-
 
 
 // DELETE USER
@@ -187,7 +189,3 @@ async loginUser(username, password) {
     const result = await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id`);
     return result.rowsAffected[0];
    }}
-
- 
-  
-

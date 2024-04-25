@@ -69,7 +69,7 @@ nav a:hover {
     width: 100%; 
 }
 
-#mangeProfileButton, #deleteProfileButton {
+#manageProfileButton, #deleteProfileButton {
     flex-grow: 1; 
     background-color: #4CAF50; 
     color: white;
@@ -116,7 +116,7 @@ nav a:hover {
     color: #757572;
 }
 
-#confrimButton {
+#confirmButton {
     width: 100%;
     padding: 15px;
     border: none;
