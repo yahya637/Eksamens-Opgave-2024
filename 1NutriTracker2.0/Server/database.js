@@ -201,51 +201,8 @@ async getAllActivitiesFromTracker() {
   }
 }
 
-async userExistsById(userId) {
-  try {
-    await this.connect();
-    const request = this.poolconnection.request();
-    request.input('user_id', sql.Int, userId);
-
-    const result = await request.query(`
-      SELECT COUNT(*) as count FROM Nutri.Users WHERE user_id = @user_id
-    `);
-
-    return result.recordset[0].count > 0;
-  } catch (error) {
-    console.error('Error checking user existence by ID:', error);
-    throw error;
-  }
-}
-
-// I database.js
-
-async createUserActivity(userActivityData) {
-  try {
-    await this.connect();
-    const request = this.poolconnection.request();
-
-    request.input('user_id', sql.Int, userActivityData.user_id);
-    request.input('activity_id', sql.Int, userActivityData.activity_id);
-    request.input('duration', sql.Int, userActivityData.duration);
-    request.input('total_kcal_burned', sql.Float, userActivityData.total_kcal_burned);
-
-    const result = await request.query(`
-      INSERT INTO nutri.UserActivities (user_id, activity_id, duration, total_kcal_burned)
-      VALUES (@user_id, @activity_id, @duration, (SELECT kcalPerHour FROM nutri.ActivityTracker WHERE activity_id = @activity_id) * @duration/60) 
-    `);
-
-    return result.rowsAffected[0]; // Return the number of rows affected
-  } catch (error) {
-    console.error('Failed to create user activity:', error);
-    throw new Error('Error creating user activity in database');
-  }
-}
-
 
 }
-
-
 
 
 
