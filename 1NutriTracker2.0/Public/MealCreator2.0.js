@@ -377,12 +377,6 @@ document.addEventListener('DOMContentLoaded', function() {
     displaySavedMeals();
 });
 
-
-
-
-
-
-
 // krav C
 // Now i need to add functionality to the show details button, so that the user can see the ingredients and the total nutrition for the meal
 function showMealDetails(mealNumber) { // The meal number is passed as a parameter
@@ -490,6 +484,28 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
     document.getElementById('ingredientsInfo').style.display = 'none'; // hide the ingredientsInfo div when after clicking the button
 });
 
-
+// Function to send data
+function sendData() {
+    // Retrieve data from localStorage
+    const data = localStorage.getItem('meals');
+    if (data) {
+      fetch('http://localhost:3000/mealcreator/saveMeal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data: data })
+      })
+      .then(response => response.json())
+      .then(data => console.log('Success:', data))
+      .catch((error) => console.error('Error:', error));
+    } else {
+      console.log('No data found in localStorage');
+    }
+  }
+  
+  // Call this function when you need to send the data
+  sendData();
+  
 
 

@@ -184,4 +184,57 @@ async loginUser(username, password) {
     request.input('user_id', sql.Int, id);
     const result = await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id`);
     return result.rowsAffected[0];
-   }}
+   }
+  
+   async saveMeal(mealData) {
+    try {
+        await this.connect();
+        const request = this.poolconnection.request();
+    
+        // Convert the date string to a JavaScript Date object
+        const mealDate = new Date(mealData.MealDate);
+    
+        // Convert string numbers to actual floats
+        const calcEnergy100g = parseFloat(mealData.calcEnergy100g);
+        const calcProtein100g = parseFloat(mealData.calcProtein100g);
+        const calcFat100g = parseFloat(mealData.calcFat100g);
+        const calcFiber100g = parseFloat(mealData.calcFiber100g);
+    
+        // Convert string number to actual integer for User_id
+        const userId = parseInt(mealData.User_id, 10);
+    
+        // Check for invalid data that could not be converted
+        if (isNaN(mealDate.getTime())) {
+            throw new Error('Invalid date format.');
+        }
+        if (isNaN(calcEnergy100g) || isNaN(calcProtein100g) || isNaN(calcFat100g) || isNaN(calcFiber100g)) {
+            throw new Error('One of the nutritional values is not a valid number.');
+        }
+        if (isNaN(userId)) {
+            throw new Error('User_id is not a valid integer.');
+        }
+    
+        request.input('MealDate', sql.DateTime, mealDate);
+        request.input('MealName', sql.NVarChar, mealData.MealName);
+        request.input('calcEnergy100g', sql.Float, calcEnergy100g);
+        request.input('calcProtein100g', sql.Float, calcProtein100g);
+        request.input('calcFat100g', sql.Float, calcFat100g);
+        request.input('calcFiber100g', sql.Float, calcFiber100g);
+        request.input('User_id', sql.Int, userId);
+    
+        const query = `
+            INSERT INTO Nutri.Mealcreator (MealDate, MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, User_id) 
+            VALUES (@MealDate, @MealName, @calcEnergy100g, @calcProtein100g, @calcFat100g, @calcFiber100g, @User_id);
+        `;
+    
+        await request.query(query);
+        return { success: true, message: 'Meal data saved successfully' };
+    } catch (error) {
+        console.error('Save meal error:', error);
+        throw error;
+    } finally {
+        await this.disconnect();
+    }
+}  
+  
+  }
