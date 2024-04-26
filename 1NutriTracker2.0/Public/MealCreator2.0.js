@@ -491,5 +491,3 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
 });
 
 
-
-
