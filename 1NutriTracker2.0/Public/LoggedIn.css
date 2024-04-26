@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+body{
+    font-family: 'Nunito', sans-serif;
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.hjem {
+    display: flex;
+    justify-content: center; 
+    padding: 20px 2%; 
+    background-color: #DEF6D8;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0; 
+    z-index: 100;
+}
+
+.logo {
+    position: absolute; /* Absolute positioning to place the logo */
+    left: 40px; /* Space from the left edge */
+    color: #91c789;
+    font-size: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    order: 1;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 60px; /* Provides space between the links */
+    transition: all 0.3s ease;
+    
+}
+
+
+nav a:hover {
+    color: #76b66c;
+    text-shadow: darkgreen   0px 0px 1px;
+}
+
+
+#nutriHome {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    margin-top: 60px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 18px;
+    color: #000;
+
+}
+.navbar a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 60px; /* Provides space between the links */
+    transition: all 0.3s ease;
+    
+}
+
+nav a:hover {
+    color: #76b66c;
+    text-shadow: darkgreen   0px 0px 1px;
+}
+
+.navbar-h a {
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 24px;
+}
+
+#nutriHome .lo {
+    position: relative;
+    z-index: 2; /* Ensures content is above the pseudo-element overlay */
+}
+
+/* Hide the img element since we'll be using it as a background */
+#nutriHome img {
+    display: none; /* Hide the img element */
+}
+
+/* Before pseudo-element for the background image */
+#nutriHome::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('depositphotos_443572692-stock-photo-food-pie-chart-white-background.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1; /* Behind the content */
+    opacity: 0.7; /* Slightly see-through to darken the image */
+}
