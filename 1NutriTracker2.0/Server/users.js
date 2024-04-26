@@ -129,7 +129,7 @@ router.delete('/:id', async (req, res) => {
 
 
 
-// FUNGERER IKKE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// FUNGERER IKKE DETTE VIRKER IKKE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Middleware til at tjekke om brugeren er logget ind
 function ensureLoggedIn(req, res, next) {
   if (req.session.userId) {
@@ -139,9 +139,10 @@ function ensureLoggedIn(req, res, next) {
   }
 }
 
-// Brug dette middleware på beskyttede routes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Brug dette middleware på beskyttede routes DETTE VIRKER IKKE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 router.get('/protected-route', ensureLoggedIn, (req, res) => {
   res.send('This is a protected content.');
 });
+
 
 export default router;
