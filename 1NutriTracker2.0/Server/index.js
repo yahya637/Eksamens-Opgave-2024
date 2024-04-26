@@ -46,7 +46,6 @@ protectedRoutes.forEach(route => {
 
 app.use("/users", users);
 app.use("/activities", activitiy);
-
 app.use("/mealcreator", mealcreator);
 
 app.listen(port, () => {
