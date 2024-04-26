@@ -17,6 +17,7 @@ body{
     left: 0;
     right: 0; 
     z-index: 100;
+    
 }
 
 .logo {
@@ -39,18 +40,9 @@ body{
     
 }
 
-
 nav a:hover {
     color: #76b66c;
     text-shadow: darkgreen   0px 0px 1px;
-}
-
-
-#nutriHome {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    margin-top: 60px;
 }
 
 h2 {
@@ -87,28 +79,49 @@ nav a:hover {
     padding: 24px;
 }
 
-#nutriHome .lo {
+#nutriHome {
+    font-family: Arial, sans-serif;
+    background: url('/top-ten-foods-for-health-2x.webp') no-repeat center center;
+    background-size: cover;
     position: relative;
-    z-index: 2; /* Ensures content is above the pseudo-element overlay */
+    padding: 82px;
+    margin-top: 60px; 
 }
 
-/* Hide the img element since we'll be using it as a background */
-#nutriHome img {
-    display: none; /* Hide the img element */
-}
-
-/* Before pseudo-element for the background image */
 #nutriHome::before {
     content: '';
-    display: block;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('depositphotos_443572692-stock-photo-food-pie-chart-white-background.jpg');
-    background-size: cover;
-    background-position: center;
-    z-index: 1; /* Behind the content */
-    opacity: 0.7; /* Slightly see-through to darken the image */
+    background: rgba(0, 0, 0, 0.404); 
 }
+
+#nutriHome h1 {
+    color: #91c789; 
+    -webkit-text-stroke: 2px #ffffff;
+}
+#nutriHome p {
+    color: #ffab40; 
+    -webkit-text-stroke: 0.5px #ffffff;
+    font-weight: bold; 
+}
+
+.heroTitle {
+    font-size: 52px;
+    font-weight: bold;
+    
+}
+
+.heroSubtitle {
+    font-size: 20px;
+    font-weight: bold;
+ 
+}
+
+.loggedIn {
+    font-size: 18px;
+    font-weight: bold;
+}
+
