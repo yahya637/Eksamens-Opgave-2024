@@ -242,17 +242,6 @@ async createUserActivity(userActivityData) {
   }
 }
 
-
-}
-
-
-
-
-
-
-
-
-
   async saveMeal(mealData) {
     try {
       await this.connect();
