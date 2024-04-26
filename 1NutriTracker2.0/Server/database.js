@@ -1,8 +1,6 @@
 import sql from 'mssql';
 import bcrypt from 'bcrypt';
 
-
-
 export default class Database {
   config = {};
   poolconnection = null;
@@ -45,9 +43,9 @@ export default class Database {
     return result.rowsAffected[0];
   }
 
-// CREATE USER
-async create(data) {
-  try {
+  // CREATE USER
+  async create(data) {
+    try {
       await this.connect();
       const request = this.poolconnection.request();
 
@@ -71,15 +69,15 @@ async create(data) {
       );
 
       return result.rowsAffected[0];  // Return the number of rows affected
-  } catch (error) {
+    } catch (error) {
       console.error('Failed to create user:', error);
       throw new Error('Error creating user in database');
+    }
   }
-}
-// CHECK IF USER EXISTS
 
-async userExists(username, email) {
-  try {
+  // CHECK IF USER EXISTS
+  async userExists(username, email) {
+    try {
       await this.connect();
       const request = this.poolconnection.request();
       request.input('username', sql.VarChar(50), username);
@@ -91,14 +89,13 @@ async userExists(username, email) {
 
       console.log(result.recordset); // Check what's actually returned
       return result.recordset[0].count > 0;
-  } catch (error) {
+    } catch (error) {
       console.error('Error checking user existence:', error);
       throw error;
+    }
   }
-}
 
-  // READ ALL USER
-
+  // READ ALL USERS
   async readAll() {
     await this.connect();
     const request = this.poolconnection.request();
@@ -106,6 +103,7 @@ async userExists(username, email) {
     return result.recordset;
   }
 
+  // READ USER BY ID
   async read(id) {
     await this.connect();
     const request = this.poolconnection.request();
@@ -117,7 +115,6 @@ async userExists(username, email) {
   }
 
   // UPDATE USER
-
   async update(id, data) {
     await this.connect();
     const request = this.poolconnection.request();
@@ -140,52 +137,71 @@ async userExists(username, email) {
     return result.rowsAffected[0];
   }
 
-// LOGIN USER
-async loginUser(username, password) {
-  try {
-    await this.connect();
-    const request = this.poolconnection.request();
-    request.input('username', sql.VarChar(50), username);
+  // LOGIN USER
+  async loginUser(username, password) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+      request.input('username', sql.VarChar(50), username);
 
-    const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
-    console.log('Database query result:', result.recordset); // Log result recordset for debugging
-    if (result.recordset.length === 0) {
-      console.log('No user found for username:', username);
-      return { success: false, message: 'User not found' };
-    }
+      const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
+      console.log('Database query result:', result.recordset); // Log result recordset for debugging
+      if (result.recordset.length === 0) {
+        console.log('No user found for username:', username);
+        return { success: false, message: 'User not found' };
+      }
 
-    const { passwordHash, user_id } = result.recordset[0];
-    console.log('Retrieved user_id:', user_id); // Log user_id for debugging
+      const { passwordHash, user_id } = result.recordset[0];
+      console.log('Retrieved user_id:', user_id); // Log user_id for debugging
 
-    if (!passwordHash) {
-      console.log('Password hash not found for user:', username);
-      return { success: false, message: 'No password set for this user.' };
+      if (!passwordHash) {
+        console.log('Password hash not found for user:', username);
+        return { success: false, message: 'No password set for this user.' };
+      }
+      const isMatch = await bcrypt.compare(password, passwordHash);
+      if (!isMatch) {
+        console.log('Password does not match for user:', username);
+        return { success: false, message: 'Invalid credentials' }; 
+      }
+      return { success: true, user_id: user_id, username: username }; // This is also used for session management and displaying user data on the front-end
+    } catch (error) {
+      console.error('Database connection or query failed:', error);
+      throw error;
+    } finally {
+      await this.disconnect();
     }
-    const isMatch = await bcrypt.compare(password, passwordHash);
-    if (!isMatch) {
-      console.log('Password does not match for user:', username);
-      return { success: false, message: 'Invalid credentials' }; 
-    }
-    return { success: true, user_id: user_id, username: username }; // This is also used for session management and displaying user data on the front-end
-  } catch (error) {
-    console.error('Database connection or query failed:', error);
-    throw error;
-  } finally {
-    await this.disconnect();
   }
-}
 
-
-// DELETE USER
-
+  // DELETE USER
   async delete(id) {
     await this.connect();
     const request = this.poolconnection.request();
     request.input('user_id', sql.Int, id);
     const result = await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id`);
     return result.rowsAffected[0];
-   }
-  
+  }
+
+// Actibity Tracker
+
+async getAllActivitiesFromTracker() {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+
+    const result = await request.query(`
+      SELECT * FROM Nutri.Activitytracker
+    `);
+
+    return result.recordset; // Returner en liste over alle aktiviteter fra Activity Tracker-tabellen
+  } catch (error) {
+    console.error('Failed to get activities from tracker:', error);
+    throw new Error('Error getting activities from tracker in database');
+  } finally {
+    await this.disconnect();
+  }
+}
+
+     
    async saveMeal(mealData) {
     try {
         await this.connect();
@@ -236,5 +252,4 @@ async loginUser(username, password) {
         await this.disconnect();
     }
 }  
-  
-  }
+}

@@ -3,6 +3,7 @@ import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import users from './users.js';
+import activitiy from './activity.js';
 import mealcreator from './mealcreator.js';
 
 const app = express();
@@ -44,6 +45,8 @@ protectedRoutes.forEach(route => {
 
 
 app.use("/users", users);
+app.use("/activities", activitiy);
+
 app.use("/mealcreator", mealcreator);
 
 app.listen(port, () => {

@@ -1,46 +1,8 @@
-const activities = [
-    { name: "Almindelig gang", kcalPerHour: 215 },
-    { name: "Gang ned af trapper", kcalPerHour: 414 },
-    { name: "Gang op af trapper", kcalPerHour: 1079 },
-    { name: "Slå græs med manuel græsslåmaskine", kcalPerHour: 281 },
-    { name: "Lave mad og redde seng", kcalPerHour: 236 },
-    { name: "Luge ukrudt", kcalPerHour: 362 },
-    { name: "Rydde sne", kcalPerHour: 481 },
-    { name: "Læse eller se TV", kcalPerHour: 74 },
-    { name: "Stå oprejst", kcalPerHour: 89 },
-    { name: "Cykling i roligt tempo", kcalPerHour: 310 },
-    { name: "Tørre støv af", kcalPerHour: 163 },
-    { name: "Vaske gulv", kcalPerHour: 281 },
-    { name: "Pudse vinduer", kcalPerHour: 259 },
-    { name: "Cardio", kcalPerHour: 814 },
-    { name: "Hård styrketræning", kcalPerHour: 348 },
-    { name: "Badminton", kcalPerHour: 318 },
-    { name: "Volleyball", kcalPerHour: 318 },
-    { name: "Bordtennis", kcalPerHour: 236 },
-    { name: "Dans i højt tempo", kcalPerHour: 355 },
-    { name: "Dans i moderat tempo", kcalPerHour: 259 },
-    { name: "Fodbold", kcalPerHour: 510 },
-    { name: "Rask gang", kcalPerHour: 384 },
-    { name: "Golf", kcalPerHour: 244 },
-    { name: "Håndbold", kcalPerHour: 466 },
-    { name: "Squash", kcalPerHour: 466 },
-    { name: "Jogging", kcalPerHour: 666 },
-    { name: "Langrend", kcalPerHour: 405 },
-    { name: "Løb i moderat tempo", kcalPerHour: 872 },
-    { name: "Løb i hurtigt tempo", kcalPerHour: 1213 },
-    { name: "Ridning", kcalPerHour: 414 },
-    { name: "Skøjteløb", kcalPerHour: 273 },
-    { name: "Svømning", kcalPerHour: 296 },
-    { name: "Cykling i højt tempo", kcalPerHour: 658 },
-    { name: "Bilreparation", kcalPerHour: 259 },
-    { name: "Gravearbejde", kcalPerHour: 414 },
-    { name: "Landbrugsarbejde", kcalPerHour: 236 },
-    { name: "Let kontorarbejde", kcalPerHour: 185 },
-    { name: "Male hus", kcalPerHour: 215 },
-    { name: "Murerarbejde", kcalPerHour: 207 },
-    { name: "Hugge og slæbe på brænde", kcalPerHour: 1168 },
-];
-const selectedActivities = [];
+// Now we have an API that returns a list of activities with their kcal/hour values /activities
+// We need to create a form that allows users to add activities to a list and see the total kcal burned per hour based on their BMR
+
+async function getActivities() {}
+
 
 // Function to calculate BMR for given inputs
 function calculateBMR(sex, age, weight, height) {
