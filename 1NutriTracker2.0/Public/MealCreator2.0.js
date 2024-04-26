@@ -302,7 +302,7 @@ function submitMeal() {
         mealNumber: counter,
         mealName: document.getElementById('mealNameInput').value,
         totalKcal: energyPer100g.toFixed(2), // .toFixed(2) is used to round the number to 2 decimal places
-        date: new Date().toLocaleDateString(), //.toLocaleDateString() is used to get the current date in string
+        date: new Date().toISOString().slice(0,10), //.toLocaleDateString() is used to get the current date in string
         ingredients: selectedIngredients,
         // Added this after starting MealTracker - I need the total weight for the meal
         totalMealWeight: totalWeight, // I alredy calculated the total weight above to calculate the totalKCal
@@ -494,7 +494,7 @@ function sendData() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ data: data })
+        body: JSON.stringify({ data })
       })
       .then(response => response.json())
       .then(data => console.log('Success:', data))
@@ -504,8 +504,8 @@ function sendData() {
     }
   }
   
-  // Call this function when you need to send the data
-  sendData();
+// Call this function when you need to send the data
+sendData();
   
 
 

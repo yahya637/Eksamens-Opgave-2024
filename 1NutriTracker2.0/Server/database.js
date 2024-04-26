@@ -64,7 +64,7 @@ export default class Database {
 
       // Execute the SQL query
       const result = await request.query(
-          `INSERT INTO Nutri.Users (username, email, fullName, passwordHash, birthdate, gender, weight)
+        `INSERT INTO Nutri.Users (username, email, fullName, passwordHash, birthdate, gender, weight)
            VALUES (@username, @email, @fullName, @passwordHash, @birthdate, @gender, @weight)`
       );
 
@@ -161,7 +161,7 @@ export default class Database {
       const isMatch = await bcrypt.compare(password, passwordHash);
       if (!isMatch) {
         console.log('Password does not match for user:', username);
-        return { success: false, message: 'Invalid credentials' }; 
+        return { success: false, message: 'Invalid credentials' };
       }
       return { success: true, user_id: user_id, username: username }; // This is also used for session management and displaying user data on the front-end
     } catch (error) {
@@ -181,75 +181,57 @@ export default class Database {
     return result.rowsAffected[0];
   }
 
-// Actibity Tracker
+  // Actibity Tracker
 
-async getAllActivitiesFromTracker() {
-  try {
-    await this.connect();
-    const request = this.poolconnection.request();
+  async getAllActivitiesFromTracker() {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
 
-    const result = await request.query(`
+      const result = await request.query(`
       SELECT * FROM Nutri.Activitytracker
     `);
 
-    return result.recordset; // Returner en liste over alle aktiviteter fra Activity Tracker-tabellen
-  } catch (error) {
-    console.error('Failed to get activities from tracker:', error);
-    throw new Error('Error getting activities from tracker in database');
-  } finally {
-    await this.disconnect();
-  }
-}
-
-     
-   async saveMeal(mealData) {
-    try {
-        await this.connect();
-        const request = this.poolconnection.request();
-    
-        // Convert the date string to a JavaScript Date object
-        const mealDate = new Date(mealData.MealDate);
-    
-        // Convert string numbers to actual floats
-        const calcEnergy100g = parseFloat(mealData.calcEnergy100g);
-        const calcProtein100g = parseFloat(mealData.calcProtein100g);
-        const calcFat100g = parseFloat(mealData.calcFat100g);
-        const calcFiber100g = parseFloat(mealData.calcFiber100g);
-    
-        // Convert string number to actual integer for User_id
-        const userId = parseInt(mealData.User_id, 10);
-    
-        // Check for invalid data that could not be converted
-        if (isNaN(mealDate.getTime())) {
-            throw new Error('Invalid date format.');
-        }
-        if (isNaN(calcEnergy100g) || isNaN(calcProtein100g) || isNaN(calcFat100g) || isNaN(calcFiber100g)) {
-            throw new Error('One of the nutritional values is not a valid number.');
-        }
-        if (isNaN(userId)) {
-            throw new Error('User_id is not a valid integer.');
-        }
-    
-        request.input('MealDate', sql.DateTime, mealDate);
-        request.input('MealName', sql.NVarChar, mealData.MealName);
-        request.input('calcEnergy100g', sql.Float, calcEnergy100g);
-        request.input('calcProtein100g', sql.Float, calcProtein100g);
-        request.input('calcFat100g', sql.Float, calcFat100g);
-        request.input('calcFiber100g', sql.Float, calcFiber100g);
-        request.input('User_id', sql.Int, userId);
-    
-        const query = `
-            INSERT INTO Nutri.Mealcreator (MealDate, MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, User_id) 
-            VALUES (@MealDate, @MealName, @calcEnergy100g, @calcProtein100g, @calcFat100g, @calcFiber100g, @User_id);
-        `;
-    
-        await request.query(query);
-        return { success: true, message: 'Meal data saved successfully' };
+      return result.recordset; // Returner en liste over alle aktiviteter fra Activity Tracker-tabellen
     } catch (error) {
-        console.error('Save meal error:', error);
-        throw error;
+      console.error('Failed to get activities from tracker:', error);
+      throw new Error('Error getting activities from tracker in database');
     } finally {
-        await this.disconnect();
+      await this.disconnect();
     }
-}  
+  }
+
+
+  async saveMeal(mealData) {
+    try {
+      await this.connect();
+      
+
+      mealData = mealData.data;
+      mealData = JSON.parse(mealData);
+
+      for (let i = 0; i < mealData.length; i++) {
+        const request = this.poolconnection.request();
+        console.log(mealData[i])
+        request.input('MealName', sql.VarChar, mealData[i].mealName);
+        request.input('calcEnergy100g', sql.Float, mealData[i].totalNutrition.energy);
+
+        const query = `
+        INSERT INTO Nutri.Mealcreator (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, User_id) 
+        VALUES (@MealName, @calcEnergy100g, 1, 1, 1, 16);
+      `;
+  
+        await request.query(query);
+  
+      
+      }
+
+      return { success: true, message: 'Meal data saved successfully' };
+    } catch (error) {
+      console.error('Save meal error:', error);
+      throw error;
+    } finally {
+      await this.disconnect();
+    }
+  }
 }

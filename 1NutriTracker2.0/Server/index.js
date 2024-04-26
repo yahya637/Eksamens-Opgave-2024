@@ -5,10 +5,13 @@ import { fileURLToPath } from 'url';
 import users from './users.js';
 import activitiy from './activity.js';
 import mealcreator from './mealcreator.js';
+import exp from 'constants';
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 3000;
+
+app.use(express.json());
 
 app.use(session({
   secret: 'your_secret_key', // ÆNDRES??????????????????????
