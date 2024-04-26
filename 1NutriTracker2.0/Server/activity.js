@@ -3,7 +3,8 @@ import { config } from './config.js';
 import Database from './database.js';
 
 const router = express.Router();
-router.use(express.json());
+
+router.use(express.json());     
 
 // Development only - don't do in production
 console.log(config);

@@ -128,7 +128,6 @@ router.delete('/:id', async (req, res) => {
 });
 
 
-
 // FUNGERER IKKE DETTE VIRKER IKKE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Middleware til at tjekke om brugeren er logget ind
 function ensureLoggedIn(req, res, next) {

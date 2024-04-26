@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import users from './users.js';
 import activitiy from './activity.js';
+import mealcreator from './mealcreator.js';
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -45,7 +46,7 @@ protectedRoutes.forEach(route => {
 
 app.use("/users", users);
 app.use("/activities", activitiy);
-
+app.use("/mealcreator", mealcreator);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
