@@ -220,6 +220,23 @@ async userExistsById(userId) {
 
 // I database.js
 
+async userExistsById(userId) {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+    request.input('user_id', sql.Int, userId);
+
+    const result = await request.query(`
+      SELECT COUNT(*) as count FROM Nutri.Users WHERE user_id = @user_id
+    `);
+
+    return result.recordset[0].count > 0;
+  } catch (error) {
+    console.error('Error checking user existence by ID:', error);
+    throw error;
+  }
+}
+
 async createUserActivity(userActivityData) {
   try {
     await this.connect();
@@ -255,10 +272,16 @@ async createUserActivity(userActivityData) {
         console.log(mealData[i])
         request.input('MealName', sql.VarChar, mealData[i].mealName);
         request.input('calcEnergy100g', sql.Float, mealData[i].totalNutrition.energy);
+        request.input('calcProtein100g', sql.Float, mealData[i].totalNutrition.protein);
+        request.input('calcFatin100g', sql.Float, mealData[i].totalNutrition.fat);
+        request.input('calcFiberin100g', sql.Float, mealData[i].totalNutrition.fiber);
+
+
+
 
         const query = `
         INSERT INTO Nutri.Mealcreator (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, User_id) 
-        VALUES (@MealName, @calcEnergy100g, 1, 1, 1, 16);
+        VALUES (@MealName, @calcEnergy100g, @calcProtein100g, @calcFatin100g, @calcFiberin100g, 16);
       `;
   
         await request.query(query);
@@ -275,3 +298,5 @@ async createUserActivity(userActivityData) {
     }
   }
 }
+
+// Når man trykker på sumbit meal skal der laves en fetch med den nye anmodning til serveren, og den skal konstant opdatere som den gør lige nu, dette ordnes på html siden med js i mealcreator
