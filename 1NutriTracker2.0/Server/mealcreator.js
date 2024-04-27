@@ -16,7 +16,7 @@ router.post('/saveMeal', async (req, res) => {
     try {
       const mealData = req.body;
       // Log received data for debugging purposes
-      console.log('Received meal data:', mealData);
+      // console.log('Received meal data:', mealData);
   
       const saveResult = await database.saveMeal(mealData);
       if (saveResult.success) {

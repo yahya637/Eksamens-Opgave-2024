@@ -64,7 +64,7 @@ export default class Database {
 
       // Execute the SQL query
       const result = await request.query(
-          `INSERT INTO Nutri.Users (username, email, fullName, passwordHash, birthdate, gender, weight)
+        `INSERT INTO Nutri.Users (username, email, fullName, passwordHash, birthdate, gender, weight)
            VALUES (@username, @email, @fullName, @passwordHash, @birthdate, @gender, @weight)`
       );
 
@@ -161,7 +161,7 @@ export default class Database {
       const isMatch = await bcrypt.compare(password, passwordHash);
       if (!isMatch) {
         console.log('Password does not match for user:', username);
-        return { success: false, message: 'Invalid credentials' }; 
+        return { success: false, message: 'Invalid credentials' };
       }
       return { success: true, user_id: user_id, username: username }; // This is also used for session management and displaying user data on the front-end
     } catch (error) {
@@ -181,25 +181,25 @@ export default class Database {
     return result.rowsAffected[0];
   }
 
-// Actibity Tracker
+  // Actibity Tracker
 
-async getAllActivitiesFromTracker() {
-  try {
-    await this.connect();
-    const request = this.poolconnection.request();
+  async getAllActivitiesFromTracker() {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
 
-    const result = await request.query(`
+      const result = await request.query(`
       SELECT * FROM Nutri.Activitytracker
     `);
 
-    return result.recordset; // Returner en liste over alle aktiviteter fra Activity Tracker-tabellen
-  } catch (error) {
-    console.error('Failed to get activities from tracker:', error);
-    throw new Error('Error getting activities from tracker in database');
-  } finally {
-    await this.disconnect();
+      return result.recordset; // Returner en liste over alle aktiviteter fra Activity Tracker-tabellen
+    } catch (error) {
+      console.error('Failed to get activities from tracker:', error);
+      throw new Error('Error getting activities from tracker in database');
+    } finally {
+      await this.disconnect();
+    }
   }
-}
 
 async userExistsById(userId) {
   try {
@@ -256,12 +256,4 @@ async getAllUserActivities() {
   }
 }
 
-
 }
-
-
-
-
-
-
-
