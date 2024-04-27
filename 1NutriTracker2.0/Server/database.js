@@ -256,4 +256,36 @@ async getAllUserActivities() {
   }
 }
 
+
+// SAVE MEAL
+async saveMeal(mealData) {
+  try {
+    await this.connect();
+
+    mealData = JSON.parse(mealData.data);  // Ensure this step is necessary based on the data format
+    for (let i = 0; i < mealData.length; i++) {
+      const request = this.poolconnection.request();
+      console.log(mealData[i])
+      request.input('MealName', sql.VarChar, mealData[i].mealName);
+      request.input('calcEnergy100g', sql.Float, mealData[i].totalNutrition.energy);
+      request.input('calcProtein100g', sql.Float, mealData[i].totalNutrition.protein);
+      request.input('calcFat100g', sql.Float, mealData[i].totalNutrition.fat);
+      request.input('calcFiber100g', sql.Float, mealData[i].totalNutrition.fiber);
+      request.input('user_id', sql.Int, mealData[i].user_id);  // Ensure user_id is provided in mealData
+
+      const query = `
+        INSERT INTO Nutri.Mealcreator (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, User_id) 
+        VALUES (@MealName, @calcEnergy100g, @calcProtein100g, @calcFat100g, @calcFiber100g, @user_id);
+      `;
+
+      await request.query(query);
+    }
+    return { success: true, message: 'Meal saved successfully' };
+  } catch (error) {
+    console.error('Failed to save meal:', error);
+    throw new Error('Error saving meal in database');
+  } finally {
+    await this.disconnect();
+  }
+}
 }

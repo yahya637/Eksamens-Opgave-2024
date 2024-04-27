@@ -6,11 +6,7 @@ const router = express.Router();
 
 router.use(express.json());     
 
-// Development only - don't do in production
-console.log(config);
-
 // From index.js the endpoint is /activities
-
 // Create database object
 const database = new Database(config);
 
