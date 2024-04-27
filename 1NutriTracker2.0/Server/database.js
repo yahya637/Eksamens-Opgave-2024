@@ -218,27 +218,41 @@ async userExistsById(userId) {
   }
 }
 
-// I database.js
-
+// CREATE USER ACTIVITY
 async createUserActivity(userActivityData) {
   try {
     await this.connect();
     const request = this.poolconnection.request();
-
+    
     request.input('user_id', sql.Int, userActivityData.user_id);
     request.input('activity_id', sql.Int, userActivityData.activity_id);
+    request.input('activity_name', sql.NVarChar, userActivityData.activity_name);
     request.input('duration', sql.Int, userActivityData.duration);
     request.input('total_kcal_burned', sql.Float, userActivityData.total_kcal_burned);
 
     const result = await request.query(`
-      INSERT INTO nutri.UserActivities (user_id, activity_id, duration, total_kcal_burned)
-      VALUES (@user_id, @activity_id, @duration, (SELECT kcalPerHour FROM nutri.ActivityTracker WHERE activity_id = @activity_id) * @duration/60) 
+      INSERT INTO nutri.UserActivities 
+      (user_id, activity_id, activity_name, duration, total_kcal_burned)
+      VALUES (@user_id, @activity_id, @activity_name, @duration, @total_kcal_burned)
     `);
 
     return result.rowsAffected[0]; // Return the number of rows affected
   } catch (error) {
     console.error('Failed to create user activity:', error);
     throw new Error('Error creating user activity in database');
+  }
+}
+
+// GET ALL USER ACTIVITIES
+async getAllUserActivities() {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+    const result = await request.query('SELECT * FROM nutri.UserActivities');
+    return result.recordset; // Assuming you're using SQL Server
+  } catch (error) {
+    console.error('Failed to get user activities:', error);
+    throw new Error('Error fetching user activities from database');
   }
 }
 

@@ -1,7 +1,30 @@
 // Now we have an API that returns a list of activities with their kcal/hour values /activities
 // We need to create a form that allows users to add activities to a list and see the total kcal burned per hour based on their BMR
+let activities = []; // Global array to store activities fetched from the API
 
-async function getActivities() {}
+async function getActivities() {
+    try {
+        const response = await fetch('/activities');
+        if (!response.ok) {
+            throw new Error('Failed to fetch activities: ' + response.statusText);
+        }
+        activities = await response.json(); // Assign fetched activities to the global variable
+        populateDropdown(activities);
+    } catch (error) {
+        console.error('There was a problem fetching the activities:', error);
+    }
+}
+
+function populateDropdown(activities) {
+    const select = document.getElementById('activity-select');
+    select.innerHTML = ''; // Clear existing options
+    activities.forEach(activity => {
+        const option = document.createElement('option');
+        option.value = activity.activity_id;
+        option.textContent = `${activity.name} (${activity.kcalPerHour} kcal/h)`;
+        select.appendChild(option);
+    });
+}
 
 
 // Function to calculate BMR for given inputs
@@ -32,63 +55,43 @@ let factor, base;
         return factor * weight + base;
 }
 
-    document.getElementById('add-activity').addEventListener('click', function() {
-        // Retrieve BMR inputs and calculate BMR
-        const sex = document.getElementById('sex').value;
-        const age = parseInt(document.getElementById('age').value, 10);
-        const weight = parseFloat(document.getElementById('weight').value);
-        const height = parseFloat(document.getElementById('height').value);
 
-    const bmr = calculateBMR(sex, age, weight, height);
-        const kcalPerDay = bmr * 239; // Convert MJ/day to kcal/day (1 MJ/day = 239 kcal/day)
-
-        // Rest of the event listener code...
-        // When adding an activity, multiply its kcal/hour by the user's BMR to get the actual kcal/hour burned
-});
-
-    function populateDropdown() {
-        const select = document.getElementById('activity-select');
-    activities.forEach(activity => {
-            const option = document.createElement('option');
-        option.value = activity.name;
-        option.textContent = `${activity.name} (${activity.kcalPerHour} kcal/time)`;
-        select.appendChild(option);
-    });
-}
+let selectedActivities = []; // Global array for selected activities
 
 function addActivityToList(activityName) {
-        const activity = activities.find(a => a.name === activityName);
-        if (activity && !selectedActivities.includes(activity)) {
-            selectedActivities.push(activity);
-            updateSelectedActivitiesForm();
+    const activity = activities.find(a => a.name === activityName);
+    if (activity && !selectedActivities.includes(activity)) {
+        selectedActivities.push(activity);
+        updateSelectedActivitiesForm();
     }
-
 }
 
 function removeActivityFromList(activityName) {
-        const index = selectedActivities.findIndex(a => a.name === activityName);
-        if (index > -1) {
-            selectedActivities.splice(index, 1);
-            updateSelectedActivitiesForm();
+    const index = selectedActivities.findIndex(a => a.name === activityName);
+    if (index > -1) {
+        selectedActivities.splice(index, 1);
+        updateSelectedActivitiesForm();
     }
 }
 
 function updateSelectedActivitiesForm() {
     const list = document.getElementById('selected-activities-list');
-list.innerHTML = ''; // Clear the list
-selectedActivities.forEach(activity => {
+    list.innerHTML = '';
+    selectedActivities.forEach(activity => {
         const listItem = document.createElement('li');
-    const caloriesBurnedPerHour = calculateCaloriesBurnedPerHour(activity.kcalPerHour);
-    listItem.textContent = `${activity.name} - ${caloriesBurnedPerHour.toFixed(2)} kcal burned/hour based on BMR`;
-    const removeButton = document.createElement('button');
-    removeButton.textContent = 'Remove';
-    removeButton.className = 'remove-button';
-    removeButton.onclick = () => removeActivityFromList(activity.name);
-    listItem.appendChild(removeButton);
-    list.appendChild(listItem);
-});
-    }
-    
+        const caloriesBurnedPerHour = calculateCaloriesBurnedPerHour(activity.kcalPerHour);
+        listItem.textContent = `${activity.name} - ${caloriesBurnedPerHour.toFixed(2)} kcal burned/hour based on BMR`;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.className = 'remove-button';
+        removeButton.onclick = () => removeActivityFromList(activity.name);
+        listItem.appendChild(removeButton);
+        list.appendChild(listItem);
+    });
+}
+
+
+
 
     
     function calculateCaloriesBurnedPerHour(activityKcalPerHour) {
@@ -104,14 +107,6 @@ selectedActivities.forEach(activity => {
         return activityKcalPerHour * (bmrKcalPerHour / 2000); // Assuming 2000 kcal/day is standard
     }
 
-    document.getElementById('add-activity').addEventListener('click', function() {
-        const select = document.getElementById('activity-select');
-        const selectedActivity = select.value;
-        addActivityToList(selectedActivity);
-        updateSelectedActivitiesForm();
-    });
-
-    populateDropdown();
 
     const showActivityTrackerButton = document.getElementById('registerButton');
     const activityTrackerForm = document.getElementById('activity-form');

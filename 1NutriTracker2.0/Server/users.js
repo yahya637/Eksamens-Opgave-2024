@@ -83,7 +83,8 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({ message: "Invalid ID" });
     }
   } catch (err) {
-    res.status(500).json({ error: err?.message });
+    console.error(`Error fetching user data: ${err.message}`, err);
+    res.status(500).json({ error: err.message || "An unexpected error occurred" });
   }
 });
 
@@ -92,8 +93,6 @@ router.put('/:id', async (req, res) => {
     // Update the signup entry with the specified ID
     const signupId = req.params.id;
     const signupData = req.body;
-    console.log(`Updating User ID: ${signupId} with Data: ${JSON.stringify(signupData)}`);
-
     if (signupId && signupData) {
       const rowsAffected = await database.update(signupId, signupData);
       res.status(200).json({ rowsAffected });

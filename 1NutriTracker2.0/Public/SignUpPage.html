@@ -89,6 +89,7 @@
                 birthdate: document.getElementById('birthdate').value,
                 gender: document.getElementById('gender').value,
                 weight: document.getElementById('weight').value 
+                
             };
 
             // Check if the passwords match
@@ -119,6 +120,7 @@
             if (data.message) {
                 alert(data.message);  // Display server-provided message
                 if (data.message === 'Signup successful!') {
+                    window.location.href = "../MyProfile.html"; // Omdiriger brugeren
                     form.reset();  // Reset form only on successful signup
                 }
             }

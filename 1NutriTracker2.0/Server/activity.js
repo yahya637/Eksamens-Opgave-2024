@@ -9,6 +9,8 @@ router.use(express.json());
 // Development only - don't do in production
 console.log(config);
 
+// From index.js the endpoint is /activities
+
 // Create database object
 const database = new Database(config);
 
@@ -25,7 +27,7 @@ router.get('/', async (_, res) => {
   });
   
   // POST User Activity
-  router.post('/useractivities', async (req, res) => {
+  router.post('/', async (req, res) => {
     const userActivityData = req.body;
     console.log(`User Activity Data: ${JSON.stringify(userActivityData)}`);
   
@@ -49,6 +51,16 @@ router.get('/', async (_, res) => {
     }
   });
   
+// GET all User Activities
+router.get('/all', async (req, res) => {
+  try {
+    const allUserActivities = await database.getAllUserActivities();
+    res.status(200).json(allUserActivities);
+  } catch (err) {
+    console.error('Error fetching user activities:', err);
+    res.status(500).json({ error: err.message || 'Error fetching user activities from the database' });
+  }
+});
 
 
   export default router;
