@@ -46,6 +46,21 @@ router.get('/', async (_, res) => {
       res.status(500).json({ error: err?.message || 'Server error during user activity creation' });
     }
   });
+
+// GET user activities by user ID
+router.get('/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  console.log(`Fetching user activities for user ID: ${userId}`);
+
+  try {
+    // Fetch user activities by user ID
+    const userActivities = await database.getUserActivitiesByUserId(userId);
+    res.status(200).json(userActivities);
+  } catch (err) {
+    console.error('Error fetching user activities:', err);
+    res.status(500).json({ error: err.message || 'Error fetching user activities from the database' });
+  }
+});
   
 // GET all User Activities
 router.get('/all', async (req, res) => {

@@ -256,6 +256,23 @@ async getAllUserActivities() {
   }
 }
 
+// GET USER ACTIVITIES BY USER ID
+async getUserActivitiesByUserId(userId) {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+    request.input('user_id', sql.Int, userId);
+
+    const result = await request.query(`
+      SELECT * FROM nutri.UserActivities WHERE user_id = @user_id
+    `);
+
+    return result.recordset;
+  } catch (error) {
+    console.error('Error fetching user activities by user ID:', error);
+    throw new Error('Error fetching user activities by user ID from database');
+  }
+}
 
 // SAVE MEAL
 async saveMeal(mealData) {

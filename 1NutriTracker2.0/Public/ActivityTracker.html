@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../ActivityTracker2.js" defer></script>
     <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 </head>
 
@@ -33,49 +34,95 @@
                 <h2 id="h2">Activity Tracker</h2>
                 <div class="button-row">
                     <button id="registerButton" title="Register Activity">
-                        <i class="gg-add"></i>                </button>
+                        <div id="icons">
+                            <span  title="Register Activity" class="material-symbols-outlined">add</span>
+                            <span  title="Register Activity" class="material-symbols-outlined">directions_run</span> 
+                        </div>
+                                    
+                    </button>
+                    <button id="calculateBMR_Button" title="Calculate BMR">
+                        <div id="icons">
+                        <span title="Calculate BMR"class="material-symbols-outlined">calculate</span>       
+                        <span  id="bmr-i" title="Calculate BMR">BMR</span>
+                        </div>            
+                    </button>
                 </div>
             </div>
 
-    <div id="activity-form">
-        <label class="labelAT" for="sex" >Gender:</label>
-        <select id="sex">
-            <option value="0" disabled selected >Select Gender ↓</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+    <div id="forms">
+        <div id="activity-form" style="display:none;">
+            <!-- TILFØJE EN CONFIRMATION TIL USER-->
 
-        </select>
+            <label class="labelAT" for="duration">Duration (min.):</label>
+            <input type="number" id="duration" placeholder="Enter duration of activity in minutes" class="a-inpunt">
 
-        <label class="labelAT" for="age">Age:</label>
-        <input type="number" id="age" placeholder="Enter your age">
+            <label class="labelAT" for="activity-select">Choose an activity:</label>
 
-        <label class="labelAT" for="weight">Weight (kg):</label>
-        <input type="number" id="weight" placeholder="Enter your weight">
+            <section>
+                <select id="activity-select">
+                    <option value="0" disabled selected >Select an activity ↓</option>
+                </select>
+                
+                <button id="add-activity">Add Activity</button>
+            </section>
 
-        <label class="labelAT" for="height">Height (cm):</label>
-        <input type="number" id="height" placeholder="Enter your height">
+        </div>
 
-        <label class="labelAT" for="duration">Duration (min.):</label>
-        <input type="number" id="duration" placeholder="Enter duration of activity in minutes">
+        <div id="bmr-form" style="display: none;">
+                <label class="labelAT">Your Gender:</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="gender" value="male">
+                        <span class="radio-custom"></span>
+                        Male
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="gender" value="female">
+                        <span class="radio-custom"></span>
+                        Female
+                    </label>
+                </div>
 
-        <label class="labelAT" for="activity-select">Choose an activity:</label>
-
-        <section>
-            <select id="activity-select">
-                <option value="0" disabled selected >Select an activity ↓</option>
-            </select>
             
-            <button id="add-activity">Add Activity</button>
-        </section>
+            <div class="form-row inline-fields">
+                <div class="form-group">
+                    <label class="labelAT" for="age">Age:</label>
+                    <input type="number" id="age" class="form-input" placeholder="Enter your age">
+                </div>
+                <div class="form-group">
+                    <label for="weight" class="labelAT">Weight (kg):</label>
+                    <input type="range" id="weight" class="form-range" min="40" max="200" oninput="document.getElementById('weightOutputId').value = this.value">
+                    <output id="weightOutputId" for="weight" class="range-output">70</output>
+                </div>
+                
+            </div>
+            <div class="form-row">
+                <button id="calc-bmr" class="form-button">Calculate BMR</button>
+            </div>
+            <div>
+                <label class="labelAT">BMR:</label>
+                <span id="bmr-result">0</span>
+            </div>
+            
+        </div>
+        
+        
+
 
     </div>
-
 
     <div id="list">
-    <label class="labelAT">Selected Activities and Calories Burned:</label>
+        <section class="activities-header">
+            <label class="labelAT">Selected Activities and Calories Burned:</label>
+            <button id="toggleActivitiesListButton">Hide Activities</button>
+        </section>
         <ul id="selected-activities-list"></ul>
     </div>
+    
+
+
+
+
 </div>
 
 
