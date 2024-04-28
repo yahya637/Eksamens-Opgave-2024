@@ -504,8 +504,7 @@ function sendData() {
     }
   }
   
-// Call this function when you need to send the data
-sendData();
-  
-
-
+  document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('subBtn');
+    button.addEventListener('click', sendData);
+ });
