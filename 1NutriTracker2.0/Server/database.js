@@ -279,16 +279,16 @@ async saveMeal(mealData) {
   try {
     await this.connect();
 
-    mealData = JSON.parse(mealData.data);  // Ensure this step is necessary based on the data format
+    // Assume mealData is already an object and does not need to be parsed.
     for (let i = 0; i < mealData.length; i++) {
       const request = this.poolconnection.request();
-      console.log(mealData[i])
+      console.log("Saving:", mealData[i]);  // Log each meal item
       request.input('MealName', sql.VarChar, mealData[i].mealName);
       request.input('calcEnergy100g', sql.Float, mealData[i].totalNutrition.energy);
       request.input('calcProtein100g', sql.Float, mealData[i].totalNutrition.protein);
       request.input('calcFat100g', sql.Float, mealData[i].totalNutrition.fat);
       request.input('calcFiber100g', sql.Float, mealData[i].totalNutrition.fiber);
-      request.input('user_id', sql.Int, mealData[i].user_id);  // Ensure user_id is provided in mealData
+      request.input('user_id', sql.Int, mealData[i].user_id);  // Ensure user_id is provided
 
       const query = `
         INSERT INTO Nutri.Mealcreator (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, User_id) 

@@ -486,23 +486,26 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
 
 // Function to send data
 function sendData() {
-    // Retrieve data from localStorage
-    const data = localStorage.getItem('meals');
-    if (data) {
-      fetch('http://localhost:3000/mealcreator/saveMeal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ data })
-      })
-      .then(response => response.json())
-      .then(data => console.log('Success:', data))
-      .catch((error) => console.error('Error:', error));
+    const savedMeals = JSON.parse(localStorage.getItem('meals'));
+    if (savedMeals && savedMeals.length > 0) {
+        // Find the meal with the highest meal number
+        const latestMeal = savedMeals.reduce((max, meal) => max.mealNumber > meal.mealNumber ? max : meal, savedMeals[0]);
+
+        // Send the latest meal data
+        fetch('http://localhost:3000/mealcreator/saveMeal', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(latestMeal)
+        })
+        .then(response => response.json())
+        .then(data => console.log('Success:', data))
+        .catch(error => console.error('Error:', error));
     } else {
-      console.log('No data found in localStorage');
+        console.log('No meals found in localStorage');
     }
-  }
+}
   
   document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('subBtn');
