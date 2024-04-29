@@ -108,7 +108,7 @@ router.delete('/:id', async (req, res) => {
   const userId = req.params.id; // Forsikre dig om, at dette er den korrekte type (string eller number)
   const sessionUserId = req.session.userId; // Samme som ovenfor
 
-  console.log("Session User ID:", sessionUserId, "Requested User ID:", userId);
+  console.log("Requested User ID:", userId);
 
   if (String(userId) !== String(sessionUserId)) {
     return res.status(403).json({ message: "Unauthorized to delete this profile" });
