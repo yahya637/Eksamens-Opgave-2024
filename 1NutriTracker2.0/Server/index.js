@@ -10,7 +10,7 @@ import exp from 'constants';
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 

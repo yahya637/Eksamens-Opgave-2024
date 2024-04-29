@@ -140,6 +140,7 @@ async function updateUser(id, userData) {
 
     // Hvis opdateringen lykkedes, returner svaret som JSON
     return response.json();
+    
   } catch (error) {
     // Håndter eventuelle fejl under fetch-anmodningen
     console.error('Fetch error:', error);
@@ -174,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         console.log('Profile updated:', response); // Udskriv svar fra serveren i konsollen
         alert('Profile updated successfully');
+        displayWelcomeMessage
         
         // Vent 1 sekund før genindlæsning af siden
         setTimeout(() => {

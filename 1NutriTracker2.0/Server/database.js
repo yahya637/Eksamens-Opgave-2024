@@ -172,17 +172,27 @@ export default class Database {
     }
   }
 
-  // DELETE USER
+  // DELETE USER - - -  VRIKER IKKE
   async delete(id) {
     await this.connect();
     const request = this.poolconnection.request();
+    // Bind the user_id parameter to the query
     request.input('user_id', sql.Int, id);
-    const result = await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id`);
+    // It needs to delete user from all tables where user_id is a foreign key
+    const result = await request.query(`
+      DELETE FROM Nutri.UserActivities WHERE user_id = @user_id;
+      DELETE FROM Nutri.Mealcreator WHERE user_id = @user_id;
+      DELETE FROM Nutri.BmrCalculations WHERE user_id = @user_id;
+      DELETE FROM Nutri.Users WHERE user_id = @user_id;
+    `);
     return result.rowsAffected[0];
   }
 
-  // Actibity Tracker
 
+
+
+
+// GET ACTIVITIES FROM DATABASE
   async getAllActivitiesFromTracker() {
     try {
       await this.connect();
@@ -305,4 +315,54 @@ async saveMeal(mealData) {
     await this.disconnect();
   }
 }
+
+// SAVE BMR CALCULATION
+async createBMRData(bmrData) {
+  try {
+    await this.connect();
+
+    const request = this.poolconnection.request();
+    request.input('user_id', sql.Int, bmrData.user_id);
+    request.input('bmr_mj', sql.Decimal(6, 2), bmrData.bmr_mj);
+    request.input('bmr_kcal', sql.Decimal(8, 2), bmrData.bmr_kcal);
+    request.input('calculation_date', sql.Date, bmrData.calculation_date); // Assuming you pass a JS Date object
+
+    const query = `
+      INSERT INTO Nutri.BmrCalculations (user_id, bmr_mj, bmr_kcal, calculation_date) 
+      VALUES (@user_id, @bmr_mj, @bmr_kcal, @calculation_date);
+    `;
+
+    await request.query(query);
+    return { success: true, message: 'BMR calculation saved successfully' };
+  } catch (error) {
+    console.error('Failed to save BMR calculation:', error);
+    throw new Error('Error saving BMR calculation in database');
+  } finally {
+    await this.disconnect();
+  }
 }
+
+// READ BMR CALCULATION BY USER ID
+async getBMRDataByUserId(userId) {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+    request.input('user_id', sql.Int, userId);
+
+    const result = await request.query(`
+      SELECT * FROM Nutri.BmrCalculations WHERE user_id = @user_id
+    `);
+
+    return result.recordset;
+  } catch (error) {
+    console.error('Error fetching BMR data by user ID:', error);
+    throw new Error('Error fetching BMR data by user ID from database');
+  } finally {
+    await this.disconnect();
+  }
+}
+
+}
+
+
+

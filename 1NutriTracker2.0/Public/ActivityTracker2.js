@@ -119,7 +119,7 @@ function displayUserActivities(activities) {
             listItem.innerHTML = `
                 <span class="activity-name">${activityNameWithoutKcal}</span> - 
                 Duration: <span class="activity-duration">${activity.duration} minutes</span>, 
-                Calories Burned: <span class="activity-calories">${parseFloat(activity.total_kcal_burned).toFixed(2)}</span>
+                Calories Burned: <span class="activity-calories">${parseFloat(activity.total_kcal_burned).toFixed(2)} kcal/h</span>
             `;
             activitiesList.appendChild(listItem);
         } else {
@@ -155,11 +155,7 @@ showActivityTrackerButton.addEventListener('click', function() {
 
 showBMRButton.addEventListener('click', function() {
     toggleForm(BMRForm, activityTrackerForm);
-    // Reset the BMR form fields
-    document.getElementById('sex').selectedIndex = 0;
-    document.getElementById('age').value = '';
-    document.getElementById('weight').value = '';
-    document.getElementById('height').value = '';
+   
 });
 
 
@@ -251,17 +247,20 @@ function calculateBMR(sex, age, weight) {
 
     let bmrMJ = factor * weight + base; 
     let bmrKcal = bmrMJ * 239; 
+    
 
     return {
         bmrMJ: bmrMJ.toFixed(2),
         bmrKcal: bmrKcal.toFixed(2)
     };
 }
-
-function displayBmr() {
+function displayBmrAndPost() {
     document.addEventListener('DOMContentLoaded', function() {
         // Add event listener to the Calculate BMR button
         document.getElementById('calc-bmr').addEventListener('click', function() {
+            // Hide any previous success messages to avoid clutter and confusion
+            hideMessage('success-message');
+
             // Get input values from the form
             let age = parseInt(document.getElementById('age').value, 10);
             let weight = parseFloat(document.getElementById('weightOutputId').textContent);
@@ -277,8 +276,148 @@ function displayBmr() {
                 alert('Please fill in all the fields.');
             }
         });
+
+        // Add event listener to the Store BMR button
+        document.getElementById('store-bmr').addEventListener('click', function() {
+            // Get input values from the form
+            let age = parseInt(document.getElementById('age').value, 10);
+            let weight = parseFloat(document.getElementById('weightOutputId').textContent);
+            let sex = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : null;
+
+            // Check if all the inputs are filled
+            if (age && weight && sex) {
+                // Calculate BMR
+                let bmrResults = calculateBMR(sex, age, weight);
+                // Get the user ID from localStorage
+                let userId = localStorage.getItem('userId');
+                // Send BMR data to the server
+                const bmrData = {
+                    user_id: userId,
+                    bmr_mj: bmrResults.bmrMJ,
+                    bmr_kcal: bmrResults.bmrKcal,
+                    calculation_date: new Date().toISOString() 
+                };
+                storeBMRData(bmrData)
+                    .then(response => {
+                        showMessage('BMR calculated and saved successfully.', 'success-message');
+                    })
+                    .catch(error => {
+                        console.error('Failed to store BMR data:', error);
+                    });
+            } else {
+                alert('Please fill in all the fields.');
+            }
+        });
     });
 }
 
+function showMessage(message, elementId) {
+    const successMessage = document.getElementById(elementId);
+    successMessage.textContent = message;
+    successMessage.style.display = 'block';
+}
+
+function hideMessage(elementId) {
+    const successMessage = document.getElementById(elementId);
+    successMessage.style.display = 'none';
+}
+
 // Call the function to initialize the BMR calculator
-displayBmr();
+displayBmrAndPost();
+
+
+
+// I need to save the calculated BMR, with the User_id in the database
+
+async function storeBMRData(data) {
+    return fetch('/activities/bmr', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json(); 
+        } else {
+            throw new Error('Failed to save BMR data'); 
+        }
+    });
+}
+
+// GET all User calculated BMR, so the user can see the BMR history
+
+async function fetchUserBMR() {
+    let user_id = localStorage.getItem('userId');
+    if (!user_id) {
+        console.error('No user ID found in localStorage.');
+        return;
+    }
+
+    fetch(`/activities/bmr/${user_id}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); 
+    })
+    .then(bmrData => {
+        console.log('User BMR data fetched successfully:', bmrData);
+        displayUserBMR(bmrData); 
+    })
+    .catch(error => {
+        console.error('There was a problem fetching user BMR data:', error);
+    });
+}
+
+
+function displayUserBMR(bmrData) {
+    const bmrHistoryElement = document.getElementById('bmr-history');
+    
+    // Clear any existing content in the bmr-history div
+    bmrHistoryElement.innerHTML = '';
+
+    if (bmrData && bmrData.length > 0) {
+        // Create an unordered list element
+        const ul = document.createElement('ul');
+        
+        // Iterate over each BMR data point
+        bmrData.forEach(data => {
+            // Create a new list item element for each BMR data point
+            const li = document.createElement('li');
+            
+            // Remove the time part from the calculation_date string
+            const datePart = data.calculation_date.replace(/T.*$/, '');
+
+            // Set the content of the list item element
+            li.textContent = `${data.bmr_mj} MJ/day, ${data.bmr_kcal} Kcal/day, Date: ${datePart}`;
+            
+            // Append the list item element to the unordered list
+            ul.appendChild(li);
+        });
+
+        // Append the unordered list to the bmr-history div
+        bmrHistoryElement.appendChild(ul);
+    } else {
+        // If no BMR data found, display a message
+        bmrHistoryElement.textContent = 'No BMR data available for this user.';
+    }
+
+    // Display the bmr-history div
+    bmrHistoryElement.style.display = 'block';
+}
+
+
+function toggleBMRHistory() {
+    const bmrHistoryElement = document.getElementById('bmr-history');
+    if (bmrHistoryElement.style.display === 'none') {
+        bmrHistoryElement.style.display = 'block';
+        fetchUserBMR(); // Call fetchUserBMR after showing the BMR history
+    } else {
+        bmrHistoryElement.style.display = 'none';
+    }
+}
+
+// Call toggleBMRHistory function when the show/hide button is clicked
+document.getElementById('show-bmr-history').addEventListener('click', toggleBMRHistory);

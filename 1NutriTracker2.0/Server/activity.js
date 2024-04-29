@@ -75,3 +75,44 @@ router.get('/all', async (req, res) => {
 
 
   export default router;
+
+
+// POST User BMR Calculations
+router.post('/bmr', async (req, res) => {
+  const bmrData = req.body;
+  console.log(`BMR Data: ${JSON.stringify(bmrData)}`);
+
+  try {
+    // Check if the user exists
+    const userExists = await database.userExistsById(bmrData.user_id);
+    if (!userExists) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Insert the BMR calculations into the database
+    const result = await database.createBMRData(bmrData);
+    if (result.success) {
+      res.status(201).json({ message: 'BMR calculations created' });
+    } else {
+      res.status(400).json({ message: result.error || 'Failed to create BMR calculations' });
+    }
+  } catch (err) {
+    console.error('BMR Error:', err);
+    res.status(500).json({ error: 'Server error during BMR calculations creation' });
+  }
+});
+
+// GET BMR Calculations by user ID
+router.get('/bmr/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  console.log(`Fetching BMR calculations for user ID: ${userId}`);
+
+  try {
+    // Fetch BMR calculations by user ID
+    const bmrCalculations = await database.getBMRDataByUserId(userId);
+    res.status(200).json(bmrCalculations);
+  } catch (err) {
+    console.error('Error fetching BMR calculations:', err);
+    res.status(500).json({ error: 'Error fetching BMR calculations from the database' });
+  }
+});
