@@ -5,18 +5,18 @@ async function fetchNutritionalContent(foodId, sortKeys) {
     let nutrition = { energy: 0, protein: 0, fat: 0, fiber: 0 };
 
     // Using a for loop to fetch nutritional data for each sort key
-    for (let i = 0; i < sortKeys.length; i++) { 
+    for (let i = 0; i < sortKeys.length; i++) {
         let sortKey = sortKeys[i] // Get the current sort key
         const apiUrl = `https://nutrimonapi.azurewebsites.net/api/FoodCompSpecs/ByItem/${foodId}/BySortKey/${sortKey}`;
-       
-       // Using a try-catch block to handle errors
+
+        // Using a try-catch block to handle errors
         try { // Try fetching nutritional data for the current sort key
             const response = await fetch(apiUrl, { // await will here wait for the fetch to complete before moving on
 
                 method: 'GET',
                 headers: {
                     'accept': 'text/plain',
-                    'X-API-Key': '168917' 
+                    'X-API-Key': '168917'
                 }
             });
             // If the response is not ok, throw an error
@@ -34,8 +34,8 @@ async function fetchNutritionalContent(foodId, sortKeys) {
             if (sortKey === '1110') nutrition.protein += value;
             if (sortKey === '1310') nutrition.fat += value;
             if (sortKey === '1240') nutrition.fiber += value;
-            
-          // If an error occurs, log it to the console, with the respective sort key
+
+            // If an error occurs, log it to the console, with the respective sort key
         } catch (error) {
             console.error(`Error fetching nutritional content for sortKey ${sortKey}:`, error);
             // .error() is used to log an error message to the console
@@ -76,7 +76,7 @@ async function fetchAllFoodItems() {
             method: 'GET',
             headers: {
                 'accept': 'text/plain',
-                'X-API-Key': '168917' 
+                'X-API-Key': '168917'
             }
         });
 
@@ -84,11 +84,11 @@ async function fetchAllFoodItems() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const foodItems = await response.json(); 
+        const foodItems = await response.json();
         return foodItems;
     } catch (error) {
         console.error('Error fetching all food items:', error);
-        return []; 
+        return [];
     }
 }
 // Krav a
@@ -108,7 +108,7 @@ function showAndHideForm() {     // In the HTML file, the form is hidden by defa
     // The input should be cleared when the form is hidden
     document.getElementById('mealNameInput').value = ''; // Using .value to clear the input field
     document.getElementById('ingredientInput').value = '';
-    document.getElementById('ingredientWeightInput').value = ''; 
+    document.getElementById('ingredientWeightInput').value = '';
     document.getElementById('ingredientDropdown').innerHTML = ''; //.innerHTML to clear the dropdown
 
     // The total nutrition should be reset when the form is hidden
@@ -117,7 +117,7 @@ function showAndHideForm() {     // In the HTML file, the form is hidden by defa
 
 // Add event listener to the add meal button
 // 
-MealButton.addEventListener('click', showAndHideForm); 
+MealButton.addEventListener('click', showAndHideForm);
 // When the button is clicked, the showAndHideForm function will be calleds
 // Now the Add meal form is visible, i need to add functionality to the search field and dropdown
 // Search field for ingredients, i also need to add the dropdown where the API will get implemented
@@ -126,7 +126,7 @@ MealButton.addEventListener('click', showAndHideForm);
 const ingredientInput = document.getElementById('ingredientInput');
 
 // defining an async function to hanlde the ingredientInput
-async function searchIngredientFieldInput () {
+async function searchIngredientFieldInput() {
     // Defining variable query, which is the value of the input field
     const query = ingredientInput.value.trim();     //!!!! HUSK AT FINDE LØSNING OM CASE SENSETIVE
     // The .trim() method makes sure there are no spaces at the beginning or end of a text
@@ -135,11 +135,11 @@ async function searchIngredientFieldInput () {
         // await is used to wait for the searchIngredients (API) fucntion function to complete
         const ingredients = await searchIngredients(query);
         // Now the other fuction (below) will be called to update the dropdown
-        updateIngredientDropdown(ingredients);  
+        updateIngredientDropdown(ingredients);
     }
 }
 // After the async function is defined, i need to add an event listener to the ingredientInput
-ingredientInput.addEventListener('input', searchIngredientFieldInput); 
+ingredientInput.addEventListener('input', searchIngredientFieldInput);
 
 
 // Now i need to define the function that will update the dropdown
@@ -148,14 +148,14 @@ const ingredientDropdown = document.getElementById('ingredientDropdown');
 //Function to update the dropdown menu with search results, although here we have the ingredients as a parameter
 function updateIngredientDropdown(IngredientsInDropdown) { // IngredientsInDropdown is expected to be an array
     // Here i can manipulate the dropdown to be empty using .innerHTML
-    ingredientDropdown.innerHTML = ''; 
+    ingredientDropdown.innerHTML = '';
     // Looping through each ingredient in the IngredientsInDropdown array
     IngredientsInDropdown.forEach(ingredient => { // using a .forEach for a simple loop to iterate through the array
         const ingredientsOption = document.createElement('option'); // This creates a new <option> element
         ingredientsOption.value = ingredient.foodID; // Setting the value of the option to the ingredients foodID
         ingredientsOption.textContent = ingredient.foodName; // Setting the display txt to the ingredients foodName
         ingredientDropdown.appendChild(ingredientsOption); // Adding the newly created <option> to the dropdown
-    }); 
+    });
 
     // Conditional display of the dropdown based on the presence of ingredients
     // If there are ingredients (array length > 0), display the dropdown, otherwise hide it
@@ -178,13 +178,13 @@ async function addSelectedIngredient() { // Using async to handle the fetchNutri
     const sortKeys = ['1030', '1110', '1310', '1240']; // The sort keys to be used for fetching nutritional data
     const nutritionData = await fetchNutritionalContent(selectedIngredientId, sortKeys); // with the new varaible nutritionData and sortKeys
     // as parameters we call the fetchNutritionalContent function
-    
+
     // Update total nutrition for the meal
     function updateTotalNutrition() {
         //This calculates the total nutrition for the meal, it takes the weight of the ingredient into account
         totalNutrition.energy += nutritionData.energy * (weight / 100); // Adjust based on weight
-        totalNutrition.protein += nutritionData.protein * (weight / 100); 
-        totalNutrition.fat += nutritionData.fat * (weight / 100); 
+        totalNutrition.protein += nutritionData.protein * (weight / 100);
+        totalNutrition.fat += nutritionData.fat * (weight / 100);
         totalNutrition.fiber += nutritionData.fiber * (weight / 100);
     }
     updateTotalNutrition();
@@ -198,7 +198,7 @@ async function addSelectedIngredient() { // Using async to handle the fetchNutri
         fat: nutritionData.fat * (weight / 100),
         fiber: nutritionData.fiber * (weight / 100)
     };
-     
+
     // Create the list item with the ingredient name and weight, this will be added to the selectedIngredients list
     const listItem = document.createElement('li'); // .createElement creates a new <li> element
     listItem.textContent = `${selectedIngredientValue} - ${weight}g`; // Setting the text content of the list item
@@ -213,8 +213,8 @@ async function addSelectedIngredient() { // Using async to handle the fetchNutri
         nutritionInfoPer100g: nutritionData // This shows the nutritional content per 100g
     };
 
-      // Husk en if statement til at tjekke der vægt er større end 0
-      if (weight > 0) {   
+    // Husk en if statement til at tjekke der vægt er større end 0
+    if (weight > 0) {
 
         // Retrieve existing ingredients from localStorage
         const savedIngredients = JSON.parse(localStorage.getItem('selectedIngredients')) || [];
@@ -233,17 +233,17 @@ async function addSelectedIngredient() { // Using async to handle the fetchNutri
         - Protein: ${totalNutrition.protein.toFixed(2)} g, 
         - Fat: ${totalNutrition.fat.toFixed(2)} g, 
         - Fiber: ${totalNutrition.fiber.toFixed(2)} g`;
-        
-        
+
+
         // Add the list items to the list
         totalNutritionList.textContent = nutritionSentence;
 
         // call the resetAddMealForm function
-            
-    }else { // If the weight is less than or equal to 0, alert the user
+
+    } else { // If the weight is less than or equal to 0, alert the user
         alert("Please enter a weight greater than 0");
         return;
-    } 
+    }
     // Call the resetAddMealForm function, this makes it easier for the user to add a new ingredient
     resetAddMealForm();
 }
@@ -257,14 +257,14 @@ function resetAddMealForm() {
     ingredientInput.value = '';
     ingredientDropdown.innerHTML = '';
     ingredientWeightInput.value = '';
-} 
+}
 
 // We now need to display the meal with the selected ingredients and in details div the total nutrition.
 // The meal table inculde the meal number, meal name, the total kcal pr 100g,
 // the date it was added, and some actions, which is delete and show details
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM fully loaded and parsed');
-    document.getElementById('subBtn').addEventListener('click', function(event) {
+    document.getElementById('subBtn').addEventListener('click', function (event) {
         event.preventDefault();
         console.log('Button clicked');
         submitMeal();
@@ -287,8 +287,8 @@ function submitMeal() {
         totalNutrition.fat += ingredient.individualNutrition.fat;
         totalNutrition.fiber += ingredient.individualNutrition.fiber;
         // This sums up the total nutrition for the meal
-        });
-    
+    });
+
     // to meet the design suggestions, I chose to also calculate the total kcal per 100 grams and not just the total nutritional content
     let energyPer100g = totalWeight > 0 ? (totalNutrition.energy / totalWeight) * 100 : 0; // I used a conditional operator to simplify the code
     // The total kcal per 100g is calculated by dividing the total energy by the total weight, and then multiplying by 100
@@ -302,19 +302,19 @@ function submitMeal() {
         mealNumber: counter,
         mealName: document.getElementById('mealNameInput').value,
         totalKcal: energyPer100g.toFixed(2), // .toFixed(2) is used to round the number to 2 decimal places
-        date: new Date().toISOString().slice(0,10), //.toLocaleDateString() is used to get the current date in string
+        date: new Date().toISOString().slice(0, 10), //.toLocaleDateString() is used to get the current date in string
         ingredients: selectedIngredients,
         // Added this after starting MealTracker - I need the total weight for the meal
         totalMealWeight: totalWeight, // I alredy calculated the total weight above to calculate the totalKCal
-        totalNutrition: totalNutrition 
+        totalNutrition: totalNutrition
     };
 
 
     // Here the meal object is saved to the local storage
     const savedMeals = JSON.parse(localStorage.getItem('meals')) || []; // savedMeals is an array of meal objects
     savedMeals.push(meal); // Add the new meal to the existing list
-    localStorage.setItem('meals', JSON.stringify(savedMeals)); 
-    localStorage.setItem('mealCounter', counter.toString()); 
+    localStorage.setItem('meals', JSON.stringify(savedMeals));
+    localStorage.setItem('mealCounter', counter.toString());
 
     // When submitting the meal, clear the selected ingredients
     localStorage.removeItem('selectedIngredients');
@@ -331,7 +331,7 @@ function submitMeal() {
 // Now its time to display the meals in the meal table
 // The way i wll approach this matter is by creating a function that will display the meals in the meal table
 // here i need to focus on visualizing the meal object to the HTML document
- function displaySavedMeals() { 
+function displaySavedMeals() {
     // Make sure to retrieve the saved meals from localStorage
     const savedMeals = JSON.parse(localStorage.getItem('meals')) || [];
     // Declare the variable for the meal-Table( HTML element)
@@ -339,12 +339,12 @@ function submitMeal() {
 
     // Clear the table before adding the updated list of meals
     mealTable.innerHTML = ''; // .innerHTML is used to clear the table
-    
+
     // Iterate through each saved meal and create a new meal entry
     savedMeals.forEach(meal => {
         const mealEntry = document.createElement('div');
         mealEntry.className = 'meal-entry';
-        
+
         // Here i use innerHTML to visualize the meal object to the HTML document
         mealEntry.innerHTML = ` 
             <span>${meal.mealNumber}</span>
@@ -356,24 +356,24 @@ function submitMeal() {
                 <button class="show-details-btn" title="Show details" data-meal-number="${meal.mealNumber}"><i class="gg-more-vertical-o"></i></button>
             </span>
             `;                  // data-meal-number is used to store the meal number as a data attribute - <i> is used to add an icon to the button
-    
-            // Append the new meal entry to the meal table
-            mealTable.appendChild(mealEntry);
 
-            // Add event listener to the show details button
-            mealEntry.querySelector('.show-details-btn').addEventListener('click', function(event) {
+        // Append the new meal entry to the meal table
+        mealTable.appendChild(mealEntry);
+
+        // Add event listener to the show details button
+        mealEntry.querySelector('.show-details-btn').addEventListener('click', function (event) {
             const mealNumber = event.target.getAttribute('data-meal-number');
             showMealDetails(mealNumber);
 
             // close the form
             MealForm.style.display = 'none';
-        
-});         
-      
-});
+
+        });
+
+    });
 }
 // Call the displaySavedMeals function to display the meals in the meal table even when the page is reloaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     displaySavedMeals();
 });
 
@@ -391,7 +391,7 @@ function showMealDetails(mealNumber) { // The meal number is passed as a paramet
     existingEntries.forEach(entry => entry.remove()); // .forEach() is used to remove each existing entry
 
     // Populate ingredient table with ingredients of the selected meal
-    meal.ingredients.forEach(ingredient => { 
+    meal.ingredients.forEach(ingredient => {
         const ingredientDiv = document.createElement('div'); // create a new div for each ingredient
         ingredientDiv.innerHTML = `
             <span>${ingredient.foodName}</span>
@@ -406,7 +406,7 @@ function showMealDetails(mealNumber) { // The meal number is passed as a paramet
     // I also want to showcase the total nutrition for the meal in the details div
     // so the same way as in the form i will calculate the total nutrition for the meal
     let totalNutrition = { energy: 0, protein: 0, fat: 0, fiber: 0 };
-    meal.ingredients.forEach(ingredient => {    
+    meal.ingredients.forEach(ingredient => {
         totalNutrition.energy += ingredient.individualNutrition.energy;
         totalNutrition.protein += ingredient.individualNutrition.protein;
         totalNutrition.fat += ingredient.individualNutrition.fat;
@@ -421,14 +421,15 @@ function showMealDetails(mealNumber) { // The meal number is passed as a paramet
     // lastly, add the sentence to the details div
     document.getElementById("totalNutritionSentence").textContent = nutritionSentence;
 
-    
+
 
 
     // Show the details div
-   if  (detailsDiv.style.display = 'none'){ // Use a if statement to show the details div, so if the details div is hidden, it will be shown and vice versa
-         detailsDiv.style.display = 'block';
-   } else {
-       detailsDiv.style.display = 'none';}
+    if (detailsDiv.style.display = 'none') { // Use a if statement to show the details div, so if the details div is hidden, it will be shown and vice versa
+        detailsDiv.style.display = 'block';
+    } else {
+        detailsDiv.style.display = 'none';
+    }
 
 }
 
@@ -460,7 +461,7 @@ document.getElementById('showcaseIngredientsButton').addEventListener('click', a
         const listItem = document.createElement('li'); // create a new list item
         listItem.textContent = foodItem.foodName; // set the text content of the list item
         listItem.setAttribute('dataFoodID', foodItem.foodID);
-    
+
         // When clicking a list item, fetch and display the nutritional content
         listItem.addEventListener('click', async (event) => {
             const foodId = event.currentTarget.getAttribute('dataFoodID');
@@ -476,7 +477,7 @@ document.getElementById('showcaseIngredientsButton').addEventListener('click', a
         });
         // Append the list item to the container
         container.appendChild(listItem);
-    }    
+    }
 });
 
 // Close button event listener
@@ -487,18 +488,19 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
 // Function to send data
 function sendData() {
     const savedMeals = JSON.parse(localStorage.getItem('meals'));
-    const userId = localStorage.getItem('userId'); // Retrieve user_id from localStorage
+    const userId = parseInt(localStorage.getItem('userId'), 10); // Retrieve user_id from localStorage and ensure it is an integer
 
     if (savedMeals && savedMeals.length > 0 && userId) {
-        // Add user_id to each meal object
-let latestMeal=savedMeals[savedMeals.length-1]
-        // Send the latest meal data
+        // Retrieve only the latest meal and add the user_id to it
+        let latestMeal = { ...savedMeals[savedMeals.length - 1], user_id: userId };
+
+        // Send only the latest meal data with the user_id included
         fetch('http://localhost:3000/mealcreator/saveMeal', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify([latestMeal]) // Now sending modified meals array
+            body: JSON.stringify([latestMeal]) // Ensure to wrap it in an array if the server expects an array
         })
         .then(response => response.json())
         .then(data => console.log('Success:', data))
@@ -510,8 +512,12 @@ let latestMeal=savedMeals[savedMeals.length-1]
     }
 }
 
-
-  document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('subBtn');
     button.addEventListener('click', sendData);
- });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('subBtn');
+    button.addEventListener('click', sendData);
+});

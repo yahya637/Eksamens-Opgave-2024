@@ -291,12 +291,14 @@ async saveMeal(mealData) {
     for (let i = 0; i < mealData.length; i++) {
       const request = this.poolconnection.request();
       console.log("Saving:", mealData[i]);  // Log each meal item
+
+      // Correctly mapping inputs to SQL parameters
       request.input('MealName', sql.VarChar, mealData[i].mealName);
       request.input('calcEnergy100g', sql.Float, mealData[i].totalNutrition.energy);
       request.input('calcProtein100g', sql.Float, mealData[i].totalNutrition.protein);
       request.input('calcFat100g', sql.Float, mealData[i].totalNutrition.fat);
       request.input('calcFiber100g', sql.Float, mealData[i].totalNutrition.fiber);
-      request.input('user_id', sql.Int, mealData[i].user_id);
+      request.input('user_id', sql.Int, mealData[i].user_id);  // Ensure this uses the passed user_id
       request.input('totalMealWeight', sql.Decimal(10, 2), mealData[i].totalMealWeight);
 
       const query = `
