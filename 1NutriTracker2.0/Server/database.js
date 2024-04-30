@@ -172,7 +172,7 @@ export default class Database {
     }
   }
 
-  // DELETE USER - - -  VRIKER IKKE
+  // DELETE USER
   async delete(id) {
     await this.connect();
     const request = this.poolconnection.request();

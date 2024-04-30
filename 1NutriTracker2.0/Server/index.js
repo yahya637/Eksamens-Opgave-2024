@@ -5,12 +5,12 @@ import { fileURLToPath } from 'url';
 import users from './users.js';
 import activityRouter from './activity.js';
 import mealcreator from './mealcreator.js';
-import exp from 'constants';
+
 
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 

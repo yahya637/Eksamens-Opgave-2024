@@ -511,3 +511,5 @@ function sendData() {
     const button = document.getElementById('subBtn');
     button.addEventListener('click', sendData);
  });
+
+sendData(); // Call the sendData function to send the latest meal data to the server

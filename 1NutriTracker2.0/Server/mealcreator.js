@@ -10,6 +10,7 @@ const database = new Database(config);
 
 
 router.post('/saveMeal', async (req, res) => {
+  console.log("Received meal data:", req.body); // Check if the data is what you expect
     try {
       const mealData = req.body;
       console.log('Received meal data:', mealData);  // Confirm the structure of received data
