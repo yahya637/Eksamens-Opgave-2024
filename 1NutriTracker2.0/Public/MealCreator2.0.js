@@ -487,29 +487,31 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
 // Function to send data
 function sendData() {
     const savedMeals = JSON.parse(localStorage.getItem('meals'));
-    if (savedMeals && savedMeals.length > 0) {
-        // Find the meal with the highest meal number
-        const latestMeal = savedMeals.reduce((max, meal) => max.mealNumber > meal.mealNumber ? max : meal, savedMeals[0]);
+    const userId = localStorage.getItem('userId'); // Retrieve user_id from localStorage
 
+    if (savedMeals && savedMeals.length > 0 && userId) {
+        // Add user_id to each meal object
+let latestMeal=savedMeals[savedMeals.length-1]
         // Send the latest meal data
         fetch('http://localhost:3000/mealcreator/saveMeal', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(latestMeal)
+            body: JSON.stringify([latestMeal]) // Now sending modified meals array
         })
         .then(response => response.json())
         .then(data => console.log('Success:', data))
         .catch(error => console.error('Error:', error));
+    } else if (!userId) {
+        console.log('User ID not found in localStorage');
     } else {
         console.log('No meals found in localStorage');
     }
 }
-  
+
+
   document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('subBtn');
     button.addEventListener('click', sendData);
  });
-
-sendData(); // Call the sendData function to send the latest meal data to the server

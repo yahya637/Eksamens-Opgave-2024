@@ -284,12 +284,10 @@ async getUserActivitiesByUserId(userId) {
   }
 }
 
-// SAVE MEAL
 async saveMeal(mealData) {
   try {
     await this.connect();
 
-    // Assume mealData is already an object and does not need to be parsed.
     for (let i = 0; i < mealData.length; i++) {
       const request = this.poolconnection.request();
       console.log("Saving:", mealData[i]);  // Log each meal item
@@ -298,11 +296,13 @@ async saveMeal(mealData) {
       request.input('calcProtein100g', sql.Float, mealData[i].totalNutrition.protein);
       request.input('calcFat100g', sql.Float, mealData[i].totalNutrition.fat);
       request.input('calcFiber100g', sql.Float, mealData[i].totalNutrition.fiber);
-      request.input('user_id', sql.Int, mealData[i].user_id);  // Ensure user_id is provided
+      request.input('user_id', sql.Int, mealData[i].user_id);
+      request.input('totalMealWeight', sql.Decimal(10, 2), mealData[i].totalMealWeight);
 
       const query = `
-        INSERT INTO Nutri.Mealcreator (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, User_id) 
-        VALUES (@MealName, @calcEnergy100g, @calcProtein100g, @calcFat100g, @calcFiber100g, @user_id);
+        INSERT INTO Nutri.Mealcreator 
+        (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, user_id, totalMealWeight) 
+        VALUES (@MealName, @calcEnergy100g, @calcProtein100g, @calcFat100g, @calcFiber100g, @user_id, @totalMealWeight);
       `;
 
       await request.query(query);
@@ -315,6 +315,7 @@ async saveMeal(mealData) {
     await this.disconnect();
   }
 }
+
 
 // SAVE BMR CALCULATION
 async createBMRData(bmrData) {
