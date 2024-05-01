@@ -66,6 +66,8 @@ function populateDropdown(meals) {
     });
 }
 
+
+
 fetchMealsFromDatabase();
 
 

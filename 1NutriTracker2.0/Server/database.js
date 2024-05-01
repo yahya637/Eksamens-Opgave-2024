@@ -12,29 +12,31 @@ export default class Database {
   }
 
   async connect() {
-    if (!this.connected) {
-      try {
-        this.poolconnection = await sql.connect(this.config);
-        this.connected = true;
-        console.log('Database connection successful');
-      } catch (error) {
-        console.error(`Error connecting to database: ${JSON.stringify(error)}`);
-        this.connected = false;
-      }
-    } else {
-      console.log('Database already connected');
+    if (!this.poolconnection) { // Only connect if not already connected
+        try {
+            this.poolconnection = new sql.ConnectionPool(this.config);
+            await this.poolconnection.connect();
+            this.connected = true;
+            console.log('Database connection successful');
+        } catch (error) {
+            console.error(`Error connecting to database: ${error}`);
+            this.connected = false;
+        }
     }
-  }
+}
 
-  async disconnect() {
-    try {
-      this.poolconnection.close();
-      this.connected = false;
-      console.log('Database connection closed');
-    } catch (error) {
-      console.error(`Error closing database connection: ${error}`);
+async disconnect() {
+    if (this.poolconnection) {
+        try {
+            await this.poolconnection.close();
+            this.poolconnection = null;
+            this.connected = false;
+            console.log('Database connection closed');
+        } catch (error) {
+            console.error(`Error closing database connection: ${error}`);
+        }
     }
-  }
+}
 
   async executeQuery(query) {
     await this.connect();
@@ -380,8 +382,8 @@ async getAllMealsForMealtrackerByUserId(userId) {
 
     return result.recordset;
   } catch (error) {
-    console.error('Error fetching user activities by user ID:', error);
-    throw new Error('Error fetching user activities by user ID from database');
+    console.error('Error fetching meals by user ID:', error);
+    throw new Error('Error fetching user meals by user ID from database');
   }
 }
 
