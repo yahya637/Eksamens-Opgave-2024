@@ -298,7 +298,7 @@ async saveMeal(mealData) {
       request.input('calcProtein100g', sql.Float, mealData[i].totalNutrition.protein);
       request.input('calcFat100g', sql.Float, mealData[i].totalNutrition.fat);
       request.input('calcFiber100g', sql.Float, mealData[i].totalNutrition.fiber);
-      request.input('user_id', sql.Int, mealData[i].user_id);  // Ensure this uses the passed user_id
+      request.input('user_id', sql.Int, mealData[i].user_id);  
       request.input('totalMealWeight', sql.Decimal(10, 2), mealData[i].totalMealWeight);
 
       const query = `
@@ -364,6 +364,27 @@ async getBMRDataByUserId(userId) {
     await this.disconnect();
   }
 }
+
+// Mealtracker 
+
+// GET USER MEALS BY USER ID
+async getAllMealsForMealtrackerByUserId(userId) {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+    request.input('user_id', sql.Int, userId);
+
+    const result = await request.query(`
+      SELECT * FROM nutri.Mealcreator WHERE user_id = @user_id
+    `);
+
+    return result.recordset;
+  } catch (error) {
+    console.error('Error fetching user activities by user ID:', error);
+    throw new Error('Error fetching user activities by user ID from database');
+  }
+}
+
 
 }
 
