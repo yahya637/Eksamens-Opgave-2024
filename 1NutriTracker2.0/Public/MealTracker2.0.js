@@ -14,7 +14,7 @@ document.getElementById('IntakeMealButton').addEventListener('click', function()
 // Krav a 
 // I have to get the meals from the local storage and display them in <select> element, so they can be selected
 // I will write a function that will fetch the meals
-
+/*
 function fetchMealsFromLocalStorage() {
     const meals = JSON.parse(localStorage.getItem('meals')); // .parse() method will convert the string to an array, .getItem() will get the meals from the local storage
     const selectionOfMeals = document.getElementById('mealSelection'); 
@@ -32,6 +32,42 @@ function fetchMealsFromLocalStorage() {
 }
 // I will call the function to fetch the meals from the local storage
 fetchMealsFromLocalStorage();
+*/
+
+async function fetchMealsFromDatabase() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        console.error('User ID not found');
+        document.getElementById('mealSelection').innerHTML = '<option>Error loading meals: User not identified</option>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/mealtracker1/${userId}`, { method: 'GET' });
+        if (!response.ok) {
+            throw new Error('Failed to fetch meals: ' + response.statusText);
+        }
+        const meals = await response.json();
+        populateDropdown(meals);
+    } catch (error) {
+        console.error('There was a problem fetching the meals:');
+    }
+}
+
+
+function populateDropdown(meals) {
+    const selectionOfMeals = document.getElementById('mealSelection');
+    selectionOfMeals.innerHTML = '';  // Clear existing options
+    meals.forEach(meal => {
+        const option = document.createElement('option');
+        option.value = meal.MealId;
+        option.textContent = `ID: ${meal.MealId}) ${meal.MealName} - ${meal.totalMealWeight}g`;
+        selectionOfMeals.appendChild(option);
+    });
+}
+
+fetchMealsFromDatabase();
+
 
 // Now that i can select the meals from the local storage, i need ro collect the weight input from the user.
 // That can be done by writing a function that will collect the weight input, and procces the rest of the form
@@ -39,6 +75,7 @@ fetchMealsFromLocalStorage();
 function processMealForm() {
     // Get the selected meal number from the dropdown
     const selectedMealID = document.getElementById('mealSelection').value;
+    console.log(selectedMealID)
     
     // Get the weight input from the user and parse it as a number
     const weightInput = document.getElementById('mealWeight').value;
@@ -51,7 +88,7 @@ function processMealForm() {
     }
 
     // Get the meal from local storage based on the selected meal number
-    const createdMeals = JSON.parse(localStorage.getItem('meals'));
+   // const createdMeals = JSON.parse(localStorage.getItem('meals'));
     if (!createdMeals) { // !createdMeals means "if createdMeals is false"
         console.error('No meals data found in local storage.');
         return;

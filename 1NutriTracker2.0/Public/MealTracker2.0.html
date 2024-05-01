@@ -42,10 +42,13 @@
         </div>
 
         <!-- Here is the form which is hidden, therefor display is set to none (Krav a) -->
-        <div id="IntakeMealForm" style="display: none;">
+        <div id="IntakeMealForm">
             <form>
+
                 <label for="mealSelection">Select Meal:</label>
                 <select id="mealSelection" aria-placeholder="Select Created Meal">
+                    <button onclick="fetchMealsFromDatabase()">Refresh Meals</button>
+
                 <!-- From localStorage, meals can be choosen -->
                 <option value="0" disabled selected>Select Created Meal ↓</option>
                 </select>

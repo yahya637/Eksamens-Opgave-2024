@@ -22,7 +22,7 @@ router.get('/:userId', async (req, res) => {
       res.status(200).json(createdMeals);
     } catch (err) {
       console.error('Error fetching user meals:', err);
-      res.status(500).json({ error: err.message || 'Error fetching user meals  from the database' });
+      res.status(500).json({ error: err.message || 'Error fetching user meals from the database' });
     }
   });
   

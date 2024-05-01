@@ -74,7 +74,6 @@ router.get('/all', async (req, res) => {
 });
 
 
-  export default router;
 
 
 // POST User BMR Calculations
@@ -116,3 +115,5 @@ router.get('/bmr/:userId', async (req, res) => {
     res.status(500).json({ error: 'Error fetching BMR calculations from the database' });
   }
 });
+
+export default router;

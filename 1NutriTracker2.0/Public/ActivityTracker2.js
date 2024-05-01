@@ -11,7 +11,7 @@ async function getActivities() {
     try {
         const response = await fetch('/activities', { method: 'GET' });
         if (!response.ok) {
-            throw new Error('Failed to fetch activities: ' + response.statusText);
+            throw new Error('Failed to fetch: ' + response.statusText);
         }
         const activities = await response.json();
         populateDropdown(activities);
