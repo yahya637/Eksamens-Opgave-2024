@@ -331,22 +331,20 @@ function submitMeal() {
 // Now its time to display the meals in the meal table
 // The way i wll approach this matter is by creating a function that will display the meals in the meal table
 // here i need to focus on visualizing the meal object to the HTML document
+// Denne funktion er ansvarlig for at vise gemte måltider, der er lagret i localStorage
 function displaySavedMeals() {
-    // Make sure to retrieve the saved meals from localStorage
+    // Forsøger at hente gemte måltider fra localStorage
     const savedMeals = JSON.parse(localStorage.getItem('meals')) || [];
-    // Declare the variable for the meal-Table( HTML element)
     const mealTable = document.querySelector('.meal-table');
 
-    // Clear the table before adding the updated list of meals
-    mealTable.innerHTML = ''; // .innerHTML is used to clear the table
+    // Rensning af tabel inden nye data tilføjes
+    mealTable.innerHTML = '';
 
-    // Iterate through each saved meal and create a new meal entry
+    // Itererer igennem hvert gemt måltid og tilføjer det til HTML tabellen
     savedMeals.forEach(meal => {
         const mealEntry = document.createElement('div');
         mealEntry.className = 'meal-entry';
-
-        // Here i use innerHTML to visualize the meal object to the HTML document
-        mealEntry.innerHTML = ` 
+        mealEntry.innerHTML = `
             <span>${meal.mealNumber}</span>
             <span>${meal.mealName}</span>
             <span>${meal.totalKcal} kcal</span>
@@ -355,23 +353,51 @@ function displaySavedMeals() {
             <span>
                 <button class="show-details-btn" title="Show details" data-meal-number="${meal.mealNumber}"><i class="gg-more-vertical-o"></i></button>
             </span>
-            `;                  // data-meal-number is used to store the meal number as a data attribute - <i> is used to add an icon to the button
+        `;
 
-        // Append the new meal entry to the meal table
+        // Tilføjer den nye måltidsindgang til tabellen
         mealTable.appendChild(mealEntry);
 
-        // Add event listener to the show details button
-        mealEntry.querySelector('.show-details-btn').addEventListener('click', function (event) {
-            const mealNumber = event.target.getAttribute('data-meal-number');
-            showMealDetails(mealNumber);
-
-            // close the form
-            MealForm.style.display = 'none';
-
+        // Tilføjer en event listener til "Vis detaljer" knappen
+        mealEntry.querySelector('.show-details-btn').addEventListener('click', (event) => {
+            showMealDetails(meal.mealNumber);
         });
-
     });
 }
+
+// Denne funktion viser detaljer om et specifikt måltid, når der klikkes på "Vis detaljer"
+function showMealDetails(mealNumber) {
+    const savedMeals = JSON.parse(localStorage.getItem('meals')) || [];
+    const meal = savedMeals.find(m => m.mealNumber.toString() === mealNumber.toString());
+
+    if (!meal) {
+        console.error('Meal not found!');
+        return;
+    }
+
+    const detailsDiv = document.getElementById('details');
+    const ingredientTable = detailsDiv.querySelector('.ingredient-table');
+    const existingEntries = ingredientTable.querySelectorAll('div:not(.ingredient-header)');
+    existingEntries.forEach(entry => entry.remove());
+
+    meal.ingredients.forEach(ingredient => {
+        const ingredientDiv = document.createElement('div');
+        ingredientDiv.innerHTML = `
+            <span>${ingredient.foodName}</span>
+            <span>${ingredient.weight}g</span>
+        `;
+        ingredientTable.appendChild(ingredientDiv);
+    });
+
+    detailsDiv.querySelector('h3').textContent = `${meal.mealNumber}: ${meal.mealName} details`;
+    detailsDiv.style.display = 'block';
+}
+
+// Event listener til at sikre, at måltiderne vises når dokumentet er indlæst
+document.addEventListener('DOMContentLoaded', function () {
+    displaySavedMeals();
+});
+
 // Call the displaySavedMeals function to display the meals in the meal table even when the page is reloaded
 document.addEventListener('DOMContentLoaded', function () {
     displaySavedMeals();
@@ -526,20 +552,28 @@ async function fetchMealsFromDatabase() {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
         console.error('User ID not found');
-        return;
     }
-
     try {
         const response = await fetch(`/mealcreator/${userId}`, { method: 'GET' });
         if (!response.ok) {
             throw new Error('Failed to fetch meals: ' + response.statusText);
         }
         const meals = await response.json();
-        console.log(meals);
+        console.log(meals)
     } catch (error) {
         console.error('There was a problem fetching the meals:', error.message);
     }
 }
 
 fetchMealsFromDatabase();
+
+function displayMeals(meals) {
+    // Assuming you have a function that handles the DOM manipulation to display meals
+    console.log('Meals fetched:', meals);
+    // Additional code to render meals on the page
+}
+
+
+
+
 
