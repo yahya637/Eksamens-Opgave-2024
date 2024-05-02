@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (data.user_id) { 
-                localStorage.setItem('userId', data.user_id); 
-                localStorage.setItem('username', data.username); 
+                sessionStorage.setItem('userId', data.user_id); 
+                sessionStorage.setItem('username', data.username); 
                 alert(`Login successful! Welcome ${data.username}`);
                 window.location.href = "../MyProfile.html"; // Omdiriger brugeren
             } else {

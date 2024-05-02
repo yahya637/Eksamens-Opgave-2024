@@ -1,5 +1,5 @@
 function displayMealDetails() {
-    const meals = JSON.parse(localStorage.getItem('meals')) || [];
+    const meals = JSON.parse(sessionStorage.getItem('meals')) || [];
     console.log('Retrieved meals:', meals);
     
     let totalMeals = 0;

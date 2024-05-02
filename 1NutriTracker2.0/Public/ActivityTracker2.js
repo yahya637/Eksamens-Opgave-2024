@@ -52,7 +52,7 @@ function handleActivitySubmission() {
     const caloriesBurned = (kcalPerHour / 60) * duration;
   
     storeActivityData({
-        user_id: localStorage.getItem('userId'),
+        user_id: sessionStorage.getItem('userId'),
         activity_id: activityId,
         activity_name: activityName,
         total_kcal_burned: caloriesBurned.toFixed(2),
@@ -83,9 +83,9 @@ function storeActivityData(data) {
 // Therefor i need to fetch the activities from the server and display them in the list
 
 function fetchUserActivities() {
-    let user_id = localStorage.getItem('userId');
+    let user_id = sessionStorage.getItem('userId');
     if (!user_id) {
-        console.error('No user ID found in localStorage.');
+        console.error('No user ID found in sessionStorage.');
         return;
     }
 
@@ -289,7 +289,7 @@ function displayBmrAndPost() {
                 // Calculate BMR
                 let bmrResults = calculateBMR(sex, age, weight);
                 // Get the user ID from localStorage
-                let userId = localStorage.getItem('userId');
+                let userId = sessionStorage.getItem('userId');
                 // Send BMR data to the server
                 const bmrData = {
                     user_id: userId,
@@ -349,9 +349,9 @@ async function storeBMRData(data) {
 // GET all User calculated BMR, so the user can see the BMR history
 
 async function fetchUserBMR() {
-    let user_id = localStorage.getItem('userId');
+    let user_id = sessionStorage.getItem('userId');
     if (!user_id) {
-        console.error('No user ID found in localStorage.');
+        console.error('No user ID found in sessionStorage.');
         return;
     }
 

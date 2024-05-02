@@ -36,7 +36,7 @@ fetchMealsFromLocalStorage();
 
 // This function retrieves meals from the database and populates a dropdown menu
 async function fetchMealsFromDatabase() {
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
     if (!userId) {
         console.error('User ID not found');
         document.getElementById('mealSelection').innerHTML = '<option>Error loading meals: User not identified</option>';
@@ -147,7 +147,7 @@ function logIntakeDetails(intakeDetails) {
 
 // This function saves the intake details to the database
 async function saveIntakeToDatabase(intakeDetails) {
-    const userId = parseInt(localStorage.getItem('userId'), 10);
+    const userId = parseInt(sessionStorage.getItem('userId'), 10);
     if (!userId) {
         console.error('User ID not found');
         return;

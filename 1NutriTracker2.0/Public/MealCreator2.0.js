@@ -488,7 +488,7 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
 // Function to send data
 function sendData() {
     const savedMeals = JSON.parse(localStorage.getItem('meals'));
-    const userId = parseInt(localStorage.getItem('userId'), 10); // Retrieve user_id from localStorage and ensure it is an integer
+    const userId = parseInt(sessionStorage.getItem('userId'), 10); // Retrieve user_id from sessionStorage and ensure it is an integer
 
     if (savedMeals && savedMeals.length > 0 && userId) {
         // Retrieve only the latest meal and add the user_id to it
@@ -506,7 +506,7 @@ function sendData() {
         .then(data => console.log('Success:', data))
         .catch(error => console.error('Error:', error));
     } else if (!userId) {
-        console.log('User ID not found in localStorage');
+        console.log('User ID not found in sessionStorage');
     } else {
         console.log('No meals found in localStorage');
     }
@@ -521,3 +521,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('subBtn');
     button.addEventListener('click', sendData);
 });
+
+async function fetchMealsFromDatabase() {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('User ID not found');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/mealcreator/${userId}`, { method: 'GET' });
+        if (!response.ok) {
+            throw new Error('Failed to fetch meals: ' + response.statusText);
+        }
+        const meals = await response.json();
+        console.log(meals);
+    } catch (error) {
+        console.error('There was a problem fetching the meals:', error.message);
+    }
+}
+
+fetchMealsFromDatabase();
+

@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function displayWelcomeMessage() {
     const welcomeMessage = document.getElementById('welcomeMessage');
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (username) {
         welcomeMessage.textContent = `Welcome, ${username}!`;
     }
@@ -96,7 +96,7 @@ document.getElementById('deleteProfileButton').addEventListener('click', deleteP
 
 // Function to delete profile
 function deleteProfile() {
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
     if (!userId) {
         alert('User not logged in');
         return;
@@ -107,7 +107,7 @@ function deleteProfile() {
         .then(response => {
             if (response.ok) {
                 alert('Profile deleted successfully');
-                localStorage.removeItem('userId'); // Remove user_id from local storage
+                sessionStorage.removeItem('userId'); // Remove user_id from local storage
                 window.location.href = "/NutriHome.html"; // Redirect the user
             } else {
                 return response.json().then(data => {
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         weight: parseFloat(weightInput.value)
       };
 
-      const userId = localStorage.getItem('userId');
+      const userId = sessionStorage.getItem('userId');
 
       try {
         const response = await updateUser(userId, updatedUserData);
