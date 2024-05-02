@@ -25,5 +25,22 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
+// POST new meal
+router.post('/:userId/intake', async (req, res) => {
+  const userId = req.params.userId;
+  const intakeDetails = req.body;
+  console.log('Creating new intake for user', userId, ':', intakeDetails);
+
+  try {
+      // Assuming database.createIntake(userId, intakeDetails) creates a new intake for the user
+      const newIntake = await database.createIntake(userId, intakeDetails);
+      res.status(201).json(newIntake);
+  } catch (err) {
+      console.error('Error creating new intake:', err);
+      res.status(500).json({ error: 'Error creating new intake in the database', details: err.message });
+  }
+});
+
+
   
   export default router;

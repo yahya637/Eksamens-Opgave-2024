@@ -386,6 +386,45 @@ async getAllMealsForMealtrackerByUserId(userId) {
     throw new Error('Error fetching user meals by user ID from database');
   }
 }
+// CREATE INTAKE
+async createIntake(userId, intakeDetails) {
+  try {
+    // Ensure database connection
+    await this.connect();
+
+    // Prepare SQL query
+    const query = `
+      INSERT INTO Nutri.consumedMeal (meal_Id, user_Id, mealName, consumedWeight, consumedEnergy, consumedProtein, consumedFat, consumedFiber, dateAdded, timeAdded, location)
+      VALUES (@mealId, @userId, @mealName, @consumedWeight, @consumedEnergy, @consumedProtein, @consumedFat, @consumedFiber, @dateAdded, @timeAdded, @location);
+    `;
+
+    // Create request
+    const request = this.poolconnection.request();
+
+    // Set input parameters
+    request.input('mealId', intakeDetails.mealId);
+    request.input('userId', userId);
+    request.input('mealName', intakeDetails.mealName);
+    request.input('consumedWeight', intakeDetails.consumedWeight);
+    request.input('consumedEnergy', intakeDetails.consumedEnergy);
+    request.input('consumedProtein', intakeDetails.consumedProtein);
+    request.input('consumedFat', intakeDetails.consumedFat);
+    request.input('consumedFiber', intakeDetails.consumedFiber);
+    request.input('dateAdded', intakeDetails.dateAdded);
+    request.input('timeAdded', intakeDetails.timeAdded);
+    request.input('location', intakeDetails.location);
+
+    // Execute query
+    const result = await request.query(query);
+
+    // Return the inserted record (optional)
+    return result.recordset;
+  } catch (error) {
+    console.error('Error creating intake:', error);
+    throw error; // Rethrow the error for handling at a higher level
+  }
+}
+
 
 
 }

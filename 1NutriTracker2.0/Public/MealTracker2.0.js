@@ -34,6 +34,7 @@ function fetchMealsFromLocalStorage() {
 fetchMealsFromLocalStorage();
 */
 
+// This function retrieves meals from the database and populates a dropdown menu
 async function fetchMealsFromDatabase() {
     const userId = localStorage.getItem('userId');
     if (!userId) {
@@ -50,19 +51,20 @@ async function fetchMealsFromDatabase() {
         const meals = await response.json();
         populateDropdown(meals);
     } catch (error) {
-        console.error('There was a problem fetching the meals:');
+        console.error('There was a problem fetching the meals:', error.message);
     }
 }
 
-
+// This function populates the dropdown menu with meals
 function populateDropdown(meals) {
     const selectionOfMeals = document.getElementById('mealSelection');
     selectionOfMeals.innerHTML = '';  // Clear existing options
     meals.forEach(meal => {
         const option = document.createElement('option');
         option.value = meal.MealId;
-        option.textContent = `ID: ${meal.MealId}) ${meal.MealName} - ${meal.totalMealWeight}g`;
+        option.textContent = `${meal.MealName} - ${meal.totalMealWeight}g`;
         option.setAttribute('data-name', meal.MealName);
+        option.setAttribute('data-id', meal.MealId);
         option.setAttribute('data-weight', meal.totalMealWeight);
         option.setAttribute('data-energy', meal.calcEnergy100g);
         option.setAttribute('data-protein', meal.calcProtein100g);
@@ -71,122 +73,122 @@ function populateDropdown(meals) {
         selectionOfMeals.appendChild(option);
     });
 }
-
-fetchMealsFromDatabase();
-
-
-
-
-// Now that i can select the meals from the database, i need to collect the weight input from the user.
-// That can be done by writing a function that will collect the weight input, and procces the rest of the form
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('mealForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+        processMealForm();
+    });
+});
+// This function processes the meal form to calculate and log the nutritional intake
 function processMealForm() {
     const mealSelect = document.getElementById('mealSelection');
     const selectedOption = mealSelect.options[mealSelect.selectedIndex];
-    const selectedMealID = selectedOption.value;
-    const selectedMealName = selectedOption.getAttribute('data-name');
-    const selectedMealWeight = parseFloat(selectedOption.getAttribute('data-weight'));
     const weightInput = document.getElementById('consumedMealWeight').value;
+    if (!weightInput) {
+        console.error('Please enter the consumed meal weight');
+        return;
+    }
     const weightConsumed = parseFloat(weightInput);
+    const intakeDetails = calculateIntakeDetails(selectedOption, weightConsumed);
+    logIntakeDetails(intakeDetails);
+    // Simulate saving data and then showing confirmation
+    try {
+        // Simulate a successful operation (replace this with your actual data handling logic)
+        displayConfirmationMessage('Meal intake saved successfully!', 'success');
+    } catch (error) {
+        displayConfirmationMessage('Failed to save meal intake.', 'error');
+        console.error('Error:', error);
+    }
+}
+function displayConfirmationMessage(message, type) {
+    const messageDiv = document.getElementById('confirmationMessage');
+    messageDiv.textContent = message;
+    messageDiv.style.display = 'block';
+    messageDiv.style.color = type === 'success' ? 'green' : 'red';
+}
 
-    if (isNaN(weightConsumed) || weightConsumed <= 0) {
-        console.error('Invalid weight consumed:', weightInput);
-        document.getElementById('errorDisplay').textContent = 'Please enter a valid weight greater than zero.';
+// This function calculates the nutritional details based on selected meal and consumed weight
+function calculateIntakeDetails(selectedOption, weightConsumed) {
+    const selectedMealWeight = parseFloat(selectedOption.getAttribute('data-weight'));
+    const mealNutrients = {
+        energy: parseFloat(selectedOption.getAttribute('data-energy')),
+        protein: parseFloat(selectedOption.getAttribute('data-protein')),
+        fat: parseFloat(selectedOption.getAttribute('data-fat')),
+        fiber: parseFloat(selectedOption.getAttribute('data-fiber'))
+    };
+    return {
+        mealId: selectedOption.getAttribute('data-id'),
+        mealName: selectedOption.getAttribute('data-name'),
+        consumedWeight: weightConsumed,
+        consumedEnergy: ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2),
+        consumedProtein: ((mealNutrients.protein / selectedMealWeight) * weightConsumed).toFixed(2),
+        consumedFat: ((mealNutrients.fat / selectedMealWeight) * weightConsumed).toFixed(2),
+        consumedFiber: ((mealNutrients.fiber / selectedMealWeight) * weightConsumed).toFixed(2),
+        dateAdded: new Date().toLocaleDateString(),
+        timeAdded: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+    };
+}
+
+// This function logs the intake details and manages location retrieval
+function logIntakeDetails(intakeDetails) {
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            intakeDetails.location = `Latitude: ${position.coords.latitude.toFixed(3)}, Longitude: ${position.coords.longitude.toFixed(3)}`;
+            saveIntakeToDatabase(intakeDetails);
+        },
+        error => {
+            console.error('Error getting location:', error);
+            intakeDetails.location = 'Location not available';
+            saveIntakeToDatabase(intakeDetails);
+        }
+    );
+}
+
+// This function saves the intake details to the database
+async function saveIntakeToDatabase(intakeDetails) {
+    const userId = parseInt(localStorage.getItem('userId'), 10);
+    if (!userId) {
+        console.error('User ID not found');
         return;
     }
 
-    const mealEnergy = parseFloat(selectedOption.getAttribute('data-energy'));
-    const mealProtein = parseFloat(selectedOption.getAttribute('data-protein'));
-    const mealFat = parseFloat(selectedOption.getAttribute('data-fat'));
-    const mealFiber = parseFloat(selectedOption.getAttribute('data-fiber'));
+    try {
+        const response = await fetch(`/mealtracker1/${userId}/intake`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(intakeDetails)
+        });
 
-    const consumedEnergy = (mealEnergy / selectedMealWeight) * weightConsumed;
-    const consumedProtein = (mealProtein / selectedMealWeight) * weightConsumed;
-    const consumedFat = (mealFat / selectedMealWeight) * weightConsumed;
-    const consumedFiber = (mealFiber / selectedMealWeight) * weightConsumed;
+        if (!response.ok) {
+            throw new Error('Failed to save intake: ' + response.statusText);
+        }
 
-    const date = new Date();
-    const intakeDate = date.toLocaleDateString();
-    const timeOptions = { hour12: false, hour: '2-digit', minute: '2-digit' };
-    const intakeTime = date.toLocaleTimeString(undefined, timeOptions);
-
-    // Declare intakeDetails outside the getCurrentPosition function
-    let  intakeDetails = {};
-
-    // Check if geolocation is supported
-    if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                const latitude = position.coords.latitude.toFixed(3);
-                const longitude = position.coords.longitude.toFixed(3);
-                const locationString = `Latitude: ${latitude}, Longitude: ${longitude}`;
-                // Assign value to intakeDetails inside the callback
-                intakeDetails = {
-                    mealId: selectedMealID,
-                    mealName: selectedMealName,
-                    consumedWeight: weightConsumed,
-                    consumedEnergy: consumedEnergy.toFixed(2),
-                    consumedProtein: consumedProtein.toFixed(2),
-                    consumedFat: consumedFat.toFixed(2),
-                    consumedFiber: consumedFiber.toFixed(2),
-                    dateAdded: intakeDate, 
-                    timeAdded: intakeTime,
-                    location: locationString
-                };
-                console.log("Intake Details:", intakeDetails);
-                saveIntakeToDatabase(intakeDetails); // Call saveIntakeToDatabase here
-                clearForm(); // Clear the form after successfully saving intake
-            },
-            error => {
-                console.error('Error getting location:', error);
-            }
-        );
-    } else {
-        console.error('Geolocation is not available');
+        try {
+            const newIntake = await response.json();
+            alert('Intake saved successfully');
+        } catch (jsonError) {
+            console.error('Failed to parse JSON:', jsonError);
+            // Handle cases where response is not in JSON format
+            const responseText = await response.text();  // Fetch the raw response text
+            console.error('Response received:', responseText);
+        }
+    } catch (error) {
+        console.error('There was a problem saving the intake:', error.message);
     }
 }
 
 
+fetchMealsFromDatabase(); // Start fetching meals when the script loads
 
-function saveIntakeToDatabase(intakeDetails) {
-    fetch('/save-intake', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(intakeDetails)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to save intake: ' + response.statusText);
-        }
-        console.log('Intake saved successfully!');
-        // You might want to perform further actions here, such as updating the UI or navigating to another page
-    })
-    .catch(error => {
-        console.error('Error saving intake:', error);
-        // Handle the error, e.g., display an error message to the user
-    });
-}
 
-// Usage:
-saveIntakeToDatabase(intakeDetails); // fejl her
 
-// Funtion to cleat the form after the intake is saved
-function clearForm() {
-    document.getElementById('mealSelection').value = ''; 
-    document.getElementById('mealWeight').value = '';
-    const intakeMealFormVar = document.getElementById('IntakeMealForm');
-    intakeMealFormVar.style.display = 'none';
-}
-
-// Add an event listener to the submit button
-document.getElementById('submitIntakeMeal').addEventListener('click', function(event) {
-    event.preventDefault();
+// Add an event listener to the submitIntakeMeal button
+document.getElementById('submitIntakeMeal').addEventListener('click', function() {
     processMealForm();
 });
 
-document.addEventListener('DOMContentLoaded', displayMealIntakes);
-
+/*
 function displayMealIntakes() {
     const intakeEntriesContainer = document.querySelector('.intake-entries');
     intakeEntriesContainer.innerHTML = ''; // Clear the container before adding new entries
@@ -207,9 +209,7 @@ function displayMealIntakes() {
         `;
         intakeEntriesContainer.appendChild(intakeEntry);
     });
-}
-
-
+}*/
 
 
 // Krav b - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
