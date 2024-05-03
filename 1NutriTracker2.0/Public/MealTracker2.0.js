@@ -197,11 +197,6 @@ function displayMealIntakes(mealIntakes) {
 
 
 
-
-
-
-
-
 // Krav b - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // I have to have the option to register the intake of a individual ingredient. To this i have another form that will be shown and hidden with the click of a button
 // Same code as above, but with different ID's

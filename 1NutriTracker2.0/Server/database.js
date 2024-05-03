@@ -405,6 +405,19 @@ async getAllMealsForMealtrackerByUserId(userId) {
 }
 
 
+async getAllMealsForMealtrackerBySessionId(userId) {
+  await this.connect(); // Assuming this.connect() is defined somewhere to establish a database connection
+  const request = this.poolconnection.request();
+  request.input('userId', sql.Int, userId);
+
+  const result = await request.query(`
+      SELECT * FROM Nutri.Mealcreator WHERE user_Id = @userId
+  `);
+
+  return result.recordset;
+}
+
+
 
 // CREATE INTAKE
 async createIntake(userId, intakeDetails) {
