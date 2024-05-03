@@ -1,3 +1,9 @@
+const MealStorage = {
+    meals: [],
+    mealCounter: 0
+};
+
+
 // Using an async function to handle asynchronous operations like API fecth,
 // This ensures program responsiveness and efficient task management.
 // The parameter foodId and sortKeys is used to fetch nutritional data for a speific food item and sort keys
@@ -272,109 +278,109 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 // This function will be called when the submit button is clicked
 function submitMeal() {
-    // Retrieve the selected ingredients from localStorage 
-    const selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients')) || [];
+        const selectedIngredients = JSON.parse(localStorage.getItem('selectedIngredients')) || [];
+        let totalWeight = selectedIngredients.reduce((acc, ingredient) => acc + parseFloat(ingredient.weight), 0);
+        let totalNutrition = { energy: 0, protein: 0, fat: 0, fiber: 0 };
+    
+        selectedIngredients.forEach(ingredient => {
+            totalNutrition.energy += ingredient.individualNutrition.energy;
+            totalNutrition.protein += ingredient.individualNutrition.protein;
+            totalNutrition.fat += ingredient.individualNutrition.fat;
+            totalNutrition.fiber += ingredient.individualNutrition.fiber;
+        });
+    
+        let energyPer100g = totalWeight > 0 ? (totalNutrition.energy / totalWeight) * 100 : 0;
+    
+        MealStorage.mealCounter++;
+    
+        const meal = {
+            mealName: document.getElementById('mealNameInput').value,
+            totalKcal: energyPer100g.toFixed(2),
+            date: new Date().toISOString().slice(0, 10),
+            ingredients: selectedIngredients,
+            totalMealWeight: totalWeight,
+            totalNutrition: totalNutrition
+        };
+    
+        MealStorage.meals.push(meal);
+    
+        localStorage.removeItem('selectedIngredients');
+        document.getElementById('mealNameInput').value = '';
+        document.getElementById('selectedIngredients').innerHTML = '<p id="selectedIngredients-p">Selected Ingredients:</p>';
+        document.getElementById('totalNutri-p').innerHTML = '';
+    
+        displaySavedMeals();
+    }
 
-    // Calculates the total weight by summing up the weight property of each ingredient in selectedIngredients, starting from `0`.
-    let totalWeight = selectedIngredients.reduce((accumulator, ingredient) => accumulator + parseFloat(ingredient.weight), 0);
-    let totalNutrition = { energy: 0, protein: 0, fat: 0, fiber: 0 };
-
-    // Using a forEach loop to calculate the total nutrition for the meal
-    selectedIngredients.forEach(ingredient => {
-        // totalNutrition (definded above) gets added to the individualNutrition of each ingredient
-        totalNutrition.energy += ingredient.individualNutrition.energy;
-        totalNutrition.protein += ingredient.individualNutrition.protein;
-        totalNutrition.fat += ingredient.individualNutrition.fat;
-        totalNutrition.fiber += ingredient.individualNutrition.fiber;
-        // This sums up the total nutrition for the meal
+function sendData() {
+        const savedMeals = MealStorage.meals;
+        const userId = parseInt(sessionStorage.getItem('userId'), 10);
+    
+        if (savedMeals && savedMeals.length > 0 && userId) {
+            let latestMeal = { ...savedMeals[savedMeals.length - 1], user_id: userId };
+    
+            fetch('http://localhost:3000/mealcreator/saveMeal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify([latestMeal])
+            })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch(error => console.error('Error:', error));
+        } else if (!userId) {
+            console.log('User ID not found in sessionStorage');
+        } else {
+            console.log('No meals found');
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const button = document.getElementById('subBtn');
+        button.addEventListener('click', sendData);
     });
-
-    // to meet the design suggestions, I chose to also calculate the total kcal per 100 grams and not just the total nutritional content
-    let energyPer100g = totalWeight > 0 ? (totalNutrition.energy / totalWeight) * 100 : 0; // I used a conditional operator to simplify the code
-    // The total kcal per 100g is calculated by dividing the total energy by the total weight, and then multiplying by 100
-
-    // The design suggests that the meal should have a number, so i will use a counter to count the number of meals
-    let counter = localStorage.getItem('mealCounter') || 0; // This will also be saved in the local storage
-    counter++; //counts every time a new meal is added 
-
-    // Finally, meal object is created and saved to localStorage
-    const meal = {
-        mealNumber: counter,
-        mealName: document.getElementById('mealNameInput').value,
-        totalKcal: energyPer100g.toFixed(2), // .toFixed(2) is used to round the number to 2 decimal places
-        date: new Date().toISOString().slice(0, 10), //.toLocaleDateString() is used to get the current date in string
-        ingredients: selectedIngredients,
-        // Added this after starting MealTracker - I need the total weight for the meal
-        totalMealWeight: totalWeight, // I alredy calculated the total weight above to calculate the totalKCal
-        totalNutrition: totalNutrition
-    };
-
-
-    // Here the meal object is saved to the local storage
-    const savedMeals = JSON.parse(localStorage.getItem('meals')) || []; // savedMeals is an array of meal objects
-    savedMeals.push(meal); // Add the new meal to the existing list
-    localStorage.setItem('meals', JSON.stringify(savedMeals));
-    localStorage.setItem('mealCounter', counter.toString());
-
-    // When submitting the meal, clear the selected ingredients
-    localStorage.removeItem('selectedIngredients');
-    // Also clear the mealName, selectedIngreidents and the total nutrition
-    document.getElementById('mealNameInput').value = '';
-    // Clear only the dynamically added ingredients, keep the "Selected Ingredients:" paragraph
-    document.getElementById('selectedIngredients').innerHTML = '<p id="selectedIngredients-p">Selected Ingredients:</p>';
-    document.getElementById('totalNutri-p').innerHTML = '';
-
-    // Call the displayMeal function to update the meal table
-    displaySavedMeals();
-}
+    
 
 // Now its time to display the meals in the meal table
 // The way i wll approach this matter is by creating a function that will display the meals in the meal table
 // here i need to focus on visualizing the meal object to the HTML document
 // Denne funktion er ansvarlig for at vise gemte måltider, der er lagret i localStorage
-function displaySavedMeals() {
-    // Forsøger at hente gemte måltider fra localStorage
-    const savedMeals = JSON.parse(localStorage.getItem('meals')) || [];
+function displaySavedMeals(meals) {
     const mealTable = document.querySelector('.meal-table');
+    mealTable.innerHTML = ''; // Clear existing meals
 
-    // Rensning af tabel inden nye data tilføjes
-    mealTable.innerHTML = '';
-
-    // Itererer igennem hvert gemt måltid og tilføjer det til HTML tabellen
-    savedMeals.forEach(meal => {
+    meals.forEach((meal, index) => {
         const mealEntry = document.createElement('div');
         mealEntry.className = 'meal-entry';
         mealEntry.innerHTML = `
-            <span>${meal.mealNumber}</span>
-            <span>${meal.mealName}</span>
-            <span>${meal.totalKcal} kcal</span>
-            <span>${meal.date}</span>
-            <span>${meal.ingredients.length}</span>
-            <span>
-                <button class="show-details-btn" title="Show details" data-meal-number="${meal.mealNumber}"><i class="gg-more-vertical-o"></i></button>
-            </span>
+            <div>Name: ${meal.MealName}</div>
+            <div>Energy: ${meal.calcEnergy100g.toFixed(2)} kcal/100g</div>
+            <div>Fat: ${meal.calcFat100g.toFixed(2)} g/100g</div>
+            <div>Protein: ${meal.calcProtein100g.toFixed(2)} g/100g</div>
+            <div>Fiber: ${meal.calcFiber100g.toFixed(2)} g/100g</div>
+            <div>Total Weight: ${meal.totalMealWeight} g</div>
+            <button onclick="showMealDetails(${meal.MealId})">Details</button>
         `;
-
-        // Tilføjer den nye måltidsindgang til tabellen
         mealTable.appendChild(mealEntry);
-
-        // Tilføjer en event listener til "Vis detaljer" knappen
-        mealEntry.querySelector('.show-details-btn').addEventListener('click', (event) => {
-            showMealDetails(meal.mealNumber);
-        });
     });
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    fetchAndDisplayMeals();
+});
 
 // Denne funktion viser detaljer om et specifikt måltid, når der klikkes på "Vis detaljer"
 function showMealDetails(mealNumber) {
     const savedMeals = JSON.parse(localStorage.getItem('meals')) || [];
-    const meal = savedMeals.find(m => m.mealNumber.toString() === mealNumber.toString());
+    const meal = MealStorage.meals[mealIndex - 1];
+    console.log("Displaying details for:", meal);
+    // Additional implementation to display meal details in your U
 
     if (!meal) {
         console.error('Meal not found!');
         return;
     }
-
+    
     const detailsDiv = document.getElementById('details');
     const ingredientTable = detailsDiv.querySelector('.ingredient-table');
     const existingEntries = ingredientTable.querySelectorAll('div:not(.ingredient-header)');
@@ -393,14 +399,32 @@ function showMealDetails(mealNumber) {
     detailsDiv.style.display = 'block';
 }
 
+async function fetchAndDisplayMeals() {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('User ID not found');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/mealcreator/${userId}`, { method: 'GET' });
+        if (!response.ok) {
+            throw new Error('Failed to fetch meals: ' + response.statusText);
+        }
+        const meals = await response.json();
+        displaySavedMeals(meals); // Now pass the fetched meals directly to the display function
+    } catch (error) {
+        console.error('There was a problem fetching the meals:', error.message);
+    }
+}
+
+
+
 // Event listener til at sikre, at måltiderne vises når dokumentet er indlæst
 document.addEventListener('DOMContentLoaded', function () {
-    displaySavedMeals();
-});
-
-// Call the displaySavedMeals function to display the meals in the meal table even when the page is reloaded
-document.addEventListener('DOMContentLoaded', function () {
-    displaySavedMeals();
+    const button = document.getElementById('subBtn');
+    button.addEventListener('click', sendData);
+    fetchAndDisplayMeals(); // Fetch and display meals when the page loads
 });
 
 // krav C
@@ -511,67 +535,11 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
     document.getElementById('ingredientsInfo').style.display = 'none'; // hide the ingredientsInfo div when after clicking the button
 });
 
-// Function to send data
-function sendData() {
-    const savedMeals = JSON.parse(localStorage.getItem('meals'));
-    const userId = parseInt(sessionStorage.getItem('userId'), 10); // Retrieve user_id from sessionStorage and ensure it is an integer
-
-    if (savedMeals && savedMeals.length > 0 && userId) {
-        // Retrieve only the latest meal and add the user_id to it
-        let latestMeal = { ...savedMeals[savedMeals.length - 1], user_id: userId };
-
-        // Send only the latest meal data with the user_id included
-        fetch('http://localhost:3000/mealcreator/saveMeal', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify([latestMeal]) // Ensure to wrap it in an array if the server expects an array
-        })
-        .then(response => response.json())
-        .then(data => console.log('Success:', data))
-        .catch(error => console.error('Error:', error));
-    } else if (!userId) {
-        console.log('User ID not found in sessionStorage');
-    } else {
-        console.log('No meals found in localStorage');
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('subBtn');
     button.addEventListener('click', sendData);
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const button = document.getElementById('subBtn');
-    button.addEventListener('click', sendData);
-});
-
-async function fetchMealsFromDatabase() {
-    const userId = sessionStorage.getItem('userId');
-    if (!userId) {
-        console.error('User ID not found');
-    }
-    try {
-        const response = await fetch(`/mealcreator/${userId}`, { method: 'GET' });
-        if (!response.ok) {
-            throw new Error('Failed to fetch meals: ' + response.statusText);
-        }
-        const meals = await response.json();
-        console.log(meals)
-    } catch (error) {
-        console.error('There was a problem fetching the meals:', error.message);
-    }
-}
-
-fetchMealsFromDatabase();
-
-function displayMeals(meals) {
-    // Assuming you have a function that handles the DOM manipulation to display meals
-    console.log('Meals fetched:', meals);
-    // Additional code to render meals on the page
-}
 
 
 
