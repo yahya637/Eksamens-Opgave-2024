@@ -186,6 +186,8 @@ async disconnect() {
       DELETE FROM Nutri.Mealcreator WHERE user_id = @user_id;
       DELETE FROM Nutri.BmrCalculations WHERE user_id = @user_id;
       DELETE FROM Nutri.Users WHERE user_id = @user_id;
+      DELETE FROM Nutri.consumedMeal WHERE user_id = @user_id;
+
     `);
     return result.rowsAffected[0];
   }
@@ -286,6 +288,8 @@ async getUserActivitiesByUserId(userId) {
   }
 }
 
+
+// SAVE MEAL - MEALCREATOR
 async saveMeal(mealData) {
   try {
     await this.connect();
@@ -366,6 +370,19 @@ async getBMRDataByUserId(userId) {
     await this.disconnect();
   }
 }
+// GET MEALS BY USER ID - MEALCREATOR
+async getAllMealsForMealtrackerBySessionId(userId) {
+  await this.connect(); // Assuming this.connect() is defined somewhere to establish a database connection
+  const request = this.poolconnection.request();
+  request.input('userId', sql.Int, userId);
+
+  const result = await request.query(`
+      SELECT * FROM Nutri.Mealcreator WHERE user_Id = @userId
+  `);
+
+  return result.recordset;
+}
+
 
 // Mealtracker 
 
@@ -386,6 +403,22 @@ async getAllMealsForMealtrackerByUserId(userId) {
     throw new Error('Error fetching user meals by user ID from database');
   }
 }
+
+
+async getAllMealsForMealtrackerBySessionId(userId) {
+  await this.connect(); // Assuming this.connect() is defined somewhere to establish a database connection
+  const request = this.poolconnection.request();
+  request.input('userId', sql.Int, userId);
+
+  const result = await request.query(`
+      SELECT * FROM Nutri.Mealcreator WHERE user_Id = @userId
+  `);
+
+  return result.recordset;
+}
+
+
+
 // CREATE INTAKE
 async createIntake(userId, intakeDetails) {
   try {
@@ -422,6 +455,31 @@ async createIntake(userId, intakeDetails) {
   } catch (error) {
     console.error('Error creating intake:', error);
     throw error; // Rethrow the error for handling at a higher level
+  }
+}
+
+// GET INTAKE BY USER ID
+// GET INTAKE BY USER ID
+async getIntakeMealsByUserId(userId, mealId = null) {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+    request.input('userId', sql.Int, userId);
+
+    let sqlQuery = "SELECT * FROM Nutri.consumedMeal WHERE user_Id = @userId";
+
+    if (mealId) {
+      request.input('mealId', sql.Int, mealId);
+      sqlQuery += " AND meal_Id = @mealId";
+    }
+
+    sqlQuery += " ORDER BY dateAdded DESC";
+
+    const result = await request.query(sqlQuery);
+    return result.recordset;
+  } catch (error) {
+    console.error('Error fetching intake by user ID:', error);
+    throw new Error('Error fetching intake by user ID from database');
   }
 }
 

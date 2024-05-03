@@ -1,40 +1,14 @@
-// Again  i have chosen to hide the Meal Intake form. So the first thing i need is to addEventListener to the button that will show and hide the form
-// IntakeMealButton is the ID of the button that will show and hide the form
-
-// With the click of the button the form will be shown and hidden
-document.getElementById('IntakeMealButton').addEventListener('click', function() {
-    const intakeMealFormVar = document.getElementById('IntakeMealForm');
-    if (intakeMealFormVar.style.display === 'none') {
-        intakeMealFormVar.style.display = 'block';
-    } else { // THis way the button will act as a toggle button
-        intakeMealFormVar.style.display = 'none';
+document.getElementById('IntakeMealButton').addEventListener('click', async function() {
+    const intakeMealForm = document.getElementById('IntakeMealForm');
+    if (intakeMealForm.style.display === 'none' || intakeMealForm.style.display === '') {
+        intakeMealForm.style.display = 'block';
+        await fetchMealsFromDatabase(); // Fetch meals when the form is shown
+        
+    } else {
+        intakeMealForm.style.display = 'none';
     }
-}
-);
-// Krav a 
-// I have to get the meals from the local storage and display them in <select> element, so they can be selected
-// I will write a function that will fetch the meals
-/*
-function fetchMealsFromLocalStorage() {
-    const meals = JSON.parse(localStorage.getItem('meals')); // .parse() method will convert the string to an array, .getItem() will get the meals from the local storage
-    const selectionOfMeals = document.getElementById('mealSelection'); 
-    // Iterate over each saved meal - .forEach() is a simple way to iterate over an array
-    meals.forEach(meal => {
-        // Create a new option element with .createElement()
-        const option = document.createElement('option');
-        // Use mealNumber as the option value for uniqueness
-        option.value = meal.mealNumber;
-        // Set the meal name as the option text and meal number
-        option.textContent = `${meal.mealNumber}) ${meal.mealName} - ${meal.totalMealWeight}g`;
-        // Append the option to the dropdown
-        selectionOfMeals.appendChild(option);
-    });
-}
-// I will call the function to fetch the meals from the local storage
-fetchMealsFromLocalStorage();
-*/
+});
 
-// This function retrieves meals from the database and populates a dropdown menu
 async function fetchMealsFromDatabase() {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
@@ -48,7 +22,9 @@ async function fetchMealsFromDatabase() {
         if (!response.ok) {
             throw new Error('Failed to fetch meals: ' + response.statusText);
         }
+
         const meals = await response.json();
+        console.log('Meals fetched successfully') 
         populateDropdown(meals);
     } catch (error) {
         console.error('There was a problem fetching the meals:', error.message);
@@ -73,14 +49,17 @@ function populateDropdown(meals) {
         selectionOfMeals.appendChild(option);
     });
 }
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('mealForm');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission behavior
-        processMealForm();
-    });
-});
-// This function processes the meal form to calculate and log the nutritional intake
+// Immediately fetch meal intakes when the script loads, if possible
+fetchMealIntakes();
+
+// Set up button click event listeners directly
+const submitButton = document.getElementById('submitIntakeMeal');
+if (submitButton) {
+    submitButton.addEventListener('click', processMealForm);
+} else {
+    console.error('Submit button not found');
+}
+
 function processMealForm() {
     const mealSelect = document.getElementById('mealSelection');
     const selectedOption = mealSelect.options[mealSelect.selectedIndex];
@@ -92,45 +71,8 @@ function processMealForm() {
     const weightConsumed = parseFloat(weightInput);
     const intakeDetails = calculateIntakeDetails(selectedOption, weightConsumed);
     logIntakeDetails(intakeDetails);
-    // Simulate saving data and then showing confirmation
-    try {
-        // Simulate a successful operation (replace this with your actual data handling logic)
-        displayConfirmationMessage('Meal intake saved successfully!', 'success');
-    } catch (error) {
-        displayConfirmationMessage('Failed to save meal intake.', 'error');
-        console.error('Error:', error);
-    }
-}
-function displayConfirmationMessage(message, type) {
-    const messageDiv = document.getElementById('confirmationMessage');
-    messageDiv.textContent = message;
-    messageDiv.style.display = 'block';
-    messageDiv.style.color = type === 'success' ? 'green' : 'red';
 }
 
-// This function calculates the nutritional details based on selected meal and consumed weight
-function calculateIntakeDetails(selectedOption, weightConsumed) {
-    const selectedMealWeight = parseFloat(selectedOption.getAttribute('data-weight'));
-    const mealNutrients = {
-        energy: parseFloat(selectedOption.getAttribute('data-energy')),
-        protein: parseFloat(selectedOption.getAttribute('data-protein')),
-        fat: parseFloat(selectedOption.getAttribute('data-fat')),
-        fiber: parseFloat(selectedOption.getAttribute('data-fiber'))
-    };
-    return {
-        mealId: selectedOption.getAttribute('data-id'),
-        mealName: selectedOption.getAttribute('data-name'),
-        consumedWeight: weightConsumed,
-        consumedEnergy: ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2),
-        consumedProtein: ((mealNutrients.protein / selectedMealWeight) * weightConsumed).toFixed(2),
-        consumedFat: ((mealNutrients.fat / selectedMealWeight) * weightConsumed).toFixed(2),
-        consumedFiber: ((mealNutrients.fiber / selectedMealWeight) * weightConsumed).toFixed(2),
-        dateAdded: new Date().toLocaleDateString(),
-        timeAdded: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
-    };
-}
-
-// This function logs the intake details and manages location retrieval
 function logIntakeDetails(intakeDetails) {
     navigator.geolocation.getCurrentPosition(
         position => {
@@ -144,8 +86,36 @@ function logIntakeDetails(intakeDetails) {
         }
     );
 }
+// This function calculates the nutritional details based on selected meal and consumed weight
 
-// This function saves the intake details to the database
+function calculateIntakeDetails(selectedOption, weightConsumed) {
+    const selectedMealWeight = parseFloat(selectedOption.getAttribute('data-weight'));
+    const mealNutrients = {
+        energy: parseFloat(selectedOption.getAttribute('data-energy')),
+        protein: parseFloat(selectedOption.getAttribute('data-protein')),
+        fat: parseFloat(selectedOption.getAttribute('data-fat')),
+        fiber: parseFloat(selectedOption.getAttribute('data-fiber'))
+    };
+
+    const currentDate = new Date();
+    const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
+    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
+    const year = currentDate.getFullYear().toString().slice(-2); // Take the last two digits of the year
+
+    return {
+        mealId: selectedOption.getAttribute('data-id'),
+        mealName: selectedOption.getAttribute('data-name'),
+        consumedWeight: weightConsumed,
+        consumedEnergy: ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2),
+        consumedProtein: ((mealNutrients.protein / selectedMealWeight) * weightConsumed).toFixed(2),
+        consumedFat: ((mealNutrients.fat / selectedMealWeight) * weightConsumed).toFixed(2),
+        consumedFiber: ((mealNutrients.fiber / selectedMealWeight) * weightConsumed).toFixed(2),
+        dateAdded: `${day}/${month}/${year}`,
+        timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' })
+    };
+}
+
+
 async function saveIntakeToDatabase(intakeDetails) {
     const userId = parseInt(sessionStorage.getItem('userId'), 10);
     if (!userId) {
@@ -154,7 +124,7 @@ async function saveIntakeToDatabase(intakeDetails) {
     }
 
     try {
-        const response = await fetch(`/mealtracker1/${userId}/intake`, {
+        const response = await fetch(`/mealtracker1/${userId}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(intakeDetails)
@@ -164,43 +134,57 @@ async function saveIntakeToDatabase(intakeDetails) {
             throw new Error('Failed to save intake: ' + response.statusText);
         }
 
-        try {
-            const newIntake = await response.json();
-            alert('Intake saved successfully');
-        } catch (jsonError) {
-            console.error('Failed to parse JSON:', jsonError);
-            // Handle cases where response is not in JSON format
-            const responseText = await response.text();  // Fetch the raw response text
-            console.error('Response received:', responseText);
-        }
+        console.log('Intake saved successfully');
+        fetchMealIntakes();  // Refresh the meal list
     } catch (error) {
         console.error('There was a problem saving the intake:', error.message);
     }
 }
 
 
-fetchMealsFromDatabase(); // Start fetching meals when the script loads
 
+function fetchMealIntakes() {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('User ID not found');
+        return;
+    }
 
+    fetch(`/mealtracker1/${userId}/intake`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch meal intakes: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(mealIntakes => {
+        console.log('Meal intakes fetched successfully:', mealIntakes);
+        displayMealIntakes(mealIntakes);
+    })
+    .catch(error => {
+        console.error('There was a problem fetching the meal intakes:', error);
+    });
+}
 
-// Add an event listener to the submitIntakeMeal button
-document.getElementById('submitIntakeMeal').addEventListener('click', function() {
-    processMealForm();
-});
-
-/*
-function displayMealIntakes() {
+function displayMealIntakes(mealIntakes) {
     const intakeEntriesContainer = document.querySelector('.intake-entries');
     intakeEntriesContainer.innerHTML = ''; // Clear the container before adding new entries
 
     mealIntakes.forEach((intake) => {
+        // Extract and format date and time from the database values
+        const dateParts = intake.dateAdded.split('T')[0].split('-'); // Split date by '-' and 'T'
+        const formattedDate = `${dateParts[1]}-${dateParts[2]}-${dateParts[0].slice(2)}`; // Format as DD-MM-YY
+
+        const timeParts = intake.timeAdded.split('T')[1].split('.')[0].split(':'); // Extract time and split
+        const formattedTime = timeParts.join(':'); // Join time parts to get HH:MM:SS
+
         const intakeEntry = document.createElement('div');
         intakeEntry.classList.add('intake-entry');
         intakeEntry.innerHTML = `
-            <span>${intake.mealName}</span> 
+            <span>${intake.mealName}</span>
             <span>${intake.consumedWeight}g <br> ${intake.consumedEnergy} kcal</span>
             <span>${intake.consumedProtein}g <br> ${intake.consumedFat}g <br> ${intake.consumedFiber}g</span>
-            <span>${intake.dateAdded} <br> ${intake.timeAdded}</span>
+            <span>${formattedDate} ${formattedTime}</span>  
             <span>${intake.location}</span>
             <div class="intake-buttons-container">
                 <button class="delete-intake-btn" data-meal-number="${intake.intakeNumber}"><i class="gg-trash"></i></button>
@@ -209,7 +193,8 @@ function displayMealIntakes() {
         `;
         intakeEntriesContainer.appendChild(intakeEntry);
     });
-}*/
+}
+
 
 
 // Krav b - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -269,7 +254,7 @@ async function searchIngredients(query) {
 const ingredientInput = document.getElementById('ingredientInput');
 const ingredientWeightInput = document.getElementById('ingredientWeightInput');
 const ingredientDropdown = document.getElementById('ingredientDropdown');
-const submitButton = document.getElementById('submitIngredientIntakeMeal'); 
+const submitButton2 = document.getElementById('submitIngredientIntakeMeal'); 
 
 ingredientInput.addEventListener('input', async function() {
     const query = ingredientInput.value.trim();
@@ -294,13 +279,13 @@ function updateIngredientDropdown(ingredientsInDropdown) {
     ingredientDropdown.style.display = ingredientsInDropdown.length > 0 ? 'block' : 'none';
 }
 
-submitButton.addEventListener('click', function(event) {
+submitButton2.addEventListener('click', function(event) {
     event.preventDefault();
-    submitButton.disabled = true; // Disable the button to prevent multiple submissions
+    submitButton2.disabled = true; // Disable the button to prevent multiple submissions
 
     // Ensure processIngredientForm is an async function
     processIngredientForm().finally(() => {
-        submitButton.disabled = false; // Re-enable the button after processing
+        submitButton2.disabled = false; // Re-enable the button after processing
     });
 });
 
