@@ -535,10 +535,17 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
     document.getElementById('ingredientsInfo').style.display = 'none'; // hide the ingredientsInfo div when after clicking the button
 });
 
+
+// Function to fetch meals from the backend and update the UI
+document.addEventListener('DOMContentLoaded', function () {
+    fetchAndDisplayMeals();
+    setInterval(fetchAndDisplayMeals, 10000); // Fetches meals every 10 seconds
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('subBtn');
-    button.addEventListener('click', sendData);
-});
+    button.addEventListener('click', sendData);});
+
 
 
 
