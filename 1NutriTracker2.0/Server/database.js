@@ -392,48 +392,8 @@ async getAllMealsForMealtrackerBySessionId(userId) {
   return result.recordset;
 }
 
-async postIngredients(meal_id, foodName, weight, energy, protein, fat, fiber) {
-  const sqlQuery = `
-    INSERT INTO Nutri.Ingredients (meal_id, foodName, weight, energy, protein, fat, fiber)
-    VALUES (@meal_id, @foodName, @weight, @energy, @protein, @fat, @fiber);
-  `;
-
-  try {
-    await this.connect();
-    const request = this.poolconnection.request();
-
-    request.input('meal_id', sql.Int, meal_id);
-    request.input('foodName', sql.NVarChar, foodName);
-    request.input('weight', sql.Decimal(10, 2), weight);
-    request.input('energy', sql.Float, energy);
-    request.input('protein', sql.Float, protein);
-    request.input('fat', sql.Float, fat);
-    request.input('fiber', sql.Float, fiber);
-
-    const result = await request.query(sqlQuery);
-    return { success: result.rowsAffected[0] > 0 };
-  } catch (error) {
-    console.error('Database error:', error);
-    throw error;
-  }
-}
-
-
-async getIngredientsByMealId(mealId) {
-  try {
-    await this.connect();  // Make sure this connects to your DB correctly
-    const request = this.poolconnection.request();
-    request.input('mealId', sql.Int, mealId);
-    const result = await request.query(`SELECT * FROM Nutri.Ingredients WHERE meal_id = @mealId;`);
-    return result.recordset;  // Ensure the query is correct and returning results
-  } catch (error) {
-    console.error('Error fetching ingredients:', error);
-    throw error;  // Throws error back to route handler
-  }
-}
 
 // Mealtracker 
-
 // GET USER MEALS BY USER ID
 async getAllMealsForMealtrackerByUserId(userId) {
   try {
