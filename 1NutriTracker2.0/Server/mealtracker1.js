@@ -41,6 +41,23 @@ router.post('/:userId/register', async (req, res) => {
   }
 });
 
+// POST new ingreedient individually
+router.post('/:userId/register/ingredient', async (req, res) => {
+  const userId = req.params.userId;
+  const ingredientDetails = req.body;
+  console.log('Creating new ingredient for user', userId, ':', ingredientDetails);
+
+  try {
+      const newIngredient = await database.createIngredientIntake(userId, ingredientDetails);
+      res.status(201).json(newIngredient);
+  } catch (err) {
+      console.error('Error creating new ingredient:', err);
+      res.status(500).json({ error: 'Error creating new ingredient in the database', details: err.message });
+  }
+}
+);
+
+
 
 // GET User meals by user ID, optionally filtered by meal ID
 router.get('/:userId/intake', async (req, res) => {
@@ -64,7 +81,46 @@ router.get('/:userId/intake', async (req, res) => {
   }
 });
 
+// DELETE meal by Consumed ID
+router.delete('/:userId/intake/:consumedId', async (req, res) => {
+  const { userId, consumedId } = req.params;
+  console.log(`Deleting meal for user ID: ${userId} and consumed ID: ${consumedId}`);
 
+  try {
+    const rowsDeleted = await database.deleteIntakeByConsumedId(consumedId);
+    if (rowsDeleted > 0) {
+      res.status(200).json({ message: "Intake deleted successfully" });
+    } else {
+      res.status(404).json({ error: "No intake found with the provided ID" });
+    }
+  } catch (err) {
+    console.error('Error deleting meal:', err);
+    res.status(500).json({ error: 'Error deleting meal from the database', details: err.message });
+  }
+});
+
+
+// PUT update meal by Consumed ID
+router.put('/:userId/intake/:consumedId', async (req, res) => {
+  const { userId, consumedId } = req.params;
+  const updatedIntake = req.body;
+  console.log(`Updating meal for user ID: ${userId} and consumed ID: ${consumedId}`);
+
+  try {
+    const rowsUpdated = await database.updateIntakeByConsumedId(consumedId, updatedIntake);
+    if (rowsUpdated > 0) {
+      res.status(200).json({ message: "Intake updated successfully" });
+    } else {
+      res.status(404).json({ error: "No intake found with the provided ID" });
+    }
+  }
+  catch (err) {
+    console.error('Error updating meal:', err);
+    res.status(500).json({ error: 'Error updating meal in the database', details: err.message });
+  }
+}
+);
+  
 
   
   export default router;

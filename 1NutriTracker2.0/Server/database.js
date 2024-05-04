@@ -383,6 +383,45 @@ async getAllMealsForMealtrackerBySessionId(userId) {
   return result.recordset;
 }
 
+async postIngredients(meal_id, foodName, weight, energy, protein, fat, fiber) {
+  const sqlQuery = `
+    INSERT INTO Nutri.Ingredients (meal_id, foodName, weight, energy, protein, fat, fiber)
+    VALUES (@meal_id, @foodName, @weight, @energy, @protein, @fat, @fiber);
+  `;
+
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+
+    request.input('meal_id', sql.Int, meal_id);
+    request.input('foodName', sql.NVarChar, foodName);
+    request.input('weight', sql.Decimal(10, 2), weight);
+    request.input('energy', sql.Float, energy);
+    request.input('protein', sql.Float, protein);
+    request.input('fat', sql.Float, fat);
+    request.input('fiber', sql.Float, fiber);
+
+    const result = await request.query(sqlQuery);
+    return { success: result.rowsAffected[0] > 0 };
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  }
+}
+
+
+async getIngredientsByMealId(mealId) {
+  try {
+    await this.connect();  // Make sure this connects to your DB correctly
+    const request = this.poolconnection.request();
+    request.input('mealId', sql.Int, mealId);
+    const result = await request.query(`SELECT * FROM Nutri.Ingredients WHERE meal_id = @mealId;`);
+    return result.recordset;  // Ensure the query is correct and returning results
+  } catch (error) {
+    console.error('Error fetching ingredients:', error);
+    throw error;  // Throws error back to route handler
+  }
+}
 
 // Mealtracker 
 
@@ -416,7 +455,6 @@ async getAllMealsForMealtrackerBySessionId(userId) {
 
   return result.recordset;
 }
-
 
 
 // CREATE INTAKE
@@ -458,7 +496,37 @@ async createIntake(userId, intakeDetails) {
   }
 }
 
-// GET INTAKE BY USER ID
+// CREATE INTAKE 2
+async createIngredientIntake(userId, ingredientDetails) {
+  try {
+      await this.connect();  // Ensure database connection
+
+      const query = `
+      INSERT INTO Nutri.consumedMeal (user_Id, meal_Id, mealName, consumedWeight, consumedEnergy, consumedProtein, consumedFat, consumedFiber, dateAdded, timeAdded, location)
+      VALUES (@userId, @mealId, @mealName, @consumedWeight, @consumedEnergy, @consumedProtein, @consumedFat, @consumedFiber, @dateAdded, @timeAdded, @location);
+      `;
+
+      const request = this.poolconnection.request();
+      request.input('mealId', ingredientDetails.mealId ? sql.Int : sql.VarChar, ingredientDetails.mealId || null);
+      request.input('userId', userId);
+      request.input('mealName', ingredientDetails.foodName);
+      request.input('consumedWeight', ingredientDetails.consumedWeight);
+      request.input('consumedEnergy', ingredientDetails.consumedEnergy);
+      request.input('consumedProtein', ingredientDetails.consumedProtein);
+      request.input('consumedFat', ingredientDetails.consumedFat);
+      request.input('consumedFiber', ingredientDetails.consumedFiber);
+      request.input('dateAdded', ingredientDetails.dateAdded);
+      request.input('timeAdded', ingredientDetails.timeAdded);
+      request.input('location', ingredientDetails.location)
+
+      const result = await request.query(query);
+      return result.recordset;
+  } catch (error) {
+      console.error('Error creating intake:', error);
+      throw error; // Rethrow the error for handling at a higher level
+  }
+}
+
 // GET INTAKE BY USER ID
 async getIntakeMealsByUserId(userId, mealId = null) {
   try {
@@ -473,7 +541,7 @@ async getIntakeMealsByUserId(userId, mealId = null) {
       sqlQuery += " AND meal_Id = @mealId";
     }
 
-    sqlQuery += " ORDER BY dateAdded DESC";
+    sqlQuery += " ORDER BY timeAdded DESC";
 
     const result = await request.query(sqlQuery);
     return result.recordset;
@@ -482,6 +550,51 @@ async getIntakeMealsByUserId(userId, mealId = null) {
     throw new Error('Error fetching intake by user ID from database');
   }
 }
+
+// DELETE INTAKE BY ConsumedID 
+async deleteIntakeByConsumedId(consumedId) {
+  try {
+    await this.connect();
+    const request = this.poolconnection.request();
+    request.input('consumedId', sql.Int, consumedId);  // Ensure the parameter name matches the one used in the query
+
+    const result = await request.query(`
+      DELETE FROM Nutri.consumedMeal WHERE consumed_Id = @consumedId
+    `);
+
+    return result.rowsAffected[0];  // Returns the number of rows affected
+  } catch (error) {
+    console.error('Error deleting intake by consumed ID:', error);
+    throw new Error('Error deleting intake by consumed ID from database');
+  }
+}
+
+async updateIntakeByConsumedId(consumedId, data) {
+    try {
+        await sql.connect(sqlConfig);
+        const request = new sql.Request();
+        request.input('consumedId', sql.Int, consumedId);
+        request.input('mealName', ingredientDetails.foodName || null);
+        request.input('consumedWeight', ingredientDetails.consumedWeight);
+        request.input('timeAdded', ingredientDetails.timeAdded|| null);
+        
+        // More inputs for nutritional values can follow the same pattern
+
+        const result = await request.query(`
+            UPDATE Nutri.consumedMeal
+            SET
+              mealName = COALESCE(NULLIF(@mealName, ''), mealName),
+              consumedWeight = @consumedWeight,
+              timeAdded = COALESCE(@timeAdded, timeAdded)
+            WHERE consumed_Id = @consumedId;
+        `);
+        console.log(result.rowsAffected + ' rows updated.');
+    } catch (err) {
+        console.error('Failed to update meal:', err);
+        throw err;
+    }
+}
+
 
 
 

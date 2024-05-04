@@ -411,3 +411,88 @@ button:hover{
     width: 24px;
     height: 24px;
 }
+
+/* Styles for the Edit Modal */
+.edit-modal {
+    background-color: whitesmoke; 
+    border: 5px outset #000000; 
+    border-radius: 10px; 
+    padding: 20px; 
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);    
+    display: none; 
+    position: fixed; 
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); 
+    width: auto; 
+    max-width: 90%; 
+    z-index: 1000; 
+}
+
+.edit-modal h3 {
+    margin: 0; 
+    padding-bottom: 10px; 
+    border-bottom: 1px solid #ccc; 
+    font-size: 20px; 
+    font-weight: bold;
+    color: #000;
+}
+
+/* Styles for the Edit and Close Buttons */
+.edit-btn, .close-edit-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 15px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.edit-btn {
+    background-color: #ffab40; /* Orange button */
+}
+
+.edit-btn:hover {
+    background-color: #ffab40bf; /* Lighter orange on hover */
+}
+/* Close Button Styling */
+.close-edit-btn {
+    position: absolute; /* Positioning the button absolutely within the modal */
+    top: 10px; /* Setting top margin to align within modal padding */
+    right: 20px; /* Setting right margin to align within modal padding */
+    padding: 8px 15px; /* Adjusting padding to better fit the modal's style */
+    background-color: #DC3545; /* Red button for closing */
+    color: white; /* Text color */
+    font-size: 16px; /* Adjusting font size for better visibility */
+    border: none; /* Removing border */
+    border-radius: 15px; /* Circular button */
+    cursor: pointer; /* Cursor pointer to indicate clickable */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Adding some shadow for depth */
+}
+
+.close-edit-btn:hover {
+    background-color: darkred; /* Darker red on hover for feedback */
+}
+
+
+.close-edit-btn:hover {
+    background-color: darkred;
+    cursor: pointer;
+}
+
+/* Optional: Style Inputs Within the Modal for Consistency */
+.edit-modal input[type="text"],
+.edit-modal input[type="number"],
+.edit-modal input[type="datetime-local"] {
+    width: 100%; /* Full-width inputs */
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
