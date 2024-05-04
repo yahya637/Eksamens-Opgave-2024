@@ -298,6 +298,14 @@ async saveMeal(mealData) {
       const request = this.poolconnection.request();
       console.log("Saving:", mealData[i]);  // Log each meal item
 
+      const simplifiedIngredients = mealData[i].ingredients.map(ingredient => ({
+        foodName: ingredient.foodName,
+        weight: ingredient.weight
+    }));
+
+    const ingredientsData = JSON.stringify(simplifiedIngredients);
+
+
       // Correctly mapping inputs to SQL parameters
       request.input('MealName', sql.VarChar, mealData[i].mealName);
       request.input('calcEnergy100g', sql.Float, mealData[i].totalNutrition.energy);
@@ -305,12 +313,13 @@ async saveMeal(mealData) {
       request.input('calcFat100g', sql.Float, mealData[i].totalNutrition.fat);
       request.input('calcFiber100g', sql.Float, mealData[i].totalNutrition.fiber);
       request.input('user_id', sql.Int, mealData[i].user_id);  
+      request.input('ingredients', sql.NVarChar, ingredientsData);
       request.input('totalMealWeight', sql.Decimal(10, 2), mealData[i].totalMealWeight);
 
       const query = `
-        INSERT INTO Nutri.Mealcreator 
-        (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, user_id, totalMealWeight) 
-        VALUES (@MealName, @calcEnergy100g, @calcProtein100g, @calcFat100g, @calcFiber100g, @user_id, @totalMealWeight);
+        INSERT INTO Nutri.Mealcreator
+        (MealName, calcEnergy100g, calcProtein100g, calcFat100g, calcFiber100g, user_id, ingredients, totalMealWeight) 
+        VALUES (@MealName, @calcEnergy100g, @calcProtein100g, @calcFat100g, @calcFiber100g, @user_id, @ingredients, @totalMealWeight);
       `;
 
       await request.query(query);
