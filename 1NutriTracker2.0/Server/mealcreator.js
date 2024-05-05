@@ -8,7 +8,7 @@ router.use(express.json());
 // Create database object
 const database = new Database(config);
 
-// GET user activities by user ID
+
 router.get('/:userId', async (req, res) => {
   const userId = req.params.userId;
   console.log(`Fetching meals for user ID: ${userId}`);
@@ -42,36 +42,24 @@ router.post('/saveMeal', async (req, res) => {
   });
 
 
-  router.post('/ingredients', async (req, res) => {
-    const { meal_id, foodName, weight, energy, protein, fat, fiber } = req.body;
-
-    try {
-        const result = await database.postIngredients(meal_id, foodName, weight, energy, protein, fat, fiber);
-        res.status(201).json({ message: 'Ingredient added successfully', success: true });
-    } catch (error) {
-        console.error('Error posting ingredient:', error);
-        res.status(500).json({ message: 'Failed to save ingredient', details: error.message });
-    }
-});
-
-  
-
-// GET route to fetch ingredients by meal ID
 router.get('/ingredients/:mealId', async (req, res) => {
   const mealId = parseInt(req.params.mealId, 10);
+  if (isNaN(mealId)) {
+      return res.status(400).json({ message: 'Invalid meal ID provided' });
+  }
+
   try {
-    const ingredients = await database.getIngredientsByMealId(mealId);
-    if (!ingredients.length) {
-      res.status(404).json({ message: 'No ingredients found for this meal ID' });
-    } else {
-      res.status(200).json(ingredients);
-    }
+      const ingredients = await database.getIngredientsByMealId(mealId);
+      if (!ingredients.length) {
+          res.status(404).json({ message: 'No ingredients found for this meal ID' });
+      } else {
+          res.status(200).json(ingredients);
+      }
   } catch (error) {
-    console.error('Error fetching ingredients:', error);
-    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+      console.error('Error fetching ingredients:', error);
+      res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
-
 
   
   

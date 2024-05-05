@@ -204,8 +204,7 @@ async function addSelectedIngredient() { // Using async to handle the fetchNutri
         fat: nutritionData.fat * (weight / 100),
         fiber: nutritionData.fiber * (weight / 100)
     };
-
-    // Create the list item with the ingredient name and weight, this will be added to the selectedIngredients list
+   // Create the list item with the ingredient name and weight, this will be added to the selectedIngredients list
     const listItem = document.createElement('li'); // .createElement creates a new <li> element
     listItem.textContent = `${selectedIngredientValue} - ${weight}g`; // Setting the text content of the list item
 
@@ -216,8 +215,9 @@ async function addSelectedIngredient() { // Using async to handle the fetchNutri
         weight: weight,
         individualNutrition: individualNutrition, // Based on the weight of the ingredient
         combinedNutrition: totalNutrition, // This shows the total nutrition for the meal dependning on the added ingredients
-        nutritionInfoPer100g: nutritionData // This shows the nutritional content per 100g
+        nutritionInfoPer100g: nutritionData, // This shows the nutritional content per 100g
     };
+
 
     // Husk en if statement til at tjekke der vægt er større end 0
     if (weight > 0) {
@@ -308,8 +308,12 @@ function submitMeal() {
         document.getElementById('mealNameInput').value = '';
         document.getElementById('selectedIngredients').innerHTML = '<p id="selectedIngredients-p">Selected Ingredients:</p>';
         document.getElementById('totalNutri-p').innerHTML = '';
-    
+        // Close the form after submitting the meal
+        showAndHideForm();
+
+
         displaySavedMeals();
+
     }
 
 function sendData() {
@@ -339,66 +343,6 @@ function sendData() {
         button.addEventListener('click', sendData);
     });
     
-
-// Now its time to display the meals in the meal table
-// The way i wll approach this matter is by creating a function that will display the meals in the meal table
-// here i need to focus on visualizing the meal object to the HTML document
-// Denne funktion er ansvarlig for at vise gemte måltider, der er lagret i localStorage
-function displaySavedMeals(meals) {
-    const mealTable = document.querySelector('.meal-table');
-    mealTable.innerHTML = ''; // Clear existing meals
-
-    meals.forEach((meal, index) => {
-        const mealEntry = document.createElement('div');
-        mealEntry.className = 'meal-entry';
-        mealEntry.innerHTML = `
-            <div>Name: ${meal.MealName}</div>
-            <div>Energy: ${meal.calcEnergy100g.toFixed(2)} kcal/100g</div>
-            <div>Fat: ${meal.calcFat100g.toFixed(2)} g/100g</div>
-            <div>Protein: ${meal.calcProtein100g.toFixed(2)} g/100g</div>
-            <div>Fiber: ${meal.calcFiber100g.toFixed(2)} g/100g</div>
-            <div>Total Weight: ${meal.totalMealWeight} g</div>
-            <button onclick="showMealDetails(${meal.MealId})">Details</button>
-        `;
-        mealTable.appendChild(mealEntry);
-    });
-}
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    fetchAndDisplayMeals();
-});
-
-// Denne funktion viser detaljer om et specifikt måltid, når der klikkes på "Vis detaljer"
-function showMealDetails(mealNumber) {
-    const savedMeals = JSON.parse(localStorage.getItem('meals')) || [];
-    const meal = MealStorage.meals[mealIndex - 1];
-    console.log("Displaying details for:", meal);
-    // Additional implementation to display meal details in your U
-
-    if (!meal) {
-        console.error('Meal not found!');
-        return;
-    }
-    
-    const detailsDiv = document.getElementById('details');
-    const ingredientTable = detailsDiv.querySelector('.ingredient-table');
-    const existingEntries = ingredientTable.querySelectorAll('div:not(.ingredient-header)');
-    existingEntries.forEach(entry => entry.remove());
-
-    meal.ingredients.forEach(ingredient => {
-        const ingredientDiv = document.createElement('div');
-        ingredientDiv.innerHTML = `
-            <span>${ingredient.foodName}</span>
-            <span>${ingredient.weight}g</span>
-        `;
-        ingredientTable.appendChild(ingredientDiv);
-    });
-
-    detailsDiv.querySelector('h3').textContent = `${meal.mealNumber}: ${meal.mealName} details`;
-    detailsDiv.style.display = 'block';
-}
-
 async function fetchAndDisplayMeals() {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
@@ -414,74 +358,125 @@ async function fetchAndDisplayMeals() {
         const meals = await response.json();
         displaySavedMeals(meals); // Now pass the fetched meals directly to the display function
     } catch (error) {
-        console.error('There was a problem fetching the meals:', error.message);
+        console.error('There was oa problem fetching the meals:', error.message);
     }
 }
 
+function displaySavedMeals(meals) {
+    const mealTable = document.querySelector('.meal-table');
+    mealTable.innerHTML = '';
 
+    meals.forEach((meal) => {
+        let ingredients = meal.ingredients;
+        if (typeof ingredients === 'string') {
+            try {
+                ingredients = JSON.parse(ingredients);
+            } catch (error) {
+                console.error('Failed to parse ingredients JSON for meal:', meal.MealName, error);
+                ingredients = [];
+            }
+        }
 
-// Event listener til at sikre, at måltiderne vises når dokumentet er indlæst
-document.addEventListener('DOMContentLoaded', function () {
-    const button = document.getElementById('subBtn');
-    button.addEventListener('click', sendData);
-    fetchAndDisplayMeals(); // Fetch and display meals when the page loads
-});
-
-// krav C
-// Now i need to add functionality to the show details button, so that the user can see the ingredients and the total nutrition for the meal
-function showMealDetails(mealNumber) { // The meal number is passed as a parameter
-    const savedMeals = JSON.parse(localStorage.getItem('meals')) || []; //
-    const meal = savedMeals.find(m => m.mealNumber.toString() === mealNumber); // Find the meal with the matching meal number
-    // .find() is used to find the first element in the array that satisfies the condition
-
-    const detailsDiv = document.getElementById('details'); // Get the details div 
-    const ingredientTable = detailsDiv.querySelector('.ingredient-table');  // then put the ingredient table in the details div
-
-    const existingEntries = ingredientTable.querySelectorAll('div:not(.ingredient-header)'); // :not(.ingredient-header) is used to exclude the header
-    existingEntries.forEach(entry => entry.remove()); // .forEach() is used to remove each existing entry
-
-    // Populate ingredient table with ingredients of the selected meal
-    meal.ingredients.forEach(ingredient => {
-        const ingredientDiv = document.createElement('div'); // create a new div for each ingredient
-        ingredientDiv.innerHTML = `
-            <span>${ingredient.foodName}</span>
-            <span>${ingredient.weight}g</span>
+        const mealEntry = document.createElement('div');
+        mealEntry.className = 'meal-entry';
+        mealEntry.innerHTML = `
+            <div class="meal-name">${meal.MealName}</div>
+            <div class="meal-calories">${meal.calcEnergy100g.toFixed(2)} Kcal</div>
+            <div class="meal-fat">${meal.calcFat100g.toFixed(2)} g</div>
+            <div class="meal-protein">${meal.calcProtein100g.toFixed(2)} g</div>
+            <div class="meal-fiber">${meal.calcFiber100g.toFixed(2)} g</div>
+            <div class="meal-weight">${meal.totalMealWeight} g</div>
+            <div class="meal-ingredients-count">${ingredients.length}</div>
         `;
+        const detailsButton = document.createElement('button');
+        detailsButton.className = 'show-details-btn';
+        detailsButton.innerHTML = '<span class="material-symbols-outlined">manage_search</span>';
+        detailsButton.addEventListener('click', () => showMealDetails(meal.MealId));
+        mealEntry.appendChild(detailsButton);
 
-        ingredientTable.appendChild(ingredientDiv); // append the new div to the ingredient table
+        mealTable.appendChild(mealEntry);
     });
-    // Update the title of the details div
-    detailsDiv.querySelector('h3').textContent = `${meal.mealNumber}: ${meal.mealName} details`; // Take the meal.name and add "Details" to it
-
-    // I also want to showcase the total nutrition for the meal in the details div
-    // so the same way as in the form i will calculate the total nutrition for the meal
-    let totalNutrition = { energy: 0, protein: 0, fat: 0, fiber: 0 };
-    meal.ingredients.forEach(ingredient => {
-        totalNutrition.energy += ingredient.individualNutrition.energy;
-        totalNutrition.protein += ingredient.individualNutrition.protein;
-        totalNutrition.fat += ingredient.individualNutrition.fat;
-        totalNutrition.fiber += ingredient.individualNutrition.fiber;
-    });
-
-    // also make a sentence to display the total nutrition for the meal
-    const nutritionSentence = `Energy: ${totalNutrition.energy.toFixed(2)} kcal,  
-    - Protein: ${totalNutrition.protein.toFixed(2)} g, 
-    - Fat: ${totalNutrition.fat.toFixed(2)} g, 
-    - Fiber: ${totalNutrition.fiber.toFixed(2)} g`;
-    // lastly, add the sentence to the details div
-    document.getElementById("totalNutritionSentence").textContent = nutritionSentence;
+}
 
 
 
 
-    // Show the details div
-    if (detailsDiv.style.display = 'none') { // Use a if statement to show the details div, so if the details div is hidden, it will be shown and vice versa
-        detailsDiv.style.display = 'block';
+document.addEventListener('DOMContentLoaded', function () {
+    fetchAndDisplayMeals();
+});
+async function showMealDetails(mealId) {
+    const url = `/mealcreator/ingredients/${mealId}`;
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch meal details: ${response.status} ${response.statusText}`);
+        }
+
+        const mealData = await response.json();
+        console.log('Fetched meal data:', mealData);
+
+        if (Array.isArray(mealData) && mealData.length > 0) {
+            const mealInfo = mealData[0];
+            if ('ingredients' in mealInfo && mealInfo.ingredients.trim() !== "") {
+                try {
+                    const ingredients = JSON.parse(mealInfo.ingredients.trim());
+                    if (Array.isArray(ingredients) && ingredients.length > 0) {
+                        displayMealDetails(ingredients, mealId, mealInfo.MealName);  // Passing MealName here
+                    } else {
+                        console.error('No ingredients found in the data');
+                    }
+                } catch (parseError) {
+                    console.error('Error parsing ingredients:', parseError);
+                }
+            } else {
+                console.error('No ingredients data available in the fetched data');
+            }
+        } else {
+            console.error('Meal data is not in expected array format or is empty');
+        }
+    } catch (error) {
+        console.error('Error fetching meal details:', error);
+    }
+}
+
+
+
+function displayMealDetails(ingredients, mealId, mealName) {
+    const detailsDiv = document.getElementById('details');
+    const ingredientTable = detailsDiv.querySelector('.ingredient-table');
+
+    // Find existing title or create a new one
+    let titleDiv = detailsDiv.querySelector('h3');
+    if (titleDiv) {
+        // Update the title for the current meal
+        titleDiv.textContent = `Meal Details for: ${mealName} (ID: ${mealId})`;
     } else {
-        detailsDiv.style.display = 'none';
+        // Create and insert a new title if it doesn't exist
+        titleDiv = document.createElement('h2');
+        titleDiv.textContent = `Meal Details for: ${mealName} (ID: ${mealId})`;
+        detailsDiv.insertBefore(titleDiv, ingredientTable);
     }
 
+    // Clear the previous ingredients and display the new ones
+    ingredientTable.innerHTML = '';
+    ingredients.forEach(ingredient => {
+        const ingredientDiv = document.createElement('div');
+        ingredientDiv.innerHTML = `<span>${ingredient.foodName} - ${parseFloat(ingredient.weight).toFixed(2)}g</span>`;
+        ingredientTable.appendChild(ingredientDiv);
+    });
+
+    detailsDiv.style.display = 'block';
 }
+
+
+
+
 
 // Add event listener to the close details button
 document.getElementById('closeDetailsBtn').addEventListener('click', () => { // When the close details button is clicked, the details div will be hidden

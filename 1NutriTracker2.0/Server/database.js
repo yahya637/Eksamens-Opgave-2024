@@ -1,3 +1,6 @@
+
+
+
 import sql from 'mssql';
 import bcrypt from 'bcrypt';
 
@@ -301,6 +304,7 @@ async saveMeal(mealData) {
       const simplifiedIngredients = mealData[i].ingredients.map(ingredient => ({
         foodName: ingredient.foodName,
         weight: ingredient.weight
+
     }));
 
     const ingredientsData = JSON.stringify(simplifiedIngredients);
@@ -392,8 +396,21 @@ async getAllMealsForMealtrackerBySessionId(userId) {
   return result.recordset;
 }
 
+async getIngredientsByMealId(mealId) {
+  try {
+    await this.connect();  // Make sure this connects to your DB correctly
+    const request = this.poolconnection.request();
+    request.input('mealId', sql.Int, mealId);
+    const result = await request.query(`SELECT * FROM Nutri.Mealcreator WHERE mealid = @mealId;`);
+    return result.recordset;  // Ensure the query is correct and returning results
+  } catch (error) {
+    console.error('Error fetching ingredients:', error);
+    throw error;  // Throws error back to route handler
+  }
+}
 
 // Mealtracker 
+
 // GET USER MEALS BY USER ID
 async getAllMealsForMealtrackerByUserId(userId) {
   try {
@@ -568,6 +585,3 @@ async updateIntakeByConsumedId(consumedId, data) {
 
 
 }
-
-
-
