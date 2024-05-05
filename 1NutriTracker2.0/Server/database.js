@@ -147,14 +147,14 @@ async disconnect() {
       request.input('username', sql.VarChar(50), username);
 
       const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
-      console.log('Database query result:', result.recordset); 
+      console.log('Database query result:', result.recordset); // Log result recordset for debugging
       if (result.recordset.length === 0) {
         console.log('No user found for username:', username);
         return { success: false, message: 'User not found' };
       }
 
       const { passwordHash, user_id } = result.recordset[0];
-      console.log('Retrieved user_id:', user_id); 
+      console.log('Retrieved user_id:', user_id); // Log user_id for debugging
 
       if (!passwordHash) {
         console.log('Password hash not found for user:', username);
@@ -165,7 +165,7 @@ async disconnect() {
         console.log('Password does not match for user:', username);
         return { success: false, message: 'Invalid credentials' };
       }
-      return { success: true, user_id: user_id, username: username }; 
+      return { success: true, user_id: user_id, username: username }; // This is also used for session management and displaying user data on the front-end
     } catch (error) {
       console.error('Database connection or query failed:', error);
       throw error;

@@ -348,7 +348,7 @@ function displaySavedMeals(meals) {
     const mealTable = document.querySelector('.meal-table');
     mealTable.innerHTML = ''; // Clear existing meals
 
-    meals.forEach((meal, index) => { // INDEX MÅ GERNE FJERENS!!
+    meals.forEach((meal, index) => {
         const mealEntry = document.createElement('div');
         mealEntry.className = 'meal-entry';
         mealEntry.innerHTML = `
@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Denne funktion viser detaljer om et specifikt måltid, når der klikkes på "Vis detaljer"
 function showMealDetails(mealNumber) {
-    const savedMeals = JSON.parse(localStorage.getItem('meals')) || []; // FEJL HER 
+    const savedMeals = JSON.parse(localStorage.getItem('meals')) || [];
     const meal = MealStorage.meals[mealIndex - 1];
     console.log("Displaying details for:", meal);
     // Additional implementation to display meal details in your U
