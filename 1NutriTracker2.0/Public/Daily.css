@@ -1,6 +1,4 @@
 /* Importing the specified font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
-
 /* Base styles for the entire page */
 body{
     font-family: 'Nunito', sans-serif;

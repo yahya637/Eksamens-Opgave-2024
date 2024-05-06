@@ -177,23 +177,31 @@ async disconnect() {
     }
   }
 
-  // DELETE USER
   async delete(id) {
     await this.connect();
-    const request = this.poolconnection.request();
-    // Bind the user_id parameter to the query
-    request.input('user_id', sql.Int, id);
-    // It needs to delete user from all tables where user_id is a foreign key
-    const result = await request.query(`
-      DELETE FROM Nutri.UserActivities WHERE user_id = @user_id;
-      DELETE FROM Nutri.Mealcreator WHERE user_id = @user_id;
-      DELETE FROM Nutri.BmrCalculations WHERE user_id = @user_id;
-      DELETE FROM Nutri.Users WHERE user_id = @user_id;
-      DELETE FROM Nutri.consumedMeal WHERE user_id = @user_id;
+    const transaction = this.poolconnection.transaction();
+    await transaction.begin();
+    try {
+        const request = transaction.request();
+        request.input('user_id', sql.Int, id);
 
-    `);
-    return result.rowsAffected[0];
-  }
+        // Slet først fra tabeller, der refererer til Users
+        await request.query(`DELETE FROM Nutri.consumedMeal WHERE meal_id IN (SELECT MealId FROM Nutri.Mealcreator WHERE User_id = @user_id);`);
+        await request.query(`DELETE FROM Nutri.Mealcreator WHERE User_id = @user_id;`);
+        await request.query(`DELETE FROM Nutri.UserActivities WHERE user_id = @user_id;`);
+        await request.query('DELETE FROM Nutri.BmrCalculations WHERE user_id = @user_id');
+        
+        // Slet til sidst fra Users
+        await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id;`);
+
+        await transaction.commit();
+        return true; // Returner true når alle sletninger lykkes
+    } catch (err) {
+        await transaction.rollback(); // Rollback ved fejl
+        throw err; // Kast fejlen videre for at håndtere den
+    }
+}
+
 
 
 

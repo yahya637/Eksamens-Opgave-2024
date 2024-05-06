@@ -63,3 +63,29 @@ function displayMealDetails() {
 document.addEventListener('DOMContentLoaded', function() {
     displayMealDetails();
 });
+
+async function fetchAndDisplayMeals() {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('User ID not found');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/mealcreator/${userId}`, { method: 'GET' });
+        if (!response.ok) {
+            throw new Error('Failed to fetch meals: ' + response.statusText);
+        }
+        const meals = await response.json();
+        console.log('Fetched meals:', meals);
+        displaySavedMeals(meals); // Now pass the fetched meals directly to the display function
+    } catch (error) {
+        console.error('There was oa problem fetching the meals:', error.message);
+    }
+}
+fetchAndDisplayMeals();
+
+
+
+
+

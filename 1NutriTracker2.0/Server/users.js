@@ -110,10 +110,6 @@ router.delete('/:id', async (req, res) => {
 
   console.log("Requested User ID:", userId);
 
-  if (String(userId) !== String(sessionUserId)) {
-    return res.status(403).json({ message: "Unauthorized to delete this profile" });
-  }
-
   try {
     const rowsAffected = await database.delete(userId);
     if (rowsAffected > 0) {
