@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     displayMealDetails();
+    fetchAlldata();
  });
  
  
@@ -17,6 +18,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     */
  
+
+    async function fetchAlldata() {
+        // Get User ID from session storage
+        const userId = sessionStorage.getItem('userId');
+        console.log('User ID:', userId);
+        try {
+            const response = await fetch(`/daily1/userstats/${userId}`);
+            const data = await response.json();
+            console.log(data);
+            return data;
+        } catch (error) {
+            console.error('Error fetching user statistics:', error);
+            // Handle error
+        }
+    }
+
+    fetchAlldata().then(data => {   
+        console.log(data);
+    });
+    
+
  
  function displayMealDetails() {
     // Retrieving meal intakes from local storage

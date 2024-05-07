@@ -595,28 +595,90 @@ async getUserStats(userId) {
     const request = this.poolconnection.request();
     request.input('user_id', sql.Int, userId);
 
-    // Query to get consumed energy
+    // Query to get consumed energy and sort by date
     const consumedQuery = `
-    SELECT SUM(consumedEnergy) AS TotalConsumedEnergy FROM Nutri.consumedMeal WHERE user_id = @user_id
+    SELECT consumedEnergy, timeAdded, dateAdded FROM Nutri.consumedMeal WHERE user_id = @user_id ORDER BY dateAdded
     `;
     const consumedResult = await request.query(consumedQuery);
     
-    // Query to get activities sum
+    // Query to get activities sum and sort by date
     const activitiesQuery = `
-    SELECT SUM(total_kcal_burned) AS TotalSumActivities FROM nutri.UserActivities WHERE user_id = @user_id
+    SELECT total_kcal_burned, timeAdded, dateAdded FROM nutri.UserActivities WHERE user_id = @user_id ORDER BY dateAdded
     `;
     const activitiesResult = await request.query(activitiesQuery);
+    
+    // Combine the sorted results into a single object
+    const combinedResults = [];
 
-    // Combine the results into a single object
+    let consumedIndex = 0;
+    let activitiesIndex = 0;
+
+    // Merge the sorted arrays
+    while (consumedIndex < consumedResult.recordset.length && activitiesIndex < activitiesResult.recordset.length) {
+      const consumedRow = consumedResult.recordset[consumedIndex];
+      const activitiesRow = activitiesResult.recordset[activitiesIndex];
+
+      if (consumedRow.dateAdded < activitiesRow.dateAdded) {
+        combinedResults.push({
+          ConsumedEnergy: consumedRow.consumedEnergy,
+          TimeAdded: consumedRow.timeAdded,
+          DateAdded: consumedRow.dateAdded,
+          Activities: null,
+          ActivitiesTimeAdded: null,
+          ActivitiesDateAdded: null
+        });
+        consumedIndex++;
+      } else {
+        combinedResults.push({
+          ConsumedEnergy: null,
+          TimeAdded: null,
+          DateAdded: null,
+          Activities: activitiesRow.total_kcal_burned,
+          ActivitiesTimeAdded: activitiesRow.timeAdded,
+          ActivitiesDateAdded: activitiesRow.dateAdded
+        });
+        activitiesIndex++;
+      }
+    }
+
+    // Add remaining consumed rows
+    while (consumedIndex < consumedResult.recordset.length) {
+      const consumedRow = consumedResult.recordset[consumedIndex];
+      combinedResults.push({
+        ConsumedEnergy: consumedRow.consumedEnergy,
+        TimeAdded: consumedRow.timeAdded,
+        DateAdded: consumedRow.dateAdded,
+        Activities: null,
+        ActivitiesTimeAdded: null,
+        ActivitiesDateAdded: null
+      });
+      consumedIndex++;
+    }
+
+    // Add remaining activities rows
+    while (activitiesIndex < activitiesResult.recordset.length) {
+      const activitiesRow = activitiesResult.recordset[activitiesIndex];
+      combinedResults.push({
+        ConsumedEnergy: null,
+        TimeAdded: null,
+        DateAdded: null,
+        Activities: activitiesRow.total_kcal_burned,
+        ActivitiesTimeAdded: activitiesRow.timeAdded,
+        ActivitiesDateAdded: activitiesRow.dateAdded
+      });
+      activitiesIndex++;
+    }
+
     return {
-      TotalConsumedEnergy: consumedResult.recordset[0].TotalConsumedEnergy,
-      TotalSumActivities: activitiesResult.recordset[0].TotalSumActivities
+      data: combinedResults
     };
   } catch (error) {
     console.error('Error fetching user statistics:', error);
     throw new Error('Error fetching user statistics from database');
   }
 }
+
+
 
 
 }
