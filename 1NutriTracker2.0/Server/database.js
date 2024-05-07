@@ -589,7 +589,37 @@ async updateIntakeByConsumedId(consumedId, data) {
     }
 }
 
+async getUserStats(userId) {
+  try {
+    await this.connect(); // Ensure connection to the database
+    const request = this.poolconnection.request();
+    request.input('user_id', sql.Int, userId);
 
+    // Query to get consumed energy
+    const consumedQuery = `
+    SELECT SUM(consumedEnergy) AS TotalConsumedEnergy FROM Nutri.consumedMeal WHERE user_id = @user_id
+    `;
+    const consumedResult = await request.query(consumedQuery);
+    
+    // Query to get activities sum
+    const activitiesQuery = `
+    SELECT SUM(total_kcal_burned) AS TotalSumActivities FROM nutri.UserActivities WHERE user_id = @user_id
+    `;
+    const activitiesResult = await request.query(activitiesQuery);
+
+    // Combine the results into a single object
+    return {
+      TotalConsumedEnergy: consumedResult.recordset[0].TotalConsumedEnergy,
+      TotalSumActivities: activitiesResult.recordset[0].TotalSumActivities
+    };
+  } catch (error) {
+    console.error('Error fetching user statistics:', error);
+    throw new Error('Error fetching user statistics from database');
+  }
+}
 
 
 }
+
+
+

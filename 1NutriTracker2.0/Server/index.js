@@ -6,6 +6,7 @@ import users from './users.js';
 import activityRouter from './activity.js';
 import mealcreator from './mealcreator.js';
 import mealtracker from './mealtracker1.js';
+import daily from './daily1.js';
 
 
 const app = express();
@@ -52,6 +53,7 @@ app.use("/users", users);
 app.use("/activities", activityRouter); 
 app.use("/mealcreator", mealcreator);
 app.use("/mealtracker1", mealtracker);
+app.use("/daily1", daily);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
