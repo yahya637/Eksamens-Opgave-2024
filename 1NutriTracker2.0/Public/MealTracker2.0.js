@@ -103,23 +103,31 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
         fiber: parseFloat(selectedOption.getAttribute('data-fiber'))
     };
 
-    const currentDate = new Date();
-    const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
-    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
-    const year = currentDate.getFullYear().toString().slice(-2); // Take the last two digits of the year
+    // Calculate the consumed nutrients based on the selected meal's nutrients and consumed weight
+    const consumedEnergy = ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2);
+    const consumedProtein = ((mealNutrients.protein / selectedMealWeight) * weightConsumed).toFixed(2);
+    const consumedFat = ((mealNutrients.fat / selectedMealWeight) * weightConsumed).toFixed(2);
+    const consumedFiber = ((mealNutrients.fiber / selectedMealWeight) * weightConsumed).toFixed(2);
 
+    console.log('Consumed Energy:', consumedEnergy);
+    console.log('Consumed Protein:', consumedProtein);
+    console.log('Consumed Fat:', consumedFat);
+    console.log('Consumed Fiber:', consumedFiber);
+
+    // Construct the intake details object
     return {
         mealId: selectedOption.getAttribute('data-id'),
         mealName: selectedOption.getAttribute('data-name'),
         consumedWeight: weightConsumed,
-        consumedEnergy: ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2),
-        consumedProtein: ((mealNutrients.protein / selectedMealWeight) * weightConsumed).toFixed(2),
-        consumedFat: ((mealNutrients.fat / selectedMealWeight) * weightConsumed).toFixed(2),
-        consumedFiber: ((mealNutrients.fiber / selectedMealWeight) * weightConsumed).toFixed(2),
-        dateAdded: `${day}/${month}/${year}`,
-        timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'})
+        consumedEnergy,
+        consumedProtein,
+        consumedFat,
+        consumedFiber,
+        dateAdded: getCurrentDate(),
+        timeAdded: getCurrentTime()
     };
 }
+
 
 
 async function saveIntakeToDatabase(intakeDetails) {
@@ -476,9 +484,16 @@ function deleteIntake(consumedId) {
 
 // Edit intakes
 function openEditForm(consumedId, name, weight, time) {
-    document.getElementById('editName').value = name;  // Should set the name, not the weight
-    document.getElementById('editWeight').value = weight;  // Should set the weight
-    document.getElementById('editTime').value = time;  // Should set the time
+    // Fyld formularen med de aktuelle oplysninger
+    document.getElementById('editName').value = name;
+    document.getElementById('editWeight').value = weight;
+    document.getElementById('editTime').value = time;
+
+    // Gem consumedId i formulardataattributter for senere brug ved indsendelse
+    const form = document.getElementById('editIntakeForm');
+    form.dataset.consumedId = consumedId;
+
+    // Vis redigeringsmodalen
     document.getElementById('editModal').style.display = 'block';
 }
 
@@ -489,18 +504,26 @@ function closeModal() {
     document.getElementById('editModal').style.display = 'none';
 }
 
-function submitEditForm() {
+function submitEditForm(event) {
+    event.preventDefault(); 
+
     const form = document.getElementById('editIntakeForm');
-    const consumedId = form.dataset.consumedId; // Get the consumedId stored in form data
+    const consumedId = form.dataset.consumedId;
     const updatedName = document.getElementById('editName').value;
     const updatedWeight = document.getElementById('editWeight').value;
-    const updatedTime = document.getElementById('editTime').value;
-    const userId = sessionStorage.getItem('userId');  
+
+    // Hent den indtastede tid
+    const inputTime = document.getElementById('editTime').value;
+    // Opret et nyt Date-objekt med den indtastede tid
+    const selectedTime = new Date(inputTime);
+    // Tilføj tidszonen til det nye Date-objekt
+    const updatedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezoneOffset() * 60000)).toISOString(); // Konverter til ISO 8601-format med korrekt tidszone
+    const userId = sessionStorage.getItem('userId');
 
     const data = {
-        name: updatedName,
-        weight: updatedWeight,
-        time: updatedTime
+        foodName: updatedName,
+        consumedWeight: updatedWeight,
+        timeAdded: updatedTime
     };
 
     fetch(`/mealtracker1/${userId}/intake/${consumedId}`, {
@@ -510,17 +533,23 @@ function submitEditForm() {
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Update successful:', data);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to update intake');
+        }
+        console.log('Intake updated successfully');
         closeModal();
-        // Update the UI here if necessary
+        fetchMealIntakes();
     })
     .catch(error => {
         console.error('Error updating intake:', error);
-        alert('Failed to update the intake: ' + error.message);
+        alert('Failed to update intake: ' + error.message);
     });
 }
+
+
+
+
 
 
 

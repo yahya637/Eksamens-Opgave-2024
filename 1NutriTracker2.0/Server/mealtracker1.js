@@ -107,20 +107,20 @@ router.put('/:userId/intake/:consumedId', async (req, res) => {
   console.log(`Updating meal for user ID: ${userId} and consumed ID: ${consumedId}`);
 
   try {
-    const rowsUpdated = await database.updateIntakeByConsumedId(consumedId, updatedIntake);
-    if (rowsUpdated > 0) {
-      res.status(200).json({ message: "Intake updated successfully" });
-    } else {
-      res.status(404).json({ error: "No intake found with the provided ID" });
-    }
+      const rowsUpdated = await database.updateIntakeByConsumedId(consumedId, updatedIntake);
+      if (rowsUpdated > 0) {
+          res.status(200).json({ message: "Intake updated successfully" });
+      } else {
+          res.status(404).json({ error: "No intake found with the provided ID" });
+      }
+  } catch (err) {
+      console.error('Error updating meal:', err);
+      res.status(500).json({ error: 'Error updating meal in the database', details: err.message });
   }
-  catch (err) {
-    console.error('Error updating meal:', err);
-    res.status(500).json({ error: 'Error updating meal in the database', details: err.message });
-  }
-}
-);
+});
+
   
+
 
   
   export default router;

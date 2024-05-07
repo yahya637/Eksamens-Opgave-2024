@@ -564,30 +564,32 @@ async deleteIntakeByConsumedId(consumedId) {
 }
 
 async updateIntakeByConsumedId(consumedId, data) {
-    try {
-        await sql.connect(sqlConfig);
-        const request = new sql.Request();
-        request.input('consumedId', sql.Int, consumedId);
-        request.input('mealName', ingredientDetails.foodName || null);
-        request.input('consumedWeight', ingredientDetails.consumedWeight);
-        request.input('timeAdded', ingredientDetails.timeAdded|| null);
-        
-        // More inputs for nutritional values can follow the same pattern
+  try {
+      await this.connect();
+      const request = this.poolconnection.request();
+      request.input('consumedId', sql.Int, consumedId);
+      request.input('mealName', data.foodName || null); // Updated
+      request.input('consumedWeight', data.consumedWeight);
+      request.input('timeAdded', data.timeAdded || null); // Updated
+      
+      // More inputs for nutritional values can follow the same pattern
 
-        const result = await request.query(`
-            UPDATE Nutri.consumedMeal
-            SET
-              mealName = COALESCE(NULLIF(@mealName, ''), mealName),
-              consumedWeight = @consumedWeight,
-              timeAdded = COALESCE(@timeAdded, timeAdded)
-            WHERE consumed_Id = @consumedId;
-        `);
-        console.log(result.rowsAffected + ' rows updated.');
-    } catch (err) {
-        console.error('Failed to update meal:', err);
-        throw err;
-    }
+      const result = await request.query(`
+          UPDATE Nutri.consumedMeal
+          SET
+            mealName = COALESCE(NULLIF(@mealName, ''), mealName),
+            consumedWeight = @consumedWeight,
+            timeAdded = COALESCE(@timeAdded, timeAdded)
+          WHERE consumed_Id = @consumedId;
+      `);
+      console.log(result.rowsAffected + ' rows updated.');
+      return result.rowsAffected; // Return the number of rows affected
+  } catch (err) {
+      console.error('Failed to update meal:', err);
+      throw err;
+  }
 }
+
 
 async getUserStats(userId) {
   try {
