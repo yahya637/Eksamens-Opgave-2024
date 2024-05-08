@@ -119,8 +119,36 @@ router.put('/:userId/intake/:consumedId', async (req, res) => {
   }
 });
 
+router.get('/:userId/water', async (req, res) => {
+  const userId = req.params.userId;
+  console.log('getting water intake for user', userId);
+
+  try {
+      // Assuming database.createIntake(userId, intakeDetails) creates a new intake for the user
+      const intake = await database.getWaterIntake(userId);
+      res.status(201).json(intake);
+  } catch (err) {
+      console.error('Error creating new intake:', err);
+      res.status(500).json({ error: 'Error creating new intake in the database', details: err.message });
+  }
+});
   
+router.post('/:userId/water', async (req, res) => {
+  const userId = req.params.userId;
+  const intakeDetails = req.body; // Antages at være i formatet { date: 'YYYY-MM-DD', amount: 250 }
+
+  console.log('Creating water intake', userId);
+
+  try {
+    // Opretter et nyt indtag for brugeren
+    await database.createWaterIntake(userId, intakeDetails);
+    res.status(201).json({ message: 'Water intake created' });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({ error: 'Error', detaljer: err.message });
+  }
+});
 
 
-  
+
   export default router;

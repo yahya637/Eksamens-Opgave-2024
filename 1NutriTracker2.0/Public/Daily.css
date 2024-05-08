@@ -1,138 +1,158 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+        /* Importing the specified font from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
-body{
-   font-family: 'Nunito', sans-serif;
-   background-color: whitesmoke;
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box;
-}
+        /* Base styles for the entire page */
+        body {
+           font-family: 'Nunito', sans-serif;
+           background-color: whitesmoke;
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+        }
 
-.hjem {
-   display: flex;
-   justify-content: center;
-   padding: 20px 2%;
-   background-color: #def6d8;
-   background-image: url('Images/svg.png/');
-   background-repeat: no-repeat;
-   background-position: bottom;
-   background-size: cover;
-   position: fixed;
-   top: 0;
-   left: 0;
-   right: 0;
-   z-index: 100;
-}
+        .hjem {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 20px 2%;
+           background-color: #DEF6D8;
+           position: fixed;
+           top: 0;
+           left: 0;
+           right: 0;
+           z-index: 100;
+        }
+
+        .logo {
+           color: #91c789;
+           font-size: 30px;
+           font-weight: 700;
+           text-decoration: none;
+           margin-top: 5px;
+           padding-left: 40px;
+        }
+
+        #logoutButton {
+           background-color: #e3342f;
+           cursor: pointer;
+           color: white;
+           padding: 8px 16px;
+           border: none;
+           border-radius: 5px;
+        }
+
+        .navbar-h {
+           display: flex;
+           gap: 30px;
+        }
+
+        .navbar a {
+           text-decoration: none;
+           color: #000;
+           font-size: 20px;
+           font-weight: 700;
+           padding: 8px;
+        }
+
+        nav a:hover {
+           color: #76b66c;
+           text-shadow: 0px 0px 1px darkgreen;
+        }
+
+        button {
+           padding: 12px 24px;
+           border: none;
+           border-radius: 15px;
+           transition: box-shadow 0.3s ease, transform 0.2s ease;
+           font-size: 16px;
+           color: white;
+           cursor: pointer;
+           text-align: center;
+           display: inline-block;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-row {
+           width: 100%;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 5px;
+           padding-left: 5px;
+           padding-right: 5
+        }
 
 
-.logo {
-   position: absolute;
-   left: 40px;
-   color: #91c789;
-   font-size: 30px;
-   font-weight: 700;
-   text-decoration: none;
-   order: 1;
-}
+        #daily {
+           width: 60em;
+           margin: auto;
+           padding: 20px;
+           border: 2px solid #99d9de;
+           border-radius: 10px;
+           position: relative;
+           top: 150px;
+           display: flex;
+           justify-content: space-evenly;
+           flex-direction: column;
+           align-items: center;
+        }
 
 
-.navbar a {
-   text-decoration: none;
-   color: #000;
-   font-size: 20px;
-   font-weight: 700;
-   padding: 0 60px; /* Provides space between the links */
-   transition: all 0.3s ease;
-  
-}
-
-nav a:hover {
-   color: #76b66c;
-   text-shadow: darkgreen   0px 0px 1px;
-}
-
-.navbar-h a {
-   text-decoration: none;
-   color: #000;
-   font-size: 20px;
-   font-weight: 700;
-   padding: 24px;
-}
-
-.header-row {
-   width: 100%;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   padding: 5px;
-   padding-left: 5px;
-   padding-right: 5
-}
 
 
-#daily{
-   width: 70em;
-   margin: auto;
-   padding: 20px;
-   border: 2px solid #99d9de;
-   border-radius: 10px;
-   position: relative;
-   top: 150px;
-   display: flex;
-   justify-content: space-evenly;
-   flex-direction: column;
-   align-items: center;
-}
 
-h1 {
-   color: #333;
-   margin-bottom: 20px;
-}
+
+        h1 {
+           color: #333;
+           margin-bottom: 20px;
+        }
 
 /** Table Styling **/
 
-#mealDetailsTable {
-   width: 60em;
-}
-
-#mealDetailsTable thead {
-   color: black;
-   background-color: transparent;
-   border-bottom: 0px solid #ddd;
-
-}
+        #mealDetailsTable {
+           width: 100%;
+           border-collapse: collapse;
+        }
 
 
-#mealDetailsTable th, #mealDetailsTable td {
-   text-align: center;
-   padding: 10px;
-}
+        #mealDetailsTable thead {
+           background-color: #76b66c;
+           color: black;
+        }
 
 
-#mealDetailsTable tbody tr {
-   background-color: #76b66c;
-   color: black;
-   border-radius: 5px;
-   margin-bottom: 10px;
-}
+        #mealDetailsTable th,
+        #mealDetailsTable td {
+           text-align: center;
+           padding: 10px;
+           border-bottom: 1px solid #ddd;
+        }
 
 
-#mealDetailsTable tbody tr:nth-child(odd) {
-   background-color: #a0c39b94;
-}
+        #mealDetailsTable tbody tr {
+           background-color: #76b66c;
+           color: black;
+           border-radius: 5px;
+           margin-bottom: 10px;
+        }
 
 
-#mealDetailsTable tbody tr:last-child {
-   font-weight: bold;
-   border-bottom: 2px solid #a0c39b94;
-}
+        #mealDetailsTable tbody tr:nth-child(odd) {
+           background-color: #a0c39b94;
+        }
 
 
-.header-item {
-   text-align: center;
-   font-weight: bold;
-   color: #333;
-}
+        #mealDetailsTable tbody tr:last-child {
+           font-weight: bold;
+           border-bottom: 2px solid #a0c39b94;
+        }
+
+
+        .header-item {
+           text-align: center;
+           font-weight: bold;
+           color: #333;
+        }
 
 .button-row {
    gap: 10px;
@@ -155,17 +175,27 @@ button {
 }
 
 
-#dailyView {
-   background-color: #569bd5;
-}
+        #dailyView {
+           background-color: #569bd5;
+        }
 
-.dailyNutri-header {
-   display: flex;
-   width: 100%;
-   justify-content: space-between;
-   align-items: center;
-   padding: 10px;
-}
-.material-symbols-outlined{
-   margin-bottom: 5px;
-}
+
+        .gg-add {
+           box-sizing: border-box;
+           position: relative;
+           display: block;
+           width: 22px;
+           height: 22px;
+           border: 2px solid;
+           transform: scale(var(--ggs, 1));
+           border-radius: 22px;
+        }
+
+
+        .dailyNutri-header {
+           display: flex;
+           width: 100%;
+           justify-content: space-between;
+           align-items: center;
+           padding: 10px;
+        }

@@ -43,11 +43,156 @@ console.error(`Error closing database connection: ${error}`);
 }
 
 
-async executeQuery(query) {
-await this.connect();
-const request = this.poolconnection.request();
-const result = await request.query(query);
-return result.rowsAffected[0];
+  // CREATE USER
+  async create(data) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+
+      // Hash the password before storing it
+      const saltRounds = 10;  // Adjust saltRounds as needed
+      const passwordHash = await bcrypt.hash(data.password, saltRounds);
+
+      // Bind all parameters to the query
+      request.input('username', sql.VarChar(50), data.username);
+      request.input('email', sql.VarChar(50), data.email);
+      request.input('fullName', sql.VarChar(50), data.fullName);
+      request.input('passwordHash', sql.VarChar(256), passwordHash);  // Use the hashed password
+      request.input('birthdate', sql.Date, data.birthdate);
+      request.input('gender', sql.VarChar(10), data.gender);
+      request.input('weight', sql.Decimal(5, 2), data.weight);
+
+      // Execute the SQL query
+      const result = await request.query(
+        `INSERT INTO Nutri.Users (username, email, fullName, passwordHash, birthdate, gender, weight)
+           VALUES (@username, @email, @fullName, @passwordHash, @birthdate, @gender, @weight)`
+      );
+
+      return result.rowsAffected[0];  // Return the number of rows affected
+    } catch (error) {
+      console.error('Failed to create user:', error);
+      throw new Error('Error creating user in database');
+    }
+  }
+
+  // CHECK IF USER EXISTS
+  async userExists(username, email) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+      request.input('username', sql.VarChar(50), username);
+      request.input('email', sql.VarChar(50), email);
+
+      const result = await request.query(`
+          SELECT COUNT(*) as count FROM Nutri.Users WHERE username = @username OR email = @email
+      `);
+
+      console.log(result.recordset); // Check what's actually returned
+      return result.recordset[0].count > 0;
+    } catch (error) {
+      console.error('Error checking user existence:', error);
+      throw error;
+    }
+  }
+
+  // READ ALL USERS
+  async readAll() {
+    await this.connect();
+    const request = this.poolconnection.request();
+    const result = await request.query(`SELECT * FROM Nutri.Users`);
+    return result.recordset;
+  }
+
+  // READ USER BY ID
+  async read(id) {
+    await this.connect();
+    const request = this.poolconnection.request();
+    const result = await request
+      .input('user_id', sql.Int, id)
+      .query(`SELECT * FROM Nutri.Users WHERE user_id = @user_id`);
+
+    return result.recordset[0];
+  }
+
+  // UPDATE USER
+  async update(id, data) {
+    await this.connect();
+    const request = this.poolconnection.request();
+    request.input('user_id', sql.Int, id);
+    request.input('email', sql.VarChar(50), data.email);
+    request.input('birthdate', sql.Date, data.birthdate);
+    request.input('gender', sql.VarChar(10), data.gender);
+    request.input('weight', sql.Decimal(5, 2), data.weight);
+
+    const result = await request.query(
+      `UPDATE Nutri.Users SET 
+        email=@email, 
+        birthdate=@birthdate,
+        gender=@gender,
+        weight=@weight
+      WHERE user_id = @user_id`
+    );
+    return result.rowsAffected[0];
+  }
+
+  // LOGIN USER
+  async loginUser(username, password) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+      request.input('username', sql.VarChar(50), username);
+
+      const result = await request.query('SELECT passwordHash, user_id FROM Nutri.Users WHERE username = @username');
+      console.log('Database query result:', result.recordset); // Log result recordset for debugging
+      if (result.recordset.length === 0) {
+        console.log('No user found for username:', username);
+        return { success: false, message: 'User not found' };
+      }
+
+      const { passwordHash, user_id } = result.recordset[0];
+      console.log('Retrieved user_id:', user_id); // Log user_id for debugging
+
+      if (!passwordHash) {
+        console.log('Password hash not found for user:', username);
+        return { success: false, message: 'No password set for this user.' };
+      }
+      const isMatch = await bcrypt.compare(password, passwordHash);
+      if (!isMatch) {
+        console.log('Password does not match for user:', username);
+        return { success: false, message: 'Invalid credentials' };
+      }
+      return { success: true, user_id: user_id, username: username }; // This is also used for session management and displaying user data on the front-end
+    } catch (error) {
+      console.error('Database connection or query failed:', error);
+      throw error;
+    } finally {
+      await this.disconnect();
+    }
+  }
+
+  async delete(id) {
+    await this.connect();
+    const transaction = this.poolconnection.transaction();
+    await transaction.begin();
+    try {
+        const request = transaction.request();
+        request.input('user_id', sql.Int, id);
+
+        // Slet først fra tabeller, der refererer til Users
+        await request.query(`DELETE FROM Nutri.consumedMeal WHERE meal_id IN (SELECT MealId FROM Nutri.Mealcreator WHERE User_id = @user_id);`);
+        await request.query(`DELETE FROM Nutri.Mealcreator WHERE User_id = @user_id;`);
+        await request.query(`DELETE FROM Nutri.UserActivities WHERE user_id = @user_id;`);
+        await request.query('DELETE FROM Nutri.BmrCalculations WHERE user_id = @user_id');
+        
+        // Slet til sidst fra Users
+        await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id;`);
+
+        await transaction.commit();
+        return true; // Returner true når alle sletninger lykkes
+    } catch (err) {
+        await transaction.rollback(); // Rollback ved fejl
+        throw err; // Kast fejlen videre for at håndtere den
+    }
 }
 
 
@@ -660,33 +805,30 @@ throw new Error('Error deleting intake by consumed ID from database');
 
 
 async updateIntakeByConsumedId(consumedId, data) {
-try {
-await this.connect();
-const request = this.poolconnection.request();
-request.input('consumedId', sql.Int, consumedId);
-request.input('mealName', data.foodName || null); // Updated
-request.input('consumedWeight', data.consumedWeight);
-request.input('timeAdded', data.timeAdded || null); // Updated
-// More inputs for nutritional values can follow the same pattern
+  try {
+      await this.connect();
+      const request = this.poolconnection.request();
+      request.input('consumedId', sql.Int, consumedId);
+      request.input('mealName', data.foodName || null); // Updated
+      request.input('timeAdded', data.timeAdded || null); // Updated
+      
+      // More inputs for nutritional values can follow the same pattern
 
-
-
-
-const result = await request.query(`
-UPDATE Nutri.consumedMeal
-SET
-mealName = COALESCE(NULLIF(@mealName, ''), mealName),
-consumedWeight = @consumedWeight,
-timeAdded = COALESCE(@timeAdded, timeAdded)
-WHERE consumed_Id = @consumedId;
-`);
-console.log(result.rowsAffected + ' rows updated.');
-return result.rowsAffected; // Return the number of rows affected
-} catch (err) {
-console.error('Failed to update meal:', err);
-throw err;
+      const result = await request.query(`
+          UPDATE Nutri.consumedMeal
+          SET
+            mealName = COALESCE(NULLIF(@mealName, ''), mealName),
+            timeAdded = COALESCE(@timeAdded, timeAdded)
+          WHERE consumed_Id = @consumedId;
+      `);
+      console.log(result.rowsAffected + ' rows updated.');
+      return result.rowsAffected; // Return the number of rows affected
+  } catch (err) {
+      console.error('Failed to update meal:', err);
+      throw err;
+  }
 }
-}
+
 
 
 // Daily Nutri
@@ -766,6 +908,42 @@ throw new Error(`Error fetching user statistics from database: ${error.message}`
 
 
 
+async getWaterIntake(userId) {
+  try {
+    await this.connect();  // Sikre databaseforbindelse
+
+    const query = `
+      SELECT * FROM Nutri.WaterInTake WHERE user_id = @userId
+    `;
+    const request = this.poolconnection.request()
+      .input('userId', userId);
+
+    const result = await request.query(query);
+    return result.recordset;
+  } catch (error) {
+    console.error('Fejl ved hentning af indtag:', error);
+    throw error; // Kast fejlen for at håndtere den på et højere niveau
+  }
+}
+
+
+async createWaterIntake(userId, intakeDetails) {
+  try {
+    await this.connect();  // Sikre databaseforbindelse
+
+    const query = `
+      INSERT INTO Nutri.WaterInTake (User_id, millilitre, intake_date, intake_time)
+      VALUES (@userId, @millilitre, GETDATE(),GETDATE())
+    `;
+    const request = this.poolconnection.request()
+      .input('userId', userId)
+      .input('millilitre', intakeDetails.millilitre); // rettet til intakeDetails.millilitre
+    await request.query(query);
+  } catch (error) {
+    console.error('Error:', error);
+    throw error; // Kast fejlen for at håndtere den på et højere niveau
+  }
+}
 
 
 

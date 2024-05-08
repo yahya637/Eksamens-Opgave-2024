@@ -14,6 +14,9 @@ document.getElementById('IntakeMealButton').addEventListener('click', async func
     }
 });
 
+
+
+
 async function fetchMealsFromDatabase() {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
@@ -94,6 +97,7 @@ function logIntakeDetails(intakeDetails) {
 }
 // This function calculates the nutritional details based on selected meal and consumed weight
 
+// This function calculates the nutritional details based on selected meal and consumed weight
 function calculateIntakeDetails(selectedOption, weightConsumed) {
     const selectedMealWeight = parseFloat(selectedOption.getAttribute('data-weight'));
     const mealNutrients = {
@@ -102,6 +106,12 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
         fat: parseFloat(selectedOption.getAttribute('data-fat')),
         fiber: parseFloat(selectedOption.getAttribute('data-fiber'))
     };
+
+    // Get the current date components
+    const currentDate = new Date();
+    const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
+    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
+    const year = currentDate.getFullYear().toString().slice(-2); // Take the last two digits of the year
 
     // Calculate the consumed nutrients based on the selected meal's nutrients and consumed weight
     const consumedEnergy = ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2);
@@ -123,8 +133,8 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
         consumedProtein,
         consumedFat,
         consumedFiber,
-        dateAdded: getCurrentDate(),
-        timeAdded: getCurrentTime()
+        dateAdded: `${day}/${month}/${year}`,
+        timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
     };
 }
 
@@ -483,10 +493,9 @@ function deleteIntake(consumedId) {
   
 
 // Edit intakes
-function openEditForm(consumedId, name, weight, time) {
+function openEditForm(consumedId, name, time) {
     // Fyld formularen med de aktuelle oplysninger
     document.getElementById('editName').value = name;
-    document.getElementById('editWeight').value = weight;
     document.getElementById('editTime').value = time;
 
     // Gem consumedId i formulardataattributter for senere brug ved indsendelse
@@ -510,19 +519,31 @@ function submitEditForm(event) {
     const form = document.getElementById('editIntakeForm');
     const consumedId = form.dataset.consumedId;
     const updatedName = document.getElementById('editName').value;
-    const updatedWeight = document.getElementById('editWeight').value;
 
-    // Hent den indtastede tid
+    // Get the input time value
     const inputTime = document.getElementById('editTime').value;
-    // Opret et nyt Date-objekt med den indtastede tid
-    const selectedTime = new Date(inputTime);
-    // Tilføj tidszonen til det nye Date-objekt
-    const updatedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezoneOffset() * 60000)).toISOString(); // Konverter til ISO 8601-format med korrekt tidszone
+
+    // Validate the input time value
+    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timeRegex.test(inputTime)) {
+        alert('Invalid time format. Please enter time in HH:MM format (e.g., 20:00).');
+        return;
+    }
+
+    // Parse hours and minutes from the input time value
+    const [hours, minutes] = inputTime.split(':').map(Number);
+
+    // Create a new Date object with the current date and parsed hours and minutes
+    const selectedTime = new Date();
+    selectedTime.setHours(hours, minutes, 0, 0);
+
+    // Convert the selected time to ISO string with correct timezone offset
+    const updatedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezoneOffset() * 60000)).toISOString();
+
     const userId = sessionStorage.getItem('userId');
 
     const data = {
         foodName: updatedName,
-        consumedWeight: updatedWeight,
         timeAdded: updatedTime
     };
 
@@ -547,9 +568,28 @@ function submitEditForm(event) {
     });
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutButton = document.getElementById('logoutButton');
+    logoutButton.addEventListener('click', function() {
+        confirmLogout();
+    });
+});
 
+function confirmLogout() {
+    // Display confirmation dialog
+    if (confirm('Are you sure you want to log out?')) {
+        logoutUser();
+    }
+}
 
+function logoutUser() {
+    // Clear specific sessionStorage item
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('username');
 
+    // Optionally clear all session storage
+    // sessionStorage.clear();
 
-
-
+    // Redirect to login page
+    window.location.href = '/NutriHome.html';
+}

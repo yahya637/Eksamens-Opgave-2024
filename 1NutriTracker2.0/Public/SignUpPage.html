@@ -76,43 +76,54 @@
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('signUpForm');
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('signUpForm');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-            const data = {
-                fullName: document.getElementById('nameInput').value,
-                username: document.getElementById('usernameInput').value,
-                email: document.getElementById('emailInput').value,
-                password: document.getElementById('PasswordInput').value,
-                birthdate: document.getElementById('birthdate').value,
-                gender: document.getElementById('gender').value,
-                weight: document.getElementById('weight').value 
-                
-            };
+        const data = {
+            fullName: document.getElementById('nameInput').value,
+            username: document.getElementById('usernameInput').value,
+            email: document.getElementById('emailInput').value,
+            password: document.getElementById('PasswordInput').value,
+            birthdate: document.getElementById('birthdate').value,
+            gender: document.getElementById('gender').value,
+            weight: document.getElementById('weight').value
+        };
 
-            // Check if the passwords match
-            if (data.password !== document.getElementById('confirmPasswordInput').value) {
-                alert('Passwords do not match!');
-                return;
-            }
+        // Validate Email
+        if (!/^\S+@\S+\.\S+$/.test(data.email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
 
-            // Check if any of the fields are empty
-            if (data.username === '' || data.email === '' || data.password === '') {
-                alert('Please fill in all fields!');
-                return;
-            }
+        // Validate Password for complexity
+        if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(data.password)) {
+            alert('Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.');
+            return;
+        }
 
+        // Check if the passwords match
+        if (data.password !== document.getElementById('confirmPasswordInput').value) {
+            alert('Passwords do not match!');
+            return;
+        }
 
-            fetch('/users/signuppage', {
+        // Check if any of the fields are empty
+        if (!data.username || !data.email || !data.password) {
+            alert('Please fill in all required fields!');
+            return;
+        }
+
+        // Post data to the server
+        fetch('/users/signuppage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Signup failed username or email already exists !');  // If response not OK, throw error to be caught
+                throw new Error('Signup failed: ' + response.statusText);  // Include more specific error detail
             }
             return response.json();
         })
@@ -120,7 +131,7 @@
             if (data.message) {
                 alert(data.message);  // Display server-provided message
                 if (data.message === 'Signup successful!') {
-                    window.location.href = "../LogInPage.html"; // Omdiriger brugeren
+                    window.location.href = "../LogInPage.html";
                     form.reset();  // Reset form only on successful signup
                 }
             }
@@ -131,6 +142,7 @@
         });
     });
 });
+
 
 </script>
 

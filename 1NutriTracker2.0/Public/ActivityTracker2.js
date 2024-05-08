@@ -423,3 +423,29 @@ function toggleBMRHistory() {
 
 // Call toggleBMRHistory function when the show/hide button is clicked
 document.getElementById('show-bmr-history').addEventListener('click', toggleBMRHistory);
+
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutButton = document.getElementById('logoutButton');
+    logoutButton.addEventListener('click', function() {
+        confirmLogout();
+    });
+});
+
+function confirmLogout() {
+    // Display confirmation dialog
+    if (confirm('Are you sure you want to log out?')) {
+        logoutUser();
+    }
+}
+
+function logoutUser() {
+    // Clear specific sessionStorage item
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('username');
+
+    // Optionally clear all session storage
+    // sessionStorage.clear();
+
+    // Redirect to login page
+    window.location.href = '/NutriHome.html';
+}
