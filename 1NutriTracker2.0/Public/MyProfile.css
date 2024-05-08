@@ -13,11 +13,8 @@
         .hjem {
             display: flex;
             justify-content: space-between;
-            /* Adjusted for proper alignment */
             align-items: center;
-            /* Center items vertically */
             padding: 20px 2%;
-            /* Increased padding for more vertical space */
             background-color: #DEF6D8;
             position: fixed;
             top: 0;
@@ -32,9 +29,7 @@
             font-weight: 700;
             text-decoration: none;
             margin-top: 5px;
-            /* Adjust logo downward */
             padding-left: 40px;
-            /* Positioning */
         }
 
         #logoutButton {
@@ -48,9 +43,7 @@
 
         .navbar-h {
             display: flex;
-            /* Ensures the navbar is flexible */
             gap: 30px;
-            /* Increased space between links */
         }
 
         .navbar a {
@@ -59,7 +52,6 @@
             font-size: 20px;
             font-weight: 700;
             padding: 8px;
-            /* Padding around the links for better touch */
         }
 
         nav a:hover {
