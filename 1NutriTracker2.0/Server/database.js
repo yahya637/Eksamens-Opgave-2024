@@ -676,6 +676,42 @@ async getUserStats(userId) {
   }
 }
 
+async getWaterIntake(userId) {
+  try {
+    await this.connect();  // Sikre databaseforbindelse
+
+    const query = `
+      SELECT * FROM Nutri.WaterInTake WHERE user_id = @userId
+    `;
+    const request = this.poolconnection.request()
+      .input('userId', userId);
+
+    const result = await request.query(query);
+    return result.recordset;
+  } catch (error) {
+    console.error('Fejl ved hentning af indtag:', error);
+    throw error; // Kast fejlen for at håndtere den på et højere niveau
+  }
+}
+
+
+async createWaterIntake(userId, intakeDetails) {
+  try {
+    await this.connect();  // Sikre databaseforbindelse
+
+    const query = `
+      INSERT INTO Nutri.WaterInTake (User_id, millilitre, intake_date, intake_time)
+      VALUES (@userId, @millilitre, GETDATE(),GETDATE())
+    `;
+    const request = this.poolconnection.request()
+      .input('userId', userId)
+      .input('millilitre', intakeDetails.millilitre); // rettet til intakeDetails.millilitre
+    await request.query(query);
+  } catch (error) {
+    console.error('Error:', error);
+    throw error; // Kast fejlen for at håndtere den på et højere niveau
+  }
+}
 
 
 
