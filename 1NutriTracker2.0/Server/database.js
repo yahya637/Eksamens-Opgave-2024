@@ -124,7 +124,6 @@ async disconnect() {
     await this.connect();
     const request = this.poolconnection.request();
     request.input('user_id', sql.Int, id);
-    request.input('username', sql.VarChar(50), data.username);
     request.input('email', sql.VarChar(50), data.email);
     request.input('birthdate', sql.Date, data.birthdate);
     request.input('gender', sql.VarChar(10), data.gender);
@@ -132,7 +131,6 @@ async disconnect() {
 
     const result = await request.query(
       `UPDATE Nutri.Users SET 
-        username=@username, 
         email=@email, 
         birthdate=@birthdate,
         gender=@gender,
