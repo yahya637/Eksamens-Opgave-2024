@@ -520,12 +520,26 @@ function submitEditForm(event) {
     const consumedId = form.dataset.consumedId;
     const updatedName = document.getElementById('editName').value;
 
-    // Hent den indtastede tid
+    // Get the input time value
     const inputTime = document.getElementById('editTime').value;
-    // Opret et nyt Date-objekt med den indtastede tid
-    const selectedTime = new Date(inputTime);
-    // Tilføj tidszonen til det nye Date-objekt
-    const updatedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezoneOffset() * 60000)).toISOString(); // Konverter til ISO 8601-format med korrekt tidszone
+
+    // Validate the input time value
+    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timeRegex.test(inputTime)) {
+        alert('Invalid time format. Please enter time in HH:MM format (e.g., 20:00).');
+        return;
+    }
+
+    // Parse hours and minutes from the input time value
+    const [hours, minutes] = inputTime.split(':').map(Number);
+
+    // Create a new Date object with the current date and parsed hours and minutes
+    const selectedTime = new Date();
+    selectedTime.setHours(hours, minutes, 0, 0);
+
+    // Convert the selected time to ISO string with correct timezone offset
+    const updatedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezoneOffset() * 60000)).toISOString();
+
     const userId = sessionStorage.getItem('userId');
 
     const data = {
@@ -553,10 +567,3 @@ function submitEditForm(event) {
         alert('Failed to update intake: ' + error.message);
     });
 }
-
-
-
-
-
-
-
