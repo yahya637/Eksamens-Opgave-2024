@@ -14,6 +14,9 @@ document.getElementById('IntakeMealButton').addEventListener('click', async func
     }
 });
 
+
+
+
 async function fetchMealsFromDatabase() {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
@@ -94,6 +97,7 @@ function logIntakeDetails(intakeDetails) {
 }
 // This function calculates the nutritional details based on selected meal and consumed weight
 
+// This function calculates the nutritional details based on selected meal and consumed weight
 function calculateIntakeDetails(selectedOption, weightConsumed) {
     const selectedMealWeight = parseFloat(selectedOption.getAttribute('data-weight'));
     const mealNutrients = {
@@ -102,6 +106,12 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
         fat: parseFloat(selectedOption.getAttribute('data-fat')),
         fiber: parseFloat(selectedOption.getAttribute('data-fiber'))
     };
+
+    // Get the current date components
+    const currentDate = new Date();
+    const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
+    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
+    const year = currentDate.getFullYear().toString().slice(-2); // Take the last two digits of the year
 
     // Calculate the consumed nutrients based on the selected meal's nutrients and consumed weight
     const consumedEnergy = ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2);
@@ -123,8 +133,8 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
         consumedProtein,
         consumedFat,
         consumedFiber,
-        dateAdded: getCurrentDate(),
-        timeAdded: getCurrentTime()
+        dateAdded: `${day}/${month}/${year}`,
+        timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
     };
 }
 
@@ -483,10 +493,9 @@ function deleteIntake(consumedId) {
   
 
 // Edit intakes
-function openEditForm(consumedId, name, weight, time) {
+function openEditForm(consumedId, name, time) {
     // Fyld formularen med de aktuelle oplysninger
     document.getElementById('editName').value = name;
-    document.getElementById('editWeight').value = weight;
     document.getElementById('editTime').value = time;
 
     // Gem consumedId i formulardataattributter for senere brug ved indsendelse
@@ -510,7 +519,6 @@ function submitEditForm(event) {
     const form = document.getElementById('editIntakeForm');
     const consumedId = form.dataset.consumedId;
     const updatedName = document.getElementById('editName').value;
-    const updatedWeight = document.getElementById('editWeight').value;
 
     // Hent den indtastede tid
     const inputTime = document.getElementById('editTime').value;
@@ -522,7 +530,6 @@ function submitEditForm(event) {
 
     const data = {
         foodName: updatedName,
-        consumedWeight: updatedWeight,
         timeAdded: updatedTime
     };
 

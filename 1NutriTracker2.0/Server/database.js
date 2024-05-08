@@ -569,7 +569,6 @@ async updateIntakeByConsumedId(consumedId, data) {
       const request = this.poolconnection.request();
       request.input('consumedId', sql.Int, consumedId);
       request.input('mealName', data.foodName || null); // Updated
-      request.input('consumedWeight', data.consumedWeight);
       request.input('timeAdded', data.timeAdded || null); // Updated
       
       // More inputs for nutritional values can follow the same pattern
@@ -578,7 +577,6 @@ async updateIntakeByConsumedId(consumedId, data) {
           UPDATE Nutri.consumedMeal
           SET
             mealName = COALESCE(NULLIF(@mealName, ''), mealName),
-            consumedWeight = @consumedWeight,
             timeAdded = COALESCE(@timeAdded, timeAdded)
           WHERE consumed_Id = @consumedId;
       `);
