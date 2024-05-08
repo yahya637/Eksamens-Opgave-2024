@@ -1,62 +1,76 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+        /* Importing the specified font from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
+        /* Base styles for the entire page */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: whitesmoke;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-.hjem {
-    display: flex;
-    justify-content: center;
-    padding: 20px 2%;
-    background-color: #def6d8;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0; 
-    z-index: 100;
-}
+        .hjem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 2%;
+            background-color: #DEF6D8;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
 
-.logo {
-    position: absolute; /* Absolute positioning to place the logo */
-    left: 40px; /* Space from the left edge */
-    color: #91c789;
-    font-size: 30px;
-    font-weight: 700;
-    text-decoration: none;
-    order: 1;
-}
+        .logo {
+            color: #91c789;
+            font-size: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 5px;
+            padding-left: 40px;
+        }
 
+        #logoutButton {
+            background-color: #e3342f;
+            cursor: pointer;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+        }
 
-.navbar a {
-    text-decoration: none;
-    color: #000;
-    font-size: 20px;
-    font-weight: 700;
-    padding: 0 60px; 
-    transition: all 0.3s ease;
-    
-}
+        .navbar-h {
+            display: flex;
+            gap: 30px;
+        }
 
+        .navbar a {
+            text-decoration: none;
+            color: #000;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 8px;
+        }
 
-nav a:hover {
-    color: #76b66c;
-    text-shadow: darkgreen   0px 0px 1px;
-}
-
-.navbar-h a {
-    text-decoration: none;
-    color: #000;
-    font-size: 20px;
-    font-weight: 700;
-    padding: 24px;
-}
-
-body{
-    font-family: 'Nunito', sans-serif;
-    background-color: whitesmoke;
-    /* Have the div centered */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-}
+        nav a:hover {
+            color: #76b66c;
+            text-shadow: 0px 0px 1px darkgreen;
+        }
+        
+        button{
+            padding: 12px 24px;
+            border: none;
+            border-radius: 15px;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
 .header-row {
     width: 100%;

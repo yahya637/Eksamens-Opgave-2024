@@ -41,6 +41,19 @@
             border-radius: 5px;
         }
 
+        button{
+            padding: 12px 24px;
+            border: none;
+            border-radius: 15px;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
         .navbar-h {
             display: flex;
             gap: 30px;
