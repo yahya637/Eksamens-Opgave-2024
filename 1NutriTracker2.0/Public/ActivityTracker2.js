@@ -50,15 +50,17 @@ function handleActivitySubmission() {
     const kcalPerHour = parseInt(activitySelect.options[activitySelect.selectedIndex].getAttribute('data-kcal'), 10);
 
     const caloriesBurned = (kcalPerHour / 60) * duration;
-  
+
+    // Store the activity data including the calculated end time
     storeActivityData({
         user_id: sessionStorage.getItem('userId'),
         activity_id: activityId,
         activity_name: activityName,
-        total_kcal_burned: caloriesBurned.toFixed(2),
-        duration: duration,
+        KcalBurned: caloriesBurned.toFixed(2),
+        DurationMinutes: duration,
     });
 }
+
 document.getElementById('add-activity').addEventListener('click', handleActivitySubmission);
 
 function storeActivityData(data) {
@@ -71,7 +73,7 @@ function storeActivityData(data) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Success:', data);
+        console.log('User tried to create an activty:', data);
         fetchUserActivities(); // Fetch and display the updated list of user activities
     })
     .catch(error => {
@@ -118,8 +120,8 @@ function displayUserActivities(activities) {
             listItem.classList.add('activity-item');
             listItem.innerHTML = `
                 <span class="activity-name">${activityNameWithoutKcal}</span> - 
-                Duration: <span class="activity-duration">${activity.duration} minutes</span>, 
-                Calories Burned: <span class="activity-calories">${parseFloat(activity.total_kcal_burned).toFixed(2)} kcal/h</span>
+                Duration: <span class="activity-duration">${activity.DurationMinutes} minutes</span>, 
+                Calories Burned: <span class="activity-calories">${parseFloat(activity.KcalBurned).toFixed(2)} kcal/h</span>
             `;
             activitiesList.appendChild(listItem);
         } else {

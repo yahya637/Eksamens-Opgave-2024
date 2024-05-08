@@ -53,7 +53,7 @@ app.use("/users", users);
 app.use("/activities", activityRouter); 
 app.use("/mealcreator", mealcreator);
 app.use("/mealtracker1", mealtracker);
-app.use("/daily1", daily);
+app.use("/daily", daily);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);

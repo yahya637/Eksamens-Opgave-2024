@@ -1,8 +1,5 @@
-/* Importing the specified font from Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
-
-/* Base styles for the entire page */
 body{
    font-family: 'Nunito', sans-serif;
    background-color: whitesmoke;
@@ -10,7 +7,7 @@ body{
    padding: 0;
    box-sizing: border-box;
 }
-/* Styles for the header/navbar */
+
 .hjem {
    display: flex;
    justify-content: center;
@@ -49,14 +46,10 @@ body{
   
 }
 
-
-
-
 nav a:hover {
    color: #76b66c;
    text-shadow: darkgreen   0px 0px 1px;
 }
-
 
 .navbar-h a {
    text-decoration: none;
@@ -65,9 +58,6 @@ nav a:hover {
    font-weight: 700;
    padding: 24px;
 }
-
-
-
 
 .header-row {
    width: 100%;
@@ -81,7 +71,7 @@ nav a:hover {
 
 
 #daily{
-   width: 60em;
+   width: 70em;
    margin: auto;
    padding: 20px;
    border: 2px solid #99d9de;
@@ -94,33 +84,28 @@ nav a:hover {
    align-items: center;
 }
 
-
-
-
-
-
 h1 {
    color: #333;
    margin-bottom: 20px;
 }
 
+/** Table Styling **/
 
 #mealDetailsTable {
-   width: 100%;
-   border-collapse: collapse;
+   width: 60em;
 }
 
-
 #mealDetailsTable thead {
-   background-color: #76b66c;
    color: black;
+   background-color: transparent;
+   border-bottom: 0px solid #ddd;
+
 }
 
 
 #mealDetailsTable th, #mealDetailsTable td {
    text-align: center;
    padding: 10px;
-   border-bottom: 1px solid #ddd;
 }
 
 
@@ -149,15 +134,13 @@ h1 {
    color: #333;
 }
 
-
 .button-row {
    gap: 10px;
    display: flex;
 }
 
-
 button {
-   padding: 12px 24px;
+   padding: 14px 24px;
    border: none;
    border-radius: 15px;
    font-size: 16px;
@@ -166,7 +149,6 @@ button {
    text-align: center;
    display: inline-block;
 }
-
 
 #hourlyView {
    background-color: #91c789;
@@ -177,23 +159,13 @@ button {
    background-color: #569bd5;
 }
 
-
-.gg-add {
-   box-sizing: border-box;
-   position: relative;
-   display: block;
-   width: 22px;
-   height: 22px;
-   border: 2px solid;
-   transform: scale(var(--ggs, 1));
-   border-radius: 22px;
-}
-
-
 .dailyNutri-header {
    display: flex;
    width: 100%;
    justify-content: space-between;
    align-items: center;
    padding: 10px;
+}
+.material-symbols-outlined{
+   margin-bottom: 5px;
 }

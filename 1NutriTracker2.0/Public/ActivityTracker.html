@@ -52,13 +52,23 @@
     <div id="forms">
         <div id="activity-form" style="display:none;">
             <!-- TILFØJE EN CONFIRMATION TIL USER-->
+            <section>
+                  <!----<label class="labelAT" id="timeLabel" for="time">Time:</label>-->
+                <label class="labelAT" id="durationLabel" for="duration">Duration (min.):</label>
 
-            <label class="labelAT" for="duration">Duration (min.):</label>
-            <input type="number" id="duration" placeholder="Enter duration of activity in minutes" class="a-inpunt">
-
-            <label class="labelAT" for="activity-select">Choose an activity:</label>
+            </section>
 
             <section>
+
+            
+            <!----<input type="time" id="time" placeholder="Enter the time when you started the activiy" class="a-inpunt"> -->
+
+            <input type="number" id="duration" placeholder="Enter duration of activity in minutes" class="a-inpunt">
+            </section>   
+            
+            <label class="labelAT" for="activity-select">Choose an activity:</label>
+            <section>
+
                 <select id="activity-select">
                     <option value="0" disabled selected >Select an activity ↓</option>
                 </select>

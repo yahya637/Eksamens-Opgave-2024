@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', function() {
+    fetchAndDisplayMeals();
+});
+
 const MealStorage = {
     meals: [],
     mealCounter: 0
@@ -338,10 +342,6 @@ function sendData() {
         }
     }
     
-    document.addEventListener('DOMContentLoaded', function () {
-        const button = document.getElementById('subBtn');
-        button.addEventListener('click', sendData);
-    });
     
 async function fetchAndDisplayMeals() {
     const userId = sessionStorage.getItem('userId');
@@ -398,12 +398,12 @@ function displaySavedMeals(meals) {
     });
 }
 
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
-    fetchAndDisplayMeals();
+    const button = document.getElementById('subBtn');
+    button.addEventListener('click', sendData);
+    button.addEventListener('click', fetchAndDisplayMeals);
 });
+
 async function showMealDetails(mealId) {
     const url = `/mealcreator/ingredients/${mealId}`;
     try {
@@ -531,11 +531,11 @@ document.getElementById('close-foodItemsContainer').addEventListener('click', ()
 });
 
 
-// Function to fetch meals from the backend and update the UI
+/* // Function to fetch meals from the backend and update the UI
 document.addEventListener('DOMContentLoaded', function () {
     fetchAndDisplayMeals();
     setInterval(fetchAndDisplayMeals, 10000); // Fetches meals every 10 seconds
-});
+}); */
 
 document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('subBtn');
