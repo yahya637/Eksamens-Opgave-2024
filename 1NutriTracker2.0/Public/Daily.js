@@ -30,31 +30,45 @@ async function fetchAlldata() {
 
 
 function processDataHourly(data) {
+    // Initial hourly summary structure
     const hourlySummary = Array.from({ length: 24 }, (_, index) => ({
         time: `${index}:00 - ${index + 1}:00`,
         consumedEnergy: 0,
         caloriesBurned: 0,
+        waterIntake: 0,
         calorieSurplusDeficit: 0,
         totalMeals: 0
     }));
 
+    // Processing consumed food data
     data.consumedData.forEach(entry => {
-        const hour = new Date(entry.TimeAdded).getHours(); // Local hour
+        const hour = new Date(entry.TimeAdded).getHours();
         hourlySummary[hour].consumedEnergy += (entry.ConsumedEnergy || 0);
         hourlySummary[hour].totalMeals += 1;
     });
 
-    const dailyBMR = data.bmrData[0].BmrKcal; // Check for undefined/null needed
+    // Calculating hourly BMR
+    const dailyBMR = data.bmrData.length > 0 ? data.bmrData[0].BmrKcal : 0; // Safely access BMR data
     const hourlyBMR = dailyBMR / 24;
 
+    // Processing activity data
     data.activitiesData.forEach(entry => {
-        const hour = new Date(entry.TimeAdded).getHours(); // Local hour
-        hourlySummary[hour].caloriesBurned += (entry.TotalKcalBurned + hourlyBMR);
+        const hour = new Date(entry.TimeAdded).getHours();
+        hourlySummary[hour].caloriesBurned += (entry.TotalKcalBurned || 0);
     });
 
+    // Adding hourly BMR to the calories burned in each hour
     hourlySummary.forEach(entry => {
+        entry.caloriesBurned += hourlyBMR;
         entry.calorieSurplusDeficit = entry.consumedEnergy - entry.caloriesBurned;
+    });
+
+    // Processing water intake data
+    data.waterIntakeData.forEach(entry => {
+        const hour = new Date(entry.TimeAdded).getHours();
+        hourlySummary[hour].waterIntake += (entry.WaterAmount || 0);
     });
 
     return hourlySummary;
 }
+

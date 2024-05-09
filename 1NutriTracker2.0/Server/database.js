@@ -833,73 +833,88 @@ async updateIntakeByConsumedId(consumedId, data) {
 
 // Daily Nutri
 
-
 async getUserStats(userId) {
-try {
-await this.connect();
-const request = this.poolconnection.request();
-request.input('user_id', sql.Int, userId);
+  try {
+      await this.connect();
+      const request = this.poolconnection.request();
+      request.input('user_id', sql.Int, userId);
 
+      const consumedQuery = `
+          SELECT
+          consumedEnergy,
+          timeAdded,
+          FORMAT(dateAdded, 'dd-MM-yyyy') AS dateAdded
+          FROM Nutri.consumedMeal
+          WHERE user_id = @user_id
+          ORDER BY dateAdded, timeAdded;
+      `;
 
-const consumedQuery = `
-SELECT
-consumedEnergy,
-timeAdded,
-FORMAT(dateAdded, 'dd-MM-yyyy') AS dateAdded
-FROM Nutri.consumedMeal
-WHERE user_id = @user_id
-ORDER BY dateAdded, timeAdded;
-`;
+      const activitiesQuery = `
+          SELECT
+          KcalBurned,
+          timeAdded,
+          FORMAT(dateAdded, 'dd-MM-yyyy') AS dateAdded
+          FROM Nutri.UserActivities
+          WHERE user_id = @user_id
+          ORDER BY dateAdded, timeAdded;
+      `;
 
+      const bmrQuery = `
+          SELECT TOP 1
+          bmr_kcal,
+          calculation_time,
+          FORMAT(calculation_date, 'dd-MM-yyyy') AS dateAdded
+          FROM Nutri.BmrCalculations
+          WHERE user_id = @user_id
+          ORDER BY calculation_date DESC, calculation_time DESC;
+      `;
 
-const activitiesQuery = `
-SELECT
-KcalBurned,
-timeAdded,
-FORMAT(dateAdded, 'dd-MM-yyyy') AS dateAdded
-FROM Nutri.UserActivities
-WHERE user_id = @user_id
-ORDER BY dateAdded, timeAdded;
-`;
+      const waterIntakeQuery = `
+          SELECT
+          waterAmount_ml,
+          timeAdded,
+          FORMAT(intake_date, 'dd-MM-yyyy') AS dateAdded
+          FROM Nutri.WaterIntake
+          WHERE user_id = @user_id
+          ORDER BY intake_date, timeAdded;
+      `;
 
+      const consumedResult = await request.query(consumedQuery);
+      console.log('Consumed query executed successfully.');
+      const activitiesResult = await request.query(activitiesQuery);
+      console.log('Activities query executed successfully.');
+      const bmrResult = await request.query(bmrQuery);
+      console.log('BMR query executed successfully.');
+      const waterIntakeResult = await request.query(waterIntakeQuery);
+      console.log('Water intake query executed successfully.');
 
-const bmrQuery = `
-SELECT TOP 1
-bmr_kcal,
-calculation_time,
-FORMAT(calculation_date, 'dd-MM-yyyy') AS dateAdded
-FROM Nutri.BmrCalculations
-WHERE user_id = @user_id
-ORDER BY calculation_date DESC, calculation_time DESC;
-`;
+      return {
+          consumedData: consumedResult.recordset.map(item => ({
+              ConsumedEnergy: item.consumedEnergy,
+              TimeAdded: item.timeAdded,
+              DateAdded: item.dateAdded
+          })),
+          activitiesData: activitiesResult.recordset.map(item => ({
+              TotalKcalBurned: item.KcalBurned,
+              TimeAdded: item.timeAdded,
+              DateAdded: item.DateOnly
+          })),
+          bmrData: bmrResult.recordset.length ? [{
+              BmrKcal: bmrResult.recordset[0].bmr_kcal,
+              CalculationTime: bmrResult.recordset[0].calculation_time,
+              CalculationDate: bmrResult.recordset[0].calculation_date
+          }] : [],
+          waterIntakeData: waterIntakeResult.recordset.map(item => ({
+              WaterAmount: item.waterAmount_ml,
+              TimeAdded: item.intake_time,
+              DateAdded: item.intake_date
+          }))
+      };
 
-
-const consumedResult = await request.query(consumedQuery);
-const activitiesResult = await request.query(activitiesQuery);
-const bmrResult = await request.query(bmrQuery);
-
-
-return {
-consumedData: consumedResult.recordset.map(item => ({
-ConsumedEnergy: item.consumedEnergy,
-TimeAdded: item.timeAdded,
-DateAdded: item.dateAdded
-})),
-activitiesData: activitiesResult.recordset.map(item => ({
-TotalKcalBurned: item.total_kcal_burned,
-TimeAdded: item.timeAdded,
-DateAdded: item.dateAdded
-})),
-bmrData: bmrResult.recordset.length ? [{
-BmrKcal: bmrResult.recordset[0].bmr_kcal,
-CalculationTime: bmrResult.recordset[0].calculation_time,
-DateAdded: bmrResult.recordset[0].dateAdded
-}] : []
-};
-} catch (error) {
-console.error('Error fetching user statistics:', error);
-throw new Error(`Error fetching user statistics from database: ${error.message}`);
-}
+  } catch (error) {
+      console.error('Error fetching user statistics:', error);
+      throw new Error(`Error fetching user statistics from database: ${error.message}`);
+  }
 }
 
 
