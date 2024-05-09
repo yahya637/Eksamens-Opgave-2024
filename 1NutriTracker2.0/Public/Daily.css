@@ -124,50 +124,7 @@ button:hover{
    text-decoration: none;
 }
 
-
-/** Table Styling **/
-
-#mealDetailsTable {
-   width: 60em;
-}
-
-
-#mealDetailsTable thead {
-   color: black;
-   background-color: transparent;
-}
-
-
-#mealDetailsTable th, #mealDetailsTable td {
-   text-align: center;
-   padding: 10px;
-}
-
-
-#mealDetailsTable tbody tr {
-   background-color: #76b66c;
-   color: black;
-   border-radius: 5px;
-   margin-bottom: 10px;
-}
-
-.header-item {
-   text-align: center;
-   font-weight: bold;
-   color: #333;
-}
-
-
-#hourlyView {
-   background-color: #91c789;
-}
-
-
-#dailyView {
-   background-color: #569bd5;
-}
-
-#hourlyView, #dailyView {
+#toggleView {
    display: flex;
    align-items: center;
    justify-content: center;
@@ -177,19 +134,18 @@ button:hover{
    color: white;
    font-size: 16px;
    cursor: pointer;
-   transition: background-color 0.3s;
+   transition: background-color 0.3s, opacity 0.3s; 
    gap: 10px;
 }
 
-#hourlyView:hover, #dailyView:hover {
-   opacity: 0.8;
+#toggleView:hover {
+   opacity: 0.8; 
 }
 
 .material-symbols-outlined {
    font-size: 24px;
    vertical-align: middle;
 }
-
 
 
 .hjem {
@@ -245,3 +201,83 @@ button:hover{
    background-color: #76b66c;
 }
 
+
+
+
+/** Table Styling 24**/
+
+#mealDetailsTable24 {
+   width: 60em;
+   border-collapse: collapse;
+}
+
+
+#mealDetailsTable24 thead {
+   border: none;
+}
+
+
+#mealDetailsTable24 th, #mealDetailsTable24 td {
+   text-align: center;
+   padding: 10px;
+   border: 2px solid #569bd5;
+
+}
+
+
+#mealDetailsTable24 th {
+   border: none;
+   background-color: transparent;
+   color: #333;
+}
+
+
+#mealDetailsTable24 tbody tr:nth-child(odd) {
+   background-color: #99d9de;
+
+   color: #333;
+}
+
+
+#mealDetailsTable24 tbody tr:nth-child(even) {
+   background-color: #b8e7eb;
+   color: #000000;
+}
+
+/** Table Styling Daily**/
+
+#mealDetailsTableDaily {
+   width: 60em;
+   border-collapse: collapse;
+}
+
+
+#mealDetailsTableDaily thead {
+   border: none;
+}
+
+
+#mealDetailsTableDaily th, #mealDetailsTableDaily td {
+   text-align: center;
+   padding: 10px;
+   border: 2px solid #DEF6D8;
+}
+
+
+#mealDetailsTableDaily th {
+   border: none;
+   background-color: transparent;
+   color: #000000;
+}
+
+
+#mealDetailsTableDaily tbody tr:nth-child(odd) {
+   background-color: #DEF6D8;
+   color: #000000;
+}
+
+
+#mealDetailsTableDaily tbody tr:nth-child(even) {
+   background-color: #f2fff5;
+   color: #000000;
+}

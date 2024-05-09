@@ -228,11 +228,28 @@ select {
 
   
   section {
-    display: flex; /* Enables flexbox layout */
+    display: flex; 
     align-items: center; /* Aligns children vertically in the center */
     gap: 10px; /* Adds space between the children */
   }
-  
+  .auto-filled-info {
+    display: none;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.info-container {
+    position: relative;
+}
+
+.info-button {
+    font-size: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+
   #activity-select {
     width: 100%;
     padding: 15px;

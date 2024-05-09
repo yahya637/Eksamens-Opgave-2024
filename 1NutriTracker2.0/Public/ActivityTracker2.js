@@ -458,3 +458,18 @@ function logoutUser() {
     // Redirect to login page
     window.location.href = '/NutriHome.html';
 }
+
+
+//ekstra fis
+document.addEventListener('DOMContentLoaded', function() {
+    const infoButton = document.querySelector('.info-button');
+    const infoText = document.querySelector('.auto-filled-info');
+
+    infoButton.addEventListener('click', function() {
+        if (infoText.style.display === 'none') {
+            infoText.style.display = 'block';
+        } else {
+            infoText.style.display = 'none';
+        }
+    });
+});

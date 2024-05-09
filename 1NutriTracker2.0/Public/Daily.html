@@ -27,40 +27,50 @@
   
 <div id="daily">
        <div class="header-row">
-           <h2>Daily Nutri</h2>
+        <h2 id="viewTitle">Hourly Nutri</h2> <!-- Initially set to Hourly Nutri -->
 
             <div class="button-row">
                
-                <button id="hourlyView">
-                <span class="material-symbols-outlined">schedule</span> 
-                Hourly View
-               </button>
-
-               <button id="dailyView">
-                <span class="material-symbols-outlined">calendar_month</span>
-                Daily View
+                <button id="toggleView">
+                    <span class="material-symbols-outlined">schedule</span>
+                    Hourly View
                 </button>
-
+             
              </div>
 
 
         </div>
 
            
-       <table id="mealDetailsTable">
-           <thead>
-               <tr>
-                   <th>Time</th>
-                   <th>Meals</th>
-                   <th>Kcal Consumed</th>
-                   <th>Kcal Burned</th>
-                   <th>Kalorieoverskud/underskud</th>
-               </tr>
-           </thead>
-           <tbody>
-               <!-- Dynamic rows will be inserted here -->
-           </tbody>
-       </table>
+<table id="mealDetailsTable24"style="">
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Meals</th>
+            <th>Kcal Consumed</th>
+            <th>Kcal Burned</th>
+            <th>Kalorieoverskud/underskud</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dynamic rows for hourly data will be inserted here -->
+    </tbody>
+</table>
+
+<table id="mealDetailsTableDaily"style="display: none;" >
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Meals</th>
+            <th>Kcal Consumed</th>
+            <th>Kcal Burned</th>
+            <th>Kalorieoverskud/underskud</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dynamic rows for daily data will be inserted here -->
+    </tbody>
+</table>
 
 
 </div>

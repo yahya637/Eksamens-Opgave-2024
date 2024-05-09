@@ -50,18 +50,18 @@
     <div id="forms">
         <div id="activity-form" style="display:none;">
             <!-- TILFØJE EN CONFIRMATION TIL USER-->
-            <section>
                   <!----<label class="labelAT" id="timeLabel" for="time">Time:</label>-->
                 <label class="labelAT" id="durationLabel" for="duration">Duration (min.):</label>
+                <div class="info-container">
+                    <button class="info-button">&#9432;</button>
+                    <p class="auto-filled-info">Time is autofilled and taken from when the activity has ended.</p>
+                </div>
 
-            </section>
-
+           
             <section>
-
-            
             <!----<input type="time" id="time" placeholder="Enter the time when you started the activiy" class="a-inpunt"> -->
-
-            <input type="number" id="duration" placeholder="Enter duration of activity in minutes" class="a-inpunt">
+            
+            <input type="number" id="duration" placeholder="Enter duration of activity in minutes" class="a-inpunt" title="Time is autofilled and taken from when the activity has ended.">
             </section>   
             
             <label class="labelAT" for="activity-select">Choose an activity:</label>

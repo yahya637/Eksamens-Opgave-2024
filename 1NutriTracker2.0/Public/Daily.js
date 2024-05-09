@@ -23,6 +23,7 @@ async function fetchAllData() {
 
 fetchAllData();
 
+
 function processDataHourly(data) {
     const currentHour = new Date().getHours(); // Get the current hour
     const hourlySummary = Array.from({ length: 24 }, (_, index) => {
@@ -63,11 +64,9 @@ function processDataHourly(data) {
     return hourlySummary;
 }
 
-
-
 // Function to update the table with hourly data
 function updateTableWithHourlyData(hourlySummary) {
-    const tableBody = document.getElementById('mealDetailsTable').getElementsByTagName('tbody')[0];
+    const tableBody = document.getElementById('mealDetailsTable24').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';  // Clear existing table rows
 
     hourlySummary.forEach(entry => {
@@ -95,10 +94,6 @@ async function fetchAllDataAndDisplay() {
 }
 
 fetchAllDataAndDisplay();
-
-
-
-
 
 
 // Function to fetch all data from the databases for 30 days
@@ -147,15 +142,15 @@ function processDataDaily(data) {
     const utcToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
     const dailySummary = Array.from({ length: 30 }, (_, index) => {
         const date = new Date(utcToday);
-        date.setUTCDate(utcToday.getUTCDate() - index);
+        date.setUTCDate(utcToday.getUTCDate() - index); // Dates for last 30 days
         return {
-            date: date.toISOString().substring(0, 10),
+            date: date.toISOString().substring(0, 10), // Format as YYYY-MM-DD
             consumedEnergy: 0,
             caloriesBurned: 0,
             calorieSurplusDeficit: 0,
             totalMeals: 0
         };
-    });
+    }).reverse(); // Reverse the array to start from today and go backwards
 
     // Process consumed data
     data.consumedData.forEach(entry => {
@@ -185,12 +180,11 @@ function processDataDaily(data) {
         entry.calorieSurplusDeficit = entry.consumedEnergy - entry.caloriesBurned;
     });
 
-    console.log('Final daily summary:', dailySummary);
     return dailySummary;
 }
 
-// Now we display the data on in the table
 
+// Now we display the data on in the table
 
 
 
@@ -220,3 +214,72 @@ async function fetchAllDataLast30Days() {
 }
 
 fetchAllDataLast30Days();
+
+
+// Function to update the table with daily data for the last 30 days
+// Function to update the table with daily data for the last 30 days
+function updateTableWithDailyData(dailySummary) {
+    const tableBody = document.getElementById('mealDetailsTableDaily').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';  // Clear existing table rows
+
+    // Ensure dailySummary is processed from most recent to oldest
+    dailySummary.slice().reverse().forEach(entry => {
+        const row = tableBody.insertRow(-1); // Add new row at the end of the table section
+        const dateCell = row.insertCell(0);
+        const mealsCell = row.insertCell(1);
+        const consumedKcalCell = row.insertCell(2);
+        const burnedKcalCell = row.insertCell(3);
+        const surplusDeficitCell = row.insertCell(4);
+
+        dateCell.textContent = entry.date;
+        mealsCell.textContent = entry.totalMeals;
+        consumedKcalCell.textContent = entry.consumedEnergy.toFixed(2);
+        burnedKcalCell.textContent = entry.caloriesBurned.toFixed(2);
+        surplusDeficitCell.textContent = entry.calorieSurplusDeficit.toFixed(2);
+    });
+}
+
+
+// Example of integration with fetchAllData30Days function
+async function fetchAllDataFor30DaysAndDisplay() {
+    const dailySummary = await fetchAllData30Days(); // Fetch data
+    if (dailySummary) {
+        updateTableWithDailyData(dailySummary); // Update the table with fetched data
+    }
+}
+
+fetchAllDataFor30DaysAndDisplay();
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('toggleView');
+    const hourlyTable = document.getElementById('mealDetailsTable24');
+    const dailyTable = document.getElementById('mealDetailsTableDaily');
+    const viewTitle = document.getElementById('viewTitle'); // Reference to the <h2> element
+    let isHourlyView = false; // Starts with Daily View
+
+    // Initial states for Daily View
+    dailyTable.style.display = ''; // Show daily table
+    hourlyTable.style.display = 'none'; // Hide hourly table
+    toggleButton.innerHTML = '<span class="material-symbols-outlined">schedule</span> Hourly View'; // Button shows Hourly View for next toggle
+    toggleButton.style.backgroundColor = '#569bd5'; // Green background for Hourly View
+    viewTitle.textContent = 'Daily Nutri'; // Update <h2> to Daily Nutri
+
+    toggleButton.addEventListener('click', function() {
+        if (isHourlyView) {
+            // Switch to Daily View
+            dailyTable.style.display = ''; // Show daily table
+            hourlyTable.style.display = 'none'; // Hide hourly table
+            toggleButton.innerHTML = '<span class="material-symbols-outlined">schedule</span> Hourly View'; // Button shows Hourly View for next toggle
+            toggleButton.style.backgroundColor = '#569bd5'; // Green background for Hourly View
+            viewTitle.textContent = 'Daily Nutri'; // Update <h2> to Daily Nutri
+        } else {
+            // Switch back to Hourly View
+            hourlyTable.style.display = ''; // Show hourly table
+            dailyTable.style.display = 'none'; // Hide daily table
+            toggleButton.innerHTML = '<span class="material-symbols-outlined">calendar_month</span> Daily View'; // Button shows Daily View for next toggle
+            toggleButton.style.backgroundColor = '#91c789'; // Blue background for Daily View
+            viewTitle.textContent = 'Hourly Nutri'; // Update <h2> to Hourly Nutri
+        }
+        isHourlyView = !isHourlyView; // Toggle the state
+    });
+});
