@@ -875,8 +875,6 @@ async getUserStats(userId) {
     console.log('Activities query executed successfully.');
     const bmrResult = await request.query(bmrQuery);
     console.log('BMR query executed successfully.');
-    const waterIntakeResult = await request.query(waterIntakeQuery);
-    console.log('Water intake query executed successfully.');
 
     return {
         consumedData: consumedResult.recordset.map(item => ({
