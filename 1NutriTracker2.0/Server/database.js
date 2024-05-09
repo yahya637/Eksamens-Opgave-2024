@@ -869,17 +869,6 @@ async getUserStats(userId) {
         ORDER BY calculation_date DESC, calculation_time DESC;
     `;
 
-    const waterIntakeQuery = `
-      SELECT
-      waterAmount_ml,
-      intake_time AS TimeAdded,
-      FORMAT(intake_date, 'dd-MM-yyyy') AS DateAdded
-      FROM Nutri.WaterIntake
-      WHERE user_id = @user_id
-      ORDER BY intake_date, intake_time;
-  `;
-
-
     const consumedResult = await request.query(consumedQuery);
     console.log('Consumed query executed successfully.');
     const activitiesResult = await request.query(activitiesQuery);
@@ -905,11 +894,6 @@ async getUserStats(userId) {
             CalculationTime: bmrResult.recordset[0].calculation_time,
             CalculationDate: bmrResult.recordset[0].calculation_date
         }] : [],
-        waterIntakeData: waterIntakeResult.recordset.map(item => ({
-            WaterAmount: item.waterAmount_ml,
-            TimeAdded: item.intake_time,
-            DateAdded: item.intake_date
-        }))
     };
 
   } catch (error) {
