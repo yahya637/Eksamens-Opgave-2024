@@ -283,6 +283,7 @@ async update(id, data) {
 await this.connect();
 const request = this.poolconnection.request();
 request.input('user_id', sql.Int, id);
+request.input('username', sql.VarChar(50), data.username);
 request.input('email', sql.VarChar(50), data.email);
 request.input('birthdate', sql.Date, data.birthdate);
 request.input('gender', sql.VarChar(10), data.gender);
@@ -291,6 +292,7 @@ request.input('weight', sql.Decimal(5, 2), data.weight);
 
 const result = await request.query(
 `UPDATE Nutri.Users SET
+username=@username,
 email=@email,
 birthdate=@birthdate,
 gender=@gender,
@@ -641,7 +643,7 @@ request.input('user_id', sql.Int, userId);
 
 
 const result = await request.query(`
-SELECT * FROM Nutri.Mealcreator WHERE User_id = @User_id
+SELECT * FROM nutri.Mealcreator WHERE user_id = @user_id
 `);
 
 
@@ -870,12 +872,12 @@ async getUserStats(userId) {
     const waterIntakeQuery = `
       SELECT
       waterAmount_ml,
-      timeAdded
+      intake_time AS TimeAdded,
       FORMAT(intake_date, 'dd-MM-yyyy') AS DateAdded
       FROM Nutri.WaterIntake
       WHERE user_id = @user_id
-      ORDER BY intake_date, timeAdded;
-    `;
+      ORDER BY intake_date, intake_time;
+  `;
 
 
     const consumedResult = await request.query(consumedQuery);
@@ -905,7 +907,7 @@ async getUserStats(userId) {
         }] : [],
         waterIntakeData: waterIntakeResult.recordset.map(item => ({
             WaterAmount: item.waterAmount_ml,
-            TimeAdded: item.timeAdded,
+            TimeAdded: item.intake_time,
             DateAdded: item.intake_date
         }))
     };
