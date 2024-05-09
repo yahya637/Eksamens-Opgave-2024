@@ -10,7 +10,7 @@
             box-sizing: border-box;
         }
 
-        .hjem {
+        #hjem {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -21,27 +21,50 @@
             left: 0;
             right: 0;
             z-index: 100;
-        }
-
-        .logo {
+           }
+          
+         .navbar {
+            display: flex;
+            gap: 3em;
+         
+         }
+         
+           .logo {
             color: #91c789;
             font-size: 30px;
             font-weight: 700;
             text-decoration: none;
             margin-top: 5px;
             padding-left: 40px;
-        }
-
-        #logoutButton {
-            background-color: #e3342f;
-            cursor: pointer;
+         }
+         
+         
+         .navbar a {
+            text-decoration: none;
+            color: #000;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 8px;
+         }
+         
+         nav a:hover {
+            color: #76b66c;
+            text-shadow: 0px 0px 1px darkgreen;
+         }
+         
+         #logoutButton {
+            background-color: #91c789;
             color: white;
-            padding: 8px 16px;
             border: none;
-            border-radius: 5px;
-        }
-
-        button{
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 700;
+         }
+         
+         #logoutButton:hover {
+            background-color: #76b66c;
+         }
+         button{
             padding: 12px 24px;
             border: none;
             border-radius: 15px;
@@ -52,24 +75,6 @@
             text-align: center;
             display: inline-block;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .navbar-h {
-            display: flex;
-            gap: 30px;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            color: #000;
-            font-size: 20px;
-            font-weight: 700;
-            padding: 8px;
-        }
-
-        nav a:hover {
-            color: #76b66c;
-            text-shadow: 0px 0px 1px darkgreen;
         }
 
         #homeButtons {
@@ -89,17 +94,12 @@
             border-radius: 10px;
             margin-top: 15px;
         }
-
+        #mangeProfileButton:hover {
+            background-color: #91c789;
+        }
 
         #deleteProfileButton {
             background-color: #f44336;
-        }
-
-        #mangeProfileButton:hover,
-        #deleteProfileButton:hover {
-            transform: translateY(-1px);
-            text-decoration: none;
-            opacity: 0.8;
         }
 
         #profileForm {

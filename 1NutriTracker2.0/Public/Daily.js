@@ -33,23 +33,33 @@ function processDataHourly(data) {
         totalMeals: 0
     }));
 
+    // Processing consumed energy data
     data.consumedData.forEach(entry => {
-        const hour = new Date(entry.TimeAdded).getHours(); // Local hour
+        const date = new Date(entry.TimeAdded);
+        const hour = date.getUTCHours(); // Using UTC hour to avoid timezone issues
+        const minutes = date.getUTCMinutes(); // Logging minutes to diagnose rounding issues
+        console.log(`Meal time: ${date.toISOString()}, Hour: ${hour}, Minutes: ${minutes}`);
         hourlySummary[hour].consumedEnergy += (entry.ConsumedEnergy || 0);
         hourlySummary[hour].totalMeals += 1;
     });
 
-    const dailyBMR = data.bmrData[0].BmrKcal; // Check for undefined/null needed
+    // Calculating daily Basal Metabolic Rate (BMR)
+    const dailyBMR = data.bmrData[0].BmrKcal;
     const hourlyBMR = dailyBMR / 24;
 
+    // Processing activities data
     data.activitiesData.forEach(entry => {
-        const hour = new Date(entry.TimeAdded).getHours(); // Local hour
+        const date = new Date(entry.TimeAdded);
+        const hour = date.getUTCHours(); // Using UTC hour to avoid timezone issues
+        console.log(`Activity time: ${date.toISOString()}, Hour: ${hour}`);
         hourlySummary[hour].caloriesBurned += (entry.TotalKcalBurned + hourlyBMR);
     });
 
+    // Calculating calorie surplus or deficit
     hourlySummary.forEach(entry => {
         entry.calorieSurplusDeficit = entry.consumedEnergy - entry.caloriesBurned;
     });
 
     return hourlySummary;
 }
+

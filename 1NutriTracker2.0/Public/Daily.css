@@ -8,7 +8,7 @@ body{
    box-sizing: border-box;
 }
 
-.hjem {
+#hjem {
    display: flex;
    justify-content: space-between;
    align-items: center;
@@ -19,17 +19,21 @@ body{
    left: 0;
    right: 0;
    z-index: 100;
+  }
+ 
+.navbar {
+   display: flex;
+   gap: 3em;
+
 }
 
-
-.logo {
-   position: absolute;
-   left: 40px;
+  .logo {
    color: #91c789;
    font-size: 30px;
    font-weight: 700;
    text-decoration: none;
-   order: 1;
+   margin-top: 5px;
+   padding-left: 40px;
 }
 
 
@@ -38,23 +42,27 @@ body{
    color: #000;
    font-size: 20px;
    font-weight: 700;
-   padding: 0 60px; /* Provides space between the links */
-   transition: all 0.3s ease;
-  
+   padding: 8px;
 }
 
 nav a:hover {
    color: #76b66c;
-   text-shadow: darkgreen   0px 0px 1px;
+   text-shadow: 0px 0px 1px darkgreen;
 }
 
-.navbar-h a {
-   text-decoration: none;
-   color: #000;
-   font-size: 20px;
+#logoutButton {
+   background-color: #91c789;
+   color: white;
+   border: none;
+   padding: 10px 20px;
+   cursor: pointer;
    font-weight: 700;
-   padding: 24px;
 }
+
+#logoutButton:hover {
+   background-color: #76b66c;
+}
+
 
 .header-row {
    width: 100%;
@@ -116,18 +124,11 @@ button:hover{
    text-decoration: none;
 }
 
-h1 {
-   color: #333;
-   margin-bottom: 20px;
-}
 
 /** Table Styling **/
 
 #mealDetailsTable {
    width: 60em;
-   border-collapse: collapse;
-
-
 }
 
 
@@ -140,7 +141,6 @@ h1 {
 #mealDetailsTable th, #mealDetailsTable td {
    text-align: center;
    padding: 10px;
-   border-bottom: 1px solid #ddd;
 }
 
 
@@ -151,25 +151,12 @@ h1 {
    margin-bottom: 10px;
 }
 
-
-
 .header-item {
    text-align: center;
    font-weight: bold;
    color: #333;
 }
 
-
-button {
-   padding: 14px 24px;
-   border: none;
-   border-radius: 15px;
-   font-size: 16px;
-   color: white;
-   cursor: pointer;
-   text-align: center;
-   display: inline-block;
-}
 
 #hourlyView {
    background-color: #91c789;
@@ -187,17 +174,57 @@ button {
 }
 
 
+.hjem {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0 2%;
+   background-color: #DEF6D8;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   z-index: 100;
+}
+
+.logo {
+   color: #91c789;
+   font-size: 30px;
+   font-weight: 700;
+   text-decoration: none;
+}
+
+.navbar {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 60px; /* Adjusts the gap between the links */
+}
+
+.navbar a {
+   text-decoration: none;
+   color: #000;
+   font-size: 20px;
+   font-weight: 700;
+   transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+   color: #76b66c;
+   text-shadow: 0px 0px 1px darkgreen;
+}
+
 #logoutButton {
-   background-color: #e3342f;
-   cursor: pointer;
+   background-color: #91c789;
    color: white;
-   padding: 8px 16px;
    border: none;
-   border-radius: 5px;
+   padding: 10px 20px;
+   cursor: pointer;
+   font-weight: 700;
 }
 
 #logoutButton:hover {
-   background-color: #d32f2f;
+   background-color: #76b66c;
 }
 
 .material-symbols-outlined{
