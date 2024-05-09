@@ -19,6 +19,7 @@ async function fetchAlldata() {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        
         const hourlySummary = processDataHourly(data);
         console.log('24 Hours data:', hourlySummary);
         return hourlySummary;
@@ -30,7 +31,9 @@ async function fetchAlldata() {
 
 
 function processDataHourly(data) {
-    // Initial hourly summary structure
+    console.log('Data received:', data);  // Log the data to check its structure
+
+    // Initialize the hourly summary structure
     const hourlySummary = Array.from({ length: 24 }, (_, index) => ({
         time: `${index}:00 - ${index + 1}:00`,
         consumedEnergy: 0,
@@ -40,34 +43,52 @@ function processDataHourly(data) {
         totalMeals: 0
     }));
 
-    // Processing consumed food data
-    data.consumedData.forEach(entry => {
-        const hour = new Date(entry.TimeAdded).getHours();
-        hourlySummary[hour].consumedEnergy += (entry.ConsumedEnergy || 0);
-        hourlySummary[hour].totalMeals += 1;
-    });
+    // Helper function to extract hour from a time string
+    function extractHour(timeString) {
+        const date = new Date(timeString);
+        return date.getHours();
+    }
 
-    // Calculating hourly BMR
-    const dailyBMR = data.bmrData.length > 0 ? data.bmrData[0].BmrKcal : 0; // Safely access BMR data
+    // Process consumed food data
+    if (data.consumedData) {
+        data.consumedData.forEach(entry => {
+            const hour = extractHour(entry.TimeAdded);
+            hourlySummary[hour].consumedEnergy += entry.ConsumedEnergy || 0;
+            hourlySummary[hour].totalMeals += 1;
+        });
+    }
+
+    // Calculate hourly BMR
+    const dailyBMR = data.bmrData?.length > 0 ? data.bmrData[0].BmrKcal : 0;
     const hourlyBMR = dailyBMR / 24;
 
-    // Processing activity data
-    data.activitiesData.forEach(entry => {
-        const hour = new Date(entry.TimeAdded).getHours();
-        hourlySummary[hour].caloriesBurned += (entry.TotalKcalBurned || 0);
-    });
+    // Process activity data
+    if (data.activitiesData) {
+        data.activitiesData.forEach(entry => {
+            const hour = extractHour(entry.TimeAdded);
+            hourlySummary[hour].caloriesBurned += entry.TotalKcalBurned || 0;
+        });
+    }
 
-    // Adding hourly BMR to the calories burned in each hour
+    // Add hourly BMR to the calories burned in each hour
     hourlySummary.forEach(entry => {
         entry.caloriesBurned += hourlyBMR;
         entry.calorieSurplusDeficit = entry.consumedEnergy - entry.caloriesBurned;
     });
 
-    // Processing water intake data
-    data.waterIntakeData.forEach(entry => {
-        const hour = new Date(entry.TimeAdded).getHours();
-        hourlySummary[hour].waterIntake += (entry.WaterAmount || 0);
-    });
+    // Process water intake data
+    if (data.waterIntakeData) {
+        data.waterIntakeData.forEach(entry => {
+            if (entry.TimeAdded) {
+                const hour = extractHour(entry.TimeAdded);
+                hourlySummary[hour].waterIntake += entry.WaterAmount || 0;
+            } else {
+                console.error("Missing TimeAdded for water intake entry:", entry);
+            }
+        });
+    } else {
+        console.error("Water intake data is missing.");
+    }
 
     return hourlySummary;
 }
