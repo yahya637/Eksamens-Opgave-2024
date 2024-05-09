@@ -41,6 +41,10 @@
      border-radius: 5px;
  }
 
+ #logoutButton:hover {
+    background-color: #d32f2f;
+ }
+ 
  .navbar-h {
      display: flex;
      gap: 30px;

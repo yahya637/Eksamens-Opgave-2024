@@ -48,7 +48,7 @@ protectedRoutes.forEach(route => {
 });
  // Skal rettes fungerer ikke, man kan stadig komme ind på de forskellige html sider uden at være logget ind !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
+// 
 app.use("/users", users);
 app.use("/activities", activityRouter); 
 app.use("/mealcreator", mealcreator);

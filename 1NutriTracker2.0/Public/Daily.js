@@ -6,24 +6,28 @@ document.addEventListener('DOMContentLoaded', function() {
  
 // Funtion to fetch all data from the databases
 async function fetchAlldata() {
-    // Get User ID from session storage
     const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('No user ID found in session storage.');
+        return;
+    }
     console.log('User ID:', userId);
 
     try {
         const response = await fetch(`/daily/userstats/${userId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
         const data = await response.json();
-        
-        // 24 Hours data
         const hourlySummary = processDataHourly(data);
         console.log('24 Hours data:', hourlySummary);
         return hourlySummary;
     } catch (error) {
         console.error('Error fetching user statistics:', error);
-}}
+    }
+}
 
 
-/// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!SKAL ÆNDRES TIL AT HENTE VAND DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 function processDataHourly(data) {
     const hourlySummary = Array.from({ length: 24 }, (_, index) => ({

@@ -1,17 +1,16 @@
-document.getElementById('IntakeMealButton').addEventListener('click', async function() {
-    const intakeMealForm = document.getElementById('IntakeMealForm');
+document.getElementById('IntakeMealButton').addEventListener('click', function() {
     const intakeIngredientForm = document.getElementById('IntakeIngredientForm');
+    const waterForm = document.getElementById('water-form');
+    const intakeMealForm = document.getElementById('IntakeMealForm');
 
     // Close the IntakeIngredientForm if it's open
     intakeIngredientForm.style.display = 'none';
 
+    // Close the WaterForm if it's open
+    waterForm.style.display = 'none';
+
     // Toggle visibility of IntakeMealForm
-    if (intakeMealForm.style.display === 'none' || intakeMealForm.style.display === '') {
-        intakeMealForm.style.display = 'block';
-        await fetchMealsFromDatabase(); // Fetch meals when the form is shown
-    } else {
-        intakeMealForm.style.display = 'none';
-    }
+    intakeMealForm.style.display = intakeMealForm.style.display === 'none' ? 'block' : 'none';
 });
 
 
@@ -243,9 +242,13 @@ function displayMealIntakes(mealIntakes) {
 document.getElementById('IntakeIngredientButton').addEventListener('click', function() {
     const intakeMealForm = document.getElementById('IntakeMealForm');
     const intakeIngredientForm = document.getElementById('IntakeIngredientForm');
+    const waterForm = document.getElementById('water-form');  // Get the water form
 
     // Close the IntakeMealForm if it's open
     intakeMealForm.style.display = 'none';
+
+    // Close the WaterForm if it's open
+    waterForm.style.display = 'none';
 
     // Toggle visibility of IntakeIngredientForm
     intakeIngredientForm.style.display = intakeIngredientForm.style.display === 'none' ? 'block' : 'none';
@@ -593,3 +596,122 @@ function logoutUser() {
     // Redirect to login page
     window.location.href = '/NutriHome.html';
 }
+
+
+// tRack water intake 
+
+// post water intake to the database
+document.getElementById('addWater').addEventListener('click', addWaterIntake);
+
+async function addWaterIntake() {
+    const waterMl = document.getElementById('waterMl').value;
+    const userId = sessionStorage.getItem('userId'); // Assuming user ID is stored in session storage
+
+    if (!userId) {
+        console.error('No user ID found in sessionStorage.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/mealtracker1/${userId}/water`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ waterAmount_ml: parseInt(waterMl) })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            alert('Water intake added successfully');
+            fetchWaterHistory(); // Refresh the water history
+        } else {
+            throw new Error('Failed to add water intake');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('confirmationMessage').style.display = 'block';
+        document.getElementById('confirmationMessage').textContent = 'Failed to add water';
+    }
+}
+
+async function fetchWaterHistory() {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('No user ID found in sessionStorage.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/mealtracker1/${userId}/water`);
+        if (response.ok) {
+            const data = await response.json();
+            displayWaterHistory(data);
+        } else {
+            throw new Error('Failed to fetch water history');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function displayWaterHistory(data) {
+    const waterHistoryDiv = document.getElementById('water-history');
+    waterHistoryDiv.innerHTML = ''; // Clear previous entries
+
+    if (data.length > 0) {
+        const ul = document.createElement('ul');
+        data.forEach(water => {
+            const li = document.createElement('li');
+            li.textContent = `${water.waterAmount_ml} ml on ${new Date(water.intake_date).toLocaleDateString()} at ${new Date(water.intake_time).toLocaleTimeString()}`;
+            ul.appendChild(li);
+        });
+        waterHistoryDiv.appendChild(ul);
+    } else {
+        waterHistoryDiv.textContent = 'No water intake history available.';
+    }
+}
+function toggleWaterHistory() {
+    const waterHistoryElement = document.getElementById('water-history');
+    const toggleButton = document.getElementById('show-water-history');
+
+    // Add null checks to prevent errors if elements are not found
+    if (!waterHistoryElement || !toggleButton) {
+        console.error('One or more elements are missing.');
+        return; // Exit the function if elements are not found
+    }
+
+    if (waterHistoryElement.style.display === 'none') {
+        waterHistoryElement.style.display = 'block';
+        toggleButton.innerText = 'Hide Water Intakes'; // Set text to 'Hide'
+        fetchWaterHistory(); // Refresh the water history data
+    } else {
+        waterHistoryElement.style.display = 'none';
+        toggleButton.innerText = 'Show Water Intakes'; // Set text to 'Show'
+    }
+}
+
+// Ensure the DOM is fully loaded before adding the event listener
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('show-water-history');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', toggleWaterHistory);
+    } else {
+        console.error('Button with ID "show-water-history" was not found.');
+    }
+});
+
+document.getElementById('waterButton').addEventListener('click', function() {
+    const intakeMealForm = document.getElementById('IntakeMealForm');
+    const intakeIngredientForm = document.getElementById('IntakeIngredientForm');
+    const waterForm = document.getElementById('water-form');
+
+    // Close the IntakeMealForm if it's open
+    intakeMealForm.style.display = 'none';
+
+    // Close the IntakeIngredientForm if it's open
+    intakeIngredientForm.style.display = 'none';
+
+    // Toggle visibility of WaterForm
+    waterForm.style.display = waterForm.style.display === 'none' ? 'block' : 'none';
+});

@@ -910,10 +910,10 @@ throw new Error(`Error fetching user statistics from database: ${error.message}`
 
 async getWaterIntake(userId) {
   try {
-    await this.connect();  // Sikre databaseforbindelse
+    await this.connect();  
 
     const query = `
-      SELECT * FROM Nutri.WaterInTake WHERE user_id = @userId
+      SELECT * FROM Nutri.WaterIntake WHERE user_id = @userId
     `;
     const request = this.poolconnection.request()
       .input('userId', userId);
@@ -922,26 +922,26 @@ async getWaterIntake(userId) {
     return result.recordset;
   } catch (error) {
     console.error('Fejl ved hentning af indtag:', error);
-    throw error; // Kast fejlen for at håndtere den på et højere niveau
+    throw error; 
   }
 }
 
 
 async createWaterIntake(userId, intakeDetails) {
   try {
-    await this.connect();  // Sikre databaseforbindelse
+    await this.connect();  
 
     const query = `
-      INSERT INTO Nutri.WaterInTake (User_id, millilitre, intake_date, intake_time)
-      VALUES (@userId, @millilitre, GETDATE(),GETDATE())
+      INSERT INTO Nutri.WaterIntake (User_id, waterAmount_ml, intake_date, intake_time)
+      VALUES (@userId, @waterAmount_ml, GETDATE(),GETDATE())
     `;
     const request = this.poolconnection.request()
       .input('userId', userId)
-      .input('millilitre', intakeDetails.millilitre); // rettet til intakeDetails.millilitre
+      .input('waterAmount_ml', intakeDetails.waterAmount_ml); 
     await request.query(query);
   } catch (error) {
     console.error('Error:', error);
-    throw error; // Kast fejlen for at håndtere den på et højere niveau
+    throw error; 
   }
 }
 

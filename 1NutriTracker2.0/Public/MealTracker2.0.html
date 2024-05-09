@@ -39,6 +39,11 @@
                 <button id="IntakeIngredientButton" title="Intake Ingredient">
                     <i class="gg-add"></i>
                 </button>
+                <button id="waterButton" title="Intake Water">
+                    <span class="material-symbols-outlined">
+                        water_drop
+                        </span>
+                </button>
             </div>
         </div>
 
@@ -97,6 +102,23 @@
                 <div id="confirmationMessage" style="display:none;"></div>
 
         </div>
+
+        <!-- After 2.0 i add the water inatke here in (ml) -->
+         <div id="water-form" style="display: none;">
+          
+            <label for="waterMl" class="labelAT"> Water (ml.):</label>
+            <input type="number" id="waterMl" class="form-input" placeholder="Enter the amount of water in ml">
+            <div>
+                <section id="waterBtn-row">
+                    <button id="addWater" class="form-button">Add Water</button>
+                    <button id="show-water-history" class="form-button">Show Water Intakes</button>
+                </section>
+                <div id="water-history" style="display: none;"></div>
+
+            </div>
+            
+        </div>
+        
 
 
 

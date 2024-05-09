@@ -119,6 +119,9 @@ router.put('/:userId/intake/:consumedId', async (req, res) => {
   }
 });
 
+
+
+// GET water intake for user
 router.get('/:userId/water', async (req, res) => {
   const userId = req.params.userId;
   console.log('getting water intake for user', userId);
@@ -132,7 +135,8 @@ router.get('/:userId/water', async (req, res) => {
       res.status(500).json({ error: 'Error creating new intake in the database', details: err.message });
   }
 });
-  
+
+// POST water intake for user  
 router.post('/:userId/water', async (req, res) => {
   const userId = req.params.userId;
   const intakeDetails = req.body; // Antages at være i formatet { date: 'YYYY-MM-DD', amount: 250 }

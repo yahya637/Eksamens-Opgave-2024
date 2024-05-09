@@ -413,16 +413,25 @@ function displayUserBMR(bmrData) {
 
 function toggleBMRHistory() {
     const bmrHistoryElement = document.getElementById('bmr-history');
+    const toggleButton = document.getElementById('show-bmr-history'); // Get the button element
+
     if (bmrHistoryElement.style.display === 'none') {
         bmrHistoryElement.style.display = 'block';
+        toggleButton.innerText = 'Hide BMR History'; // Change button text to 'Hide'
         fetchUserBMR(); // Call fetchUserBMR after showing the BMR history
     } else {
         bmrHistoryElement.style.display = 'none';
+        toggleButton.innerText = 'Show BMR History'; // Change button text to 'Show'
     }
 }
 
-// Call toggleBMRHistory function when the show/hide button is clicked
+// Add event listener to the show/hide button
 document.getElementById('show-bmr-history').addEventListener('click', toggleBMRHistory);
+
+
+
+
+// Logout functionality
 
 document.addEventListener('DOMContentLoaded', function() {
     const logoutButton = document.getElementById('logoutButton');

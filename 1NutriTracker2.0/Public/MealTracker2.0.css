@@ -119,13 +119,19 @@ button:hover{
 }
 
 #IntakeIngredientButton {
-    background-color: #569bd5;
+    background-color: #ffab40;
 }
 
 #IntakeIngredientButton:hover {
-    background-color: #0c5692;
+    background-color: #ffab90;
+}
+#waterButton {
+    background-color: #569bd5;
 }
 
+#waterButton:hover {
+    background-color: #0c5692;
+}
 /*This the whole table*/
 .meal-table {
     margin-top: 15px;
@@ -500,4 +506,81 @@ button:hover{
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+#water-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 500px;
+}
+
+.labelAT {
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #2b2b2b; 
+    text-align: left;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+.form-input {
+    width: 500px;
+    padding: 15px;
+;
+    border: 2;
+    padding: 10px;
+    border: 2px solid #569bd5;
+    border-radius: 10px;
+    font-size: 16px;
+    width: calc(100% - 25px);
+    background-color: transparent;
+}
+
+.form-input:focus {
+    border-color: #569bd5;
+    background-color: #ffffff;
+}
+
+#waterBtn-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-button {
+    height: 45px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #569bd5;
+    width: 48%;
+    border-radius: 15px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+}
+
+.form-button:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+
+
+#water-history ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#water-history li {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #e6f7ff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
