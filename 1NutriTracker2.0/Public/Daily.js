@@ -161,9 +161,18 @@ fetchAllData30Days();
 
 // Function to fetch all data from the databases for the last 30 days
 // Helper function to ensure date string from database is converted to a correct JavaScript Date object
-function parseDate(dateStr) {
+// Helper function to ensure date string from database is converted to a correct JavaScript Date object
+// Updated parseDate to handle MM-DD-YYYY format
+// Parses dates for consumedData (MM-DD-YYYY)
+function parseConsumedDate(dateStr) {
+    const [month, day, year] = dateStr.split('-').map(Number);
+    return new Date(Date.UTC(year, month - 1, day));
+}
+
+// Parses dates for activitiesData (DD-MM-YYYY)
+function parseActivityDate(dateStr) {
     const [day, month, year] = dateStr.split('-').map(Number);
-    return new Date(Date.UTC(year, month - 1, day));  // Sørger for korrekt UTC dato
+    return new Date(Date.UTC(year, month - 1, day));
 }
 
 function processDataDaily(data) {
@@ -173,7 +182,7 @@ function processDataDaily(data) {
         const date = new Date(utcToday);
         date.setUTCDate(utcToday.getUTCDate() - index);
         return {
-            date: date.toISOString().substring(0, 10), // Konverterer til "YYYY-MM-DD"
+            date: date.toISOString().substring(0, 10),
             consumedEnergy: 0,
             caloriesBurned: 0,
             calorieSurplusDeficit: 0,
@@ -181,40 +190,39 @@ function processDataDaily(data) {
         };
     });
 
-    // Behandle indtaget data
+    // Process consumed data
     data.consumedData.forEach(entry => {
-        const entryDate = parseDate(entry.DateAdded).toISOString().substring(0, 10);
+        const entryDate = parseConsumedDate(entry.DateAdded).toISOString().substring(0, 10);
         const summary = dailySummary.find(d => d.date === entryDate);
         if (summary) {
             summary.consumedEnergy += entry.ConsumedEnergy || 0;
             summary.totalMeals += 1;
         } else {
-            console.log('No matching date found for consumed data:', entry);
+            console.error('No matching date found for consumed data:', entry.DateAdded);
         }
     });
 
-    // Behandle aktivitetsdata
+    // Process activity data
     data.activitiesData.forEach(entry => {
-        const entryDate = parseDate(entry.DateAdded).toISOString().substring(0, 10);
+        const entryDate = parseActivityDate(entry.DateAdded).toISOString().substring(0, 10);
         const summary = dailySummary.find(d => d.date === entryDate);
         if (summary) {
-            summary.caloriesBurned += entry.TotalKcalBurned || 0;
+            summary.caloriesBurned += entry.TotalKcalBurned;
         } else {
-            console.log('No matching date found for activity data:', entry);
+            console.error('No matching date found for activity data:', entry.DateAdded);
         }
     });
 
-    // Juster BMR logik baseret på aktivitet og forbrug
+    // Calculate calorie surplus/deficit
     dailySummary.forEach(entry => {
-        if (entry.caloriesBurned > 0 || entry.consumedEnergy > 0) {
-            entry.caloriesBurned += data.bmrData.length ? data.bmrData[0].BmrKcal / 30 : 0;
-        }
         entry.calorieSurplusDeficit = entry.consumedEnergy - entry.caloriesBurned;
     });
 
     console.log('Final daily summary:', dailySummary);
     return dailySummary;
 }
+
+
 
 
 // Function to fetch all data from the databases for the last 30 days
