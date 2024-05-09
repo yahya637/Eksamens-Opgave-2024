@@ -167,11 +167,29 @@ button:hover{
    background-color: #569bd5;
 }
 
-.dailyNutri-header {
-   display: block;
-   width: 100%;
-   padding: 10px;
+#hourlyView, #dailyView {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 20px;
+   color: white;
+   font-size: 16px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+   gap: 10px;
 }
+
+#hourlyView:hover, #dailyView:hover {
+   opacity: 0.8;
+}
+
+.material-symbols-outlined {
+   font-size: 24px;
+   vertical-align: middle;
+}
+
 
 
 .hjem {
@@ -227,5 +245,3 @@ button:hover{
    background-color: #76b66c;
 }
 
-.material-symbols-outlined{
-padding: 1px;}

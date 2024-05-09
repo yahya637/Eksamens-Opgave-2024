@@ -23,24 +23,25 @@ async function fetchAllData() {
 
 fetchAllData();
 
-
 function processDataHourly(data) {
-    const hourlySummary = Array.from({ length: 24 }, (_, index) => ({
-        time: `${index}:00 - ${index + 1}:00`,
-        consumedEnergy: 0,
-        caloriesBurned: 0,
-        calorieSurplusDeficit: 0,
-        totalMeals: 0
-    }));
+    const currentHour = new Date().getHours(); // Get the current hour
+    const hourlySummary = Array.from({ length: 24 }, (_, index) => {
+        const hourIndex = (currentHour + index) % 24; // Calculate the hour index wrapping around 24
+        return {
+            time: `${hourIndex}:00 - ${(hourIndex + 1) % 24}:00`, // Handle wrapping around 24 for display
+            consumedEnergy: 0,
+            caloriesBurned: 0,
+            calorieSurplusDeficit: 0,
+            totalMeals: 0
+        };
+    });
 
     // Processing consumed energy data
     data.consumedData.forEach(entry => {
         const date = new Date(entry.TimeAdded);
         const hour = date.getUTCHours(); // Using UTC hour to avoid timezone issues
-        const minutes = date.getUTCMinutes(); // Logging minutes to diagnose rounding issues
-        console.log(`Meal time: ${date.toISOString()}, Hour: ${hour}, Minutes: ${minutes}`);
-        hourlySummary[hour].consumedEnergy += (entry.ConsumedEnergy || 0);
-        hourlySummary[hour].totalMeals += 1;
+        hourlySummary.find(h => h.time.startsWith(`${hour}:00`)).consumedEnergy += (entry.ConsumedEnergy || 0);
+        hourlySummary.find(h => h.time.startsWith(`${hour}:00`)).totalMeals += 1;
     });
 
     // Calculating daily Basal Metabolic Rate (BMR)
@@ -50,9 +51,8 @@ function processDataHourly(data) {
     // Processing activities data
     data.activitiesData.forEach(entry => {
         const date = new Date(entry.TimeAdded);
-        const hour = date.getUTCHours(); // Using UTC hour to avoid timezone issues
-        console.log(`Activity time: ${date.toISOString()}, Hour: ${hour}`);
-        hourlySummary[hour].caloriesBurned += (entry.TotalKcalBurned + hourlyBMR);
+        const hour = date.getUTCHours();
+        hourlySummary.find(h => h.time.startsWith(`${hour}:00`)).caloriesBurned += (entry.TotalKcalBurned + hourlyBMR);
     });
 
     // Calculating calorie surplus or deficit
@@ -62,6 +62,43 @@ function processDataHourly(data) {
 
     return hourlySummary;
 }
+
+
+
+// Function to update the table with hourly data
+function updateTableWithHourlyData(hourlySummary) {
+    const tableBody = document.getElementById('mealDetailsTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';  // Clear existing table rows
+
+    hourlySummary.forEach(entry => {
+        const row = tableBody.insertRow();
+        const timeCell = row.insertCell(0);
+        const mealsCell = row.insertCell(1);
+        const consumedKcalCell = row.insertCell(2);
+        const burnedKcalCell = row.insertCell(3);
+        const surplusDeficitCell = row.insertCell(4);
+
+        timeCell.textContent = entry.time;
+        mealsCell.textContent = entry.totalMeals;
+        consumedKcalCell.textContent = entry.consumedEnergy.toFixed(2);
+        burnedKcalCell.textContent = entry.caloriesBurned.toFixed(2);
+        surplusDeficitCell.textContent = entry.calorieSurplusDeficit.toFixed(2);
+    });
+}
+
+// Example of integration with fetchAllData function
+async function fetchAllDataAndDisplay() {
+    const hourlySummary = await fetchAllData(); // Fetch data
+    if (hourlySummary) {
+        updateTableWithHourlyData(hourlySummary); // Update the table with fetched data
+    }
+}
+
+fetchAllDataAndDisplay();
+
+
+
+
 
 
 // Function to fetch all data from the databases for 30 days
@@ -151,6 +188,9 @@ function processDataDaily(data) {
     console.log('Final daily summary:', dailySummary);
     return dailySummary;
 }
+
+// Now we display the data on in the table
+
 
 
 
