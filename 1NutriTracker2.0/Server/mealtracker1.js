@@ -11,7 +11,7 @@ console.log(config);
 // Create database object
 const database = new Database(config);
 
-// GET user activities by user ID
+// GET user  by user ID
 router.get('/:userId', async (req, res) => {
   const userId = req.params.userId;
   console.log(`Fetching user activities for user ID: ${userId}`);

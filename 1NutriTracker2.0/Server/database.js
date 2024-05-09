@@ -283,7 +283,6 @@ async update(id, data) {
 await this.connect();
 const request = this.poolconnection.request();
 request.input('user_id', sql.Int, id);
-request.input('username', sql.VarChar(50), data.username);
 request.input('email', sql.VarChar(50), data.email);
 request.input('birthdate', sql.Date, data.birthdate);
 request.input('gender', sql.VarChar(10), data.gender);
@@ -292,7 +291,6 @@ request.input('weight', sql.Decimal(5, 2), data.weight);
 
 const result = await request.query(
 `UPDATE Nutri.Users SET
-username=@username,
 email=@email,
 birthdate=@birthdate,
 gender=@gender,
@@ -643,7 +641,7 @@ request.input('user_id', sql.Int, userId);
 
 
 const result = await request.query(`
-SELECT * FROM nutri.Mealcreator WHERE user_id = @user_id
+SELECT * FROM Nutri.Mealcreator WHERE User_id = @User_id
 `);
 
 

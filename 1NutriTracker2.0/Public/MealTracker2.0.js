@@ -1,4 +1,4 @@
-document.getElementById('IntakeMealButton').addEventListener('click', function() {
+document.getElementById('IntakeMealButton').addEventListener('click', async function() {
     const intakeIngredientForm = document.getElementById('IntakeIngredientForm');
     const waterForm = document.getElementById('water-form');
     const intakeMealForm = document.getElementById('IntakeMealForm');
@@ -11,7 +11,12 @@ document.getElementById('IntakeMealButton').addEventListener('click', function()
 
     // Toggle visibility of IntakeMealForm
     intakeMealForm.style.display = intakeMealForm.style.display === 'none' ? 'block' : 'none';
+
+    // Fetch meals from the database and wait for it to complete before proceeding
+    await fetchMealsFromDatabase();
 });
+
+
 
 
 
@@ -31,12 +36,19 @@ async function fetchMealsFromDatabase() {
         }
 
         const meals = await response.json();
-        console.log('Meals fetched successfully') 
+        if (!meals || meals.length === 0) {
+            console.error('No meals found or empty response.');
+            document.getElementById('mealSelection').innerHTML = '<option>No meals available</option>';
+            return;
+        }
+
         populateDropdown(meals);
     } catch (error) {
         console.error('There was a problem fetching the meals:', error.message);
+        document.getElementById('mealSelection').innerHTML = `<option>Error: ${error.message}</option>`;
     }
 }
+
 
 // This function populates the dropdown menu with meals
 function populateDropdown(meals) {
@@ -175,7 +187,6 @@ function fetchMealIntakes() {
         console.error('User ID not found');
         return;
     }
-
     fetch(`/mealtracker1/${userId}/intake`)
     .then(response => {
         if (!response.ok) {
@@ -715,3 +726,4 @@ document.getElementById('waterButton').addEventListener('click', function() {
     // Toggle visibility of WaterForm
     waterForm.style.display = waterForm.style.display === 'none' ? 'block' : 'none';
 });
+
