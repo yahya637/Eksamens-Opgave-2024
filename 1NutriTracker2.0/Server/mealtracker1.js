@@ -11,10 +11,10 @@ console.log(config);
 // Create database object
 const database = new Database(config);
 
-// GET user  by user ID
+// GET user Meals by user ID
 router.get('/:userId', async (req, res) => {
   const userId = req.params.userId;
-  console.log(`Fetching user activities for user ID: ${userId}`);
+  console.log(`Fetching Meals for user ID: ${userId}`);
 
   try {
       const createdMeals = await database.getAllMealsForMealtrackerByUserId(userId);

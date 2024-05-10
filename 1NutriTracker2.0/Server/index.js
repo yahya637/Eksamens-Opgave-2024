@@ -26,6 +26,7 @@ app.use(session({
 app.use(express.static(path.join(__dirname, "../Public")));
 
 function ensureLoggedIn(req, res, next) {
+  console.log("Checking logged in status for", req.path);
   if (req.session.userId) {
     next();
   } else {
@@ -33,11 +34,11 @@ function ensureLoggedIn(req, res, next) {
   }
 }
 
-const protectedRoutes = ['/public/MyProfile.html', '/Daily.html', '/public/MealCreator2.0.html', '/ActivityTracker.html', '/public/MealTracker2.0.html'];
+const protectedRoutes = ['/MyProfile.html', '/Daily.html', '/1NutriTracker2.0\Public\MealCreator2.0.html', '/ActivityTracker.html', '/MealTracker2.0.html'];
 
 protectedRoutes.forEach(route => {
   app.get(route, ensureLoggedIn, (req, res) => {
-    const filePath = path.join(__dirname, '../Public', route); // Korrekt sti til offentlige filer
+    const filePath = path.join(__dirname, '../Public', route);
     res.sendFile(filePath, err => {
       if (err) {
         console.error('Error sending file:', err);

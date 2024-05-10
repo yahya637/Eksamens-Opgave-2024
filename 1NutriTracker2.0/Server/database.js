@@ -183,8 +183,6 @@ console.error(`Error closing database connection: ${error}`);
         await request.query(`DELETE FROM Nutri.Mealcreator WHERE User_id = @user_id;`);
         await request.query(`DELETE FROM Nutri.UserActivities WHERE user_id = @user_id;`);
         await request.query('DELETE FROM Nutri.BmrCalculations WHERE user_id = @user_id');
-        
-        // Slet til sidst fra Users
         await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id;`);
 
         await transaction.commit();

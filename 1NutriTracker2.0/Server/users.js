@@ -105,15 +105,13 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-  const userId = req.params.id; // Forsikre dig om, at dette er den korrekte type (string eller number)
-  const sessionUserId = req.session.userId; // Samme som ovenfor
-
+  const userId = req.params.id; 
   console.log("Requested User ID:", userId);
 
   try {
     const rowsAffected = await database.delete(userId);
     if (rowsAffected > 0) {
-      res.status(204).end(); // Ingen content at sende tilbage, men succes
+      res.status(204).end(); 
     } else {
       res.status(404).json({ message: "User not found" });
     }
