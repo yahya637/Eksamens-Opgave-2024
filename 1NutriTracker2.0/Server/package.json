@@ -5,26 +5,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ../tests/**/*.js"
+    "test": "mocha LogIn.test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "chai": "^4.3.7",
     "chai-http": "^4.4.0",
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
     "joi": "^17.13.1",
     "jsonwebtoken": "^9.0.2",
-    "mocha": "^10.4.0",
     "mssql": "^10.0.2",
+    "sinon": "^17.0.2",
     "swagger-ui-express": "^5.0.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "chai": "^5.1.1",
     "dotenv": "^16.4.5",
+    "mocha": "^10.4.0",
     "nodemon": "^3.1.0"
   }
 }
