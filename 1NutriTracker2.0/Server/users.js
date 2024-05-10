@@ -113,9 +113,11 @@ router.delete('/:id', async (req, res) => {
       res.status(404).json({ message: "User not found" });
     }
   } catch (err) {
-    res.status(500).json({ error: err?.message });
+    console.error("Deletion error:", err); // Log detailed error
+    res.status(500).json({ error: err.message || 'Error during deletion' });
   }
 });
+
 
 
 // FUNGERER IKKE DETTE VIRKER IKKE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

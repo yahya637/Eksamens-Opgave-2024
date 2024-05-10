@@ -1,0 +1,17 @@
+{
+  "name": "mochatest",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "users.js",
+  "scripts": {
+    "test": "npx mocha -r esm './test/*.js'"
+  },
+  "dependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "esm": "^3.2.25"
+  },
+  "devDependencies": {
+    "mocha": "^10.4.0"
+  }
+}

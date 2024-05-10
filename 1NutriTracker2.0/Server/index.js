@@ -8,7 +8,6 @@ import mealcreator from './mealcreator.js';
 import mealtracker from './mealtracker1.js';
 import daily from './daily1.js';
 
-
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 3000;
@@ -61,4 +60,4 @@ app.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });
 
-export default ensureLoggedIn;
+export default app
