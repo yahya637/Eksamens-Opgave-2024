@@ -22,7 +22,4 @@ router.get('/userstats/:userId', async (req, res) => {
   }
 });
 
-
-
-
 export default router;
