@@ -771,7 +771,7 @@ sqlQuery += " AND meal_Id = @mealId";
 }
 
 
-sqlQuery += " ORDER BY timeAdded DESC";
+sqlQuery += " ORDER BY dateAdded DESC, timeAdded DESC";
 
 
 const result = await request.query(sqlQuery);
