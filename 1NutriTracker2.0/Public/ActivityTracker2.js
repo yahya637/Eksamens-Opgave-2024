@@ -59,6 +59,9 @@ function handleActivitySubmission() {
         KcalBurned: caloriesBurned.toFixed(2),
         DurationMinutes: duration,
     });
+
+    alert('Meal saved and displayed successfully')
+
 }
 
 document.getElementById('add-activity').addEventListener('click', handleActivitySubmission);
@@ -179,52 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Krav 4.B - BMR Calculation
-
-/*
-// Function to fetch the user information from the server
-function fetchUserInfo() {
-    let userId = localStorage.getItem("userId");
-    console.log("Fetching info for user ID:", userId); // Debug: Log the user ID being fetched
-
-    if (!userId) {
-        console.error("No user ID found in localStorage.");
-        return; // Exit the function if no user ID is found
-    }
-
-    fetch(`/users/${userId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        // Then populate the form with the user data
-        .then(data => {
-            console.log("Data received:", data); // Debug: Log the received data
-            document.getElementById("sex").value = data.gender === "man" ? "male" : "female";
-            document.getElementById("age").value = calculateAge(data.birthdate);
-            document.getElementById("weight").value = data.weight;
-        })
-        .catch(error => console.error('Error fetching user data:', error));
-}
-
-function calculateAge(birthdate) {
-    let birthDate = new Date(birthdate);
-    let today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    let monthDifference = today.getMonth() - birthDate.getMonth();
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate < birthDate.getDate())) {
-        age--;
-    }
-    console.log("Calculated age:", age); 
-    return age;
-}
-
-
-// Call the function when the page is loaded
-document.addEventListener('DOMContentLoaded', fetchUserInfo);*/
-
-// Start taking the inputs from the user
 
 // Function to calculate BMR for given inputs
 function calculateBMR(sex, age, weight) {

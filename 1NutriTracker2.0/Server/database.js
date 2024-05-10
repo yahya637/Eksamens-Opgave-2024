@@ -380,25 +380,25 @@ throw err; // Kast fejlen videre for at håndtere den
 
 
 // GET ACTIVITIES FROM DATABASE
-async getAllActivitiesFromTracker() {
-try {
-await this.connect();
-const request = this.poolconnection.request();
+  async getAllActivitiesFromTracker() {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
 
 
-const result = await request.query(`
+      const result = await request.query(`
 SELECT * FROM Nutri.Activitytracker
 `);
 
 
-return result.recordset; // Returner en liste over alle aktiviteter fra Activity Tracker-tabellen
-} catch (error) {
-console.error('Failed to get activities from tracker:', error);
-throw new Error('Error getting activities from tracker in database');
-} finally {
-await this.disconnect();
-}
-}
+      return result.recordset; 
+    } catch (error) {
+      console.error('Failed to get activities from tracker:', error);
+      throw new Error('Error getting activities from tracker in database');
+    } finally {
+      await this.disconnect();
+    }
+  }
 
 
 async userExistsById(userId) {
