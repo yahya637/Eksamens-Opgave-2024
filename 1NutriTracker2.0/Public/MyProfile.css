@@ -1,7 +1,5 @@
-        /* Importing the specified font from Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
-        /* Base styles for the entire page */
         body {
             font-family: 'Nunito', sans-serif;
             background-color: whitesmoke;
@@ -21,50 +19,51 @@
             left: 0;
             right: 0;
             z-index: 100;
-           }
-          
-         .navbar {
+        }
+
+        .navbar {
             display: flex;
             gap: 3em;
-         
-         }
-         
-           .logo {
+
+        }
+
+        .logo {
             color: #91c789;
             font-size: 30px;
             font-weight: 700;
             text-decoration: none;
             margin-top: 5px;
             padding-left: 40px;
-         }
-         
-         
-         .navbar a {
+        }
+
+
+        .navbar a {
             text-decoration: none;
             color: #000;
             font-size: 20px;
             font-weight: 700;
             padding: 8px;
-         }
-         
-         nav a:hover {
+        }
+
+        nav a:hover {
             color: #76b66c;
             text-shadow: 0px 0px 1px darkgreen;
-         }
-         
-         #logoutButton {
+        }
+
+        #logoutButton {
             background-color: #91c789;
             color: white;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             font-weight: 700;
-         }
-         
-         #logoutButton:hover {
+        }
+
+        #logoutButton:hover {
             background-color: #76b66c;
-         }
-         button{
+        }
+
+        button {
             padding: 12px 24px;
             border: none;
             border-radius: 15px;
@@ -74,7 +73,7 @@
             cursor: pointer;
             text-align: center;
             display: inline-block;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         #homeButtons {
@@ -94,6 +93,7 @@
             border-radius: 10px;
             margin-top: 15px;
         }
+
         #mangeProfileButton:hover {
             background-color: #91c789;
         }

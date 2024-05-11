@@ -1,18 +1,10 @@
-document.getElementById('IntakeMealButton').addEventListener('click', async function() {
+document.getElementById('IntakeMealButton').addEventListener('click', async function () {
     const intakeIngredientForm = document.getElementById('IntakeIngredientForm');
     const waterForm = document.getElementById('water-form');
     const intakeMealForm = document.getElementById('IntakeMealForm');
-
-    // Close the IntakeIngredientForm if it's open
     intakeIngredientForm.style.display = 'none';
-
-    // Close the WaterForm if it's open
     waterForm.style.display = 'none';
-
-    // Toggle visibility of IntakeMealForm
     intakeMealForm.style.display = intakeMealForm.style.display === 'none' ? 'block' : 'none';
-
-    // Fetch meals from the database and wait for it to complete before proceeding
     await fetchMealsFromDatabase();
 });
 
@@ -53,7 +45,7 @@ async function fetchMealsFromDatabase() {
 // This function populates the dropdown menu with meals
 function populateDropdown(meals) {
     const selectionOfMeals = document.getElementById('mealSelection');
-    selectionOfMeals.innerHTML = '';  // Clear existing options
+    selectionOfMeals.innerHTML = ''; 
     meals.forEach(meal => {
         const option = document.createElement('option');
         option.value = meal.MealId;
@@ -71,7 +63,6 @@ function populateDropdown(meals) {
 // Immediately fetch meal intakes when the script loads, if possible
 fetchMealIntakes();
 
-// Set up button click event listeners directly
 const submitButton = document.getElementById('submitIntakeMeal');
 if (submitButton) {
     console.log('Submit button clicked');
@@ -106,7 +97,6 @@ function logIntakeDetails(intakeDetails) {
         }
     );
 }
-// This function calculates the nutritional details based on selected meal and consumed weight
 
 // This function calculates the nutritional details based on selected meal and consumed weight
 function calculateIntakeDetails(selectedOption, weightConsumed) {
@@ -118,7 +108,6 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
         fiber: parseFloat(selectedOption.getAttribute('data-fiber'))
     };
 
-    // Get the current date components
     const currentDate = new Date();
     const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
     const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
@@ -170,7 +159,7 @@ async function saveIntakeToDatabase(intakeDetails) {
         }
 
         console.log('Intake saved successfully');
-        await fetchMealIntakes();  // Refresh the meal list
+        await fetchMealIntakes();
     } catch (error) {
         console.error('There was a problem saving the intake:', error.message);
     }
@@ -188,28 +177,28 @@ function fetchMealIntakes() {
         return;
     }
     fetch(`/mealtracker1/${userId}/intake`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to fetch meal intakes: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(mealIntakes => {
-        console.log('Meal intakes fetched successfully:', mealIntakes);
-        displayMealIntakes(mealIntakes);
-    })
-    .catch(error => {
-        console.error('There was a problem fetching the meal intakes:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch meal intakes: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(mealIntakes => {
+            console.log('Meal intakes fetched successfully:', mealIntakes);
+            displayMealIntakes(mealIntakes);
+        })
+        .catch(error => {
+            console.error('There was a problem fetching the meal intakes:', error);
+        });
 }
 
 function displayMealIntakes(mealIntakes) {
     const intakeEntriesContainer = document.querySelector('.intake-entries');
-    intakeEntriesContainer.innerHTML = ''; // Clear the container before adding new entries
+    intakeEntriesContainer.innerHTML = ''; 
 
     mealIntakes.forEach((intake) => {
         let formattedDate = 'N/A'; // Default value if date is not available
-        let formattedTime = 'N/A'; // Default value if time is not available
+        let formattedTime = 'N/A'; 
 
         // Check if dateAdded is not null before processing
         if (intake.dateAdded) {
@@ -249,19 +238,12 @@ function displayMealIntakes(mealIntakes) {
 // Event listener for IntakeMealButton
 
 
-// Event listener for IntakeIngredientButton
-document.getElementById('IntakeIngredientButton').addEventListener('click', function() {
+document.getElementById('IntakeIngredientButton').addEventListener('click', function () {
     const intakeMealForm = document.getElementById('IntakeMealForm');
     const intakeIngredientForm = document.getElementById('IntakeIngredientForm');
-    const waterForm = document.getElementById('water-form');  // Get the water form
-
-    // Close the IntakeMealForm if it's open
+    const waterForm = document.getElementById('water-form');
     intakeMealForm.style.display = 'none';
-
-    // Close the WaterForm if it's open
     waterForm.style.display = 'none';
-
-    // Toggle visibility of IntakeIngredientForm
     intakeIngredientForm.style.display = intakeIngredientForm.style.display === 'none' ? 'block' : 'none';
 });
 
@@ -272,18 +254,20 @@ async function fetchNutritionalContent(foodId, sortKeys) {
         let sortKey = sortKeys[i];
         const apiUrl = `https://nutrimonapi.azurewebsites.net/api/FoodCompSpecs/ByItem/${foodId}/BySortKey/${sortKey}`;
         try {
-            console.log(`Fetching data for sortKey: ${sortKey}`); // Log the sort key being processed
+            console.log(`Fetching data for sortKey: ${sortKey}`);
             const response = await fetch(apiUrl, {
                 method: 'GET',
-                headers: { 'accept': 'text/plain', 
-                           'X-API-Key': '168917' }
+                headers: {
+                    'accept': 'text/plain',
+                    'X-API-Key': '168917'
+                }
             });
-            console.log(`Response for sortKey ${sortKey}:`, response); // Log the response
+            console.log(`Response for sortKey ${sortKey}:`, response);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            console.log(`Data for sortKey ${sortKey}:`, data); // Log the data
+            console.log(`Data for sortKey ${sortKey}:`, data);
             let value = parseFloat(data[0]?.resVal.replace(',', '.')) || 0;
             if (sortKey === '1030') nutrition.energy += value;
             if (sortKey === '1110') nutrition.protein += value;
@@ -291,7 +275,7 @@ async function fetchNutritionalContent(foodId, sortKeys) {
             if (sortKey === '1240') nutrition.fiber += value;
         } catch (error) {
             console.error(`Error fetching nutritional content for sortKey ${sortKey}:`, error);
-            throw error; // Ensure this error is caught in the calling function
+            throw error;
         }
     }
     return nutrition;
@@ -311,16 +295,16 @@ async function searchIngredients(query) {
         return await response.json();
     } catch (error) {
         console.error('Error fetching ingredients:', error);
-        throw error; // Propagate the error
+        throw error; 
     }
 }
 
 const ingredientInput = document.getElementById('ingredientInput');
 const ingredientWeightInput = document.getElementById('ingredientWeightInput');
 const ingredientDropdown = document.getElementById('ingredientDropdown');
-const submitButton2 = document.getElementById('submitIngredientIntakeMeal'); 
+const submitButton2 = document.getElementById('submitIngredientIntakeMeal');
 
-ingredientInput.addEventListener('input', async function() {
+ingredientInput.addEventListener('input', async function () {
     const query = ingredientInput.value.trim();
     if (query.length > 2) {
         try {
@@ -343,11 +327,9 @@ function updateIngredientDropdown(ingredientsInDropdown) {
     ingredientDropdown.style.display = ingredientsInDropdown.length > 0 ? 'block' : 'none';
 }
 
-submitButton2.addEventListener('click', function(event) {
+submitButton2.addEventListener('click', function (event) {
     event.preventDefault();
     submitButton2.disabled = true; // Disable the button to prevent multiple submissions
-
-    // Ensure processIngredientForm is an async function
     processIngredientForm().finally(() => {
         submitButton2.disabled = false; // Re-enable the button after processing
     });
@@ -368,10 +350,10 @@ async function processIngredientForm() {
         return;
     }
 
-    
+
     // Get the location first
-    navigator.geolocation.getCurrentPosition(async function(position) {
-        const longitude = position.coords.longitude.toFixed(3); 
+    navigator.geolocation.getCurrentPosition(async function (position) {
+        const longitude = position.coords.longitude.toFixed(3);
         const latitude = position.coords.latitude.toFixed(3); // 
         try {
             const nutrition = await fetchNutritionalContent(foodId, ['1030', '1110', '1310', '1240']);
@@ -382,9 +364,9 @@ async function processIngredientForm() {
             const fiberIntake = (nutrition.fiber / 100) * weightConsumed;
 
             const currentDate = new Date();
-            const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
-            const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
-            const year = currentDate.getFullYear().toString().slice(-2); // Take the last two digits of the year
+            const day = ('0' + currentDate.getDate()).slice(-2); 
+            const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); 
+            const year = currentDate.getFullYear().toString().slice(-2); 
 
             const intakeIngredient = {
                 ingredientCounter,
@@ -395,9 +377,9 @@ async function processIngredientForm() {
                 consumedFat: fatIntake.toFixed(2),
                 consumedFiber: fiberIntake.toFixed(2),
                 dateAdded: `${day}/${month}/${year}`,
-                timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'}),
+                timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
                 location: `Latitude: ${latitude}, Longitude: ${longitude}`,
-              
+
             };
             saveIngredientIntake(intakeIngredient);
         } catch (error) {
@@ -405,7 +387,7 @@ async function processIngredientForm() {
         } finally {
             clearIngredientForm();
         }
-    }, function(error) {
+    }, function (error) {
         alert('Unable to retrieve location. Please ensure location services are enabled and try again.');
         console.error('Geolocation error:', error);
     });
@@ -425,28 +407,18 @@ function saveIngredientIntake(intakeIngredient) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(intakeIngredient)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to save ingredient intake: ' + response.statusText);
-        }
-        console.log('Ingredient intake saved successfully');
-        fetchMealIntakes();
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to save ingredient intake: ' + response.statusText);
+            }
+            console.log('Ingredient intake saved successfully');
+            fetchMealIntakes();
 
-    })
-    .catch(error => {
-        console.error('There was a problem saving the ingredient intake:', error);
-    });
+        })
+        .catch(error => {
+            console.error('There was a problem saving the ingredient intake:', error);
+        });
 }
-
-
-
-
-/*function saveIngredientIntake(intakeIngredient) {
-    const existingIntakes = JSON.parse(localStorage.getItem('ingredientIntakes')) || [];
-    existingIntakes.push(intakeIngredient);
-    localStorage.setItem('ingredientIntakes', JSON.stringify(existingIntakes));
-    displayIngredientIntakes();
-}*/
 
 function clearIngredientForm() {
     ingredientInput.value = '';
@@ -460,12 +432,10 @@ function clearIngredientForm() {
 // Krav F 
 // Delete intakes 
 
-// This script should be placed inside a <script> tag or an external JS file that is loaded after the HTML elements are available in the DOM
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const intakeEntriesContainer = document.querySelector('.intake-entries');
 
-    intakeEntriesContainer.addEventListener('click', function(event) {
+    intakeEntriesContainer.addEventListener('click', function (event) {
         if (event.target.closest('.delete-intake-btn')) {
             const deleteBtn = event.target.closest('.delete-intake-btn');
             const consumedId = deleteBtn.getAttribute('data-meal-number');
@@ -479,44 +449,38 @@ document.addEventListener('DOMContentLoaded', function() {
             const editBtn = event.target.closest('.edit-intake-btn');
             const consumedId = editBtn.getAttribute('data-meal-number');
             console.log(`Edit button clicked for intake ID: ${consumedId}`);
-            // Implement your edit functionality here
         }
     });
 });
 
 function deleteIntake(consumedId) {
-    const userId = sessionStorage.getItem('userId');  // Ensure you have the user's ID stored in sessionStorage
+    const userId = sessionStorage.getItem('userId'); 
     fetch(`/mealtracker1/${userId}/intake/${consumedId}`, {
         method: 'DELETE'
     })
-    .then(response => {
-        if (response.ok) {
-            console.log('Intake deleted successfully');
-            document.querySelector(`button[data-meal-number="${consumedId}"]`).closest('.intake-entry').remove();
-        } else {
-            return response.json().then(data => {
-                throw new Error(data.error);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error deleting meal intake:', error);
-        alert('Failed to delete intake: ' + error.message);
-    });
-  }
-  
+        .then(response => {
+            if (response.ok) {
+                console.log('Intake deleted successfully');
+                document.querySelector(`button[data-meal-number="${consumedId}"]`).closest('.intake-entry').remove();
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.error);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting meal intake:', error);
+            alert('Failed to delete intake: ' + error.message);
+        });
+}
+
 
 // Edit intakes
 function openEditForm(consumedId, name, time) {
-    // Fyld formularen med de aktuelle oplysninger
     document.getElementById('editName').value = name;
     document.getElementById('editTime').value = time;
-
-    // Gem consumedId i formulardataattributter for senere brug ved indsendelse
     const form = document.getElementById('editIntakeForm');
     form.dataset.consumedId = consumedId;
-
-    // Vis redigeringsmodalen
     document.getElementById('editModal').style.display = 'block';
 }
 
@@ -528,23 +492,18 @@ function closeModal() {
 }
 
 function submitEditForm(event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const form = document.getElementById('editIntakeForm');
     const consumedId = form.dataset.consumedId;
     const updatedName = document.getElementById('editName').value;
-
-    // Get the input time value
     const inputTime = document.getElementById('editTime').value;
 
-    // Validate the input time value
     const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(inputTime)) {
         alert('Invalid time format. Please enter time in HH:MM format (e.g., 20:00).');
         return;
     }
-
-    // Parse hours and minutes from the input time value
     const [hours, minutes] = inputTime.split(':').map(Number);
 
     // Create a new Date object with the current date and parsed hours and minutes
@@ -568,29 +527,28 @@ function submitEditForm(event) {
         },
         body: JSON.stringify(data)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to update intake');
-        }
-        console.log('Intake updated successfully');
-        closeModal();
-        fetchMealIntakes();
-    })
-    .catch(error => {
-        console.error('Error updating intake:', error);
-        alert('Failed to update intake: ' + error.message);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update intake');
+            }
+            console.log('Intake updated successfully');
+            closeModal();
+            fetchMealIntakes();
+        })
+        .catch(error => {
+            console.error('Error updating intake:', error);
+            alert('Failed to update intake: ' + error.message);
+        });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const logoutButton = document.getElementById('logoutButton');
-    logoutButton.addEventListener('click', function() {
+    logoutButton.addEventListener('click', function () {
         confirmLogout();
     });
 });
 
 function confirmLogout() {
-    // Display confirmation dialog
     if (confirm('Are you sure you want to log out?')) {
         logoutUser();
     }
@@ -600,23 +558,18 @@ function logoutUser() {
     // Clear specific sessionStorage item
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('username');
-
-    // Optionally clear all session storage
-    // sessionStorage.clear();
-
-    // Redirect to login page
     window.location.href = '/NutriHome.html';
 }
 
 
-// tRack water intake 
+// Track water intake 
 
 // post water intake to the database
 document.getElementById('addWater').addEventListener('click', addWaterIntake);
 
 async function addWaterIntake() {
     const waterMl = document.getElementById('waterMl').value;
-    const userId = sessionStorage.getItem('userId'); // Assuming user ID is stored in session storage
+    const userId = sessionStorage.getItem('userId'); 
 
     if (!userId) {
         console.error('No user ID found in sessionStorage.');
@@ -631,11 +584,11 @@ async function addWaterIntake() {
             },
             body: JSON.stringify({ waterAmount_ml: parseInt(waterMl) })
         });
-        
+
         if (response.ok) {
             const result = await response.json();
             alert('Water intake added successfully');
-            fetchWaterHistory(); // Refresh the water history
+            fetchWaterHistory(); 
         } else {
             throw new Error('Failed to add water intake');
         }
@@ -668,7 +621,7 @@ async function fetchWaterHistory() {
 
 function displayWaterHistory(data) {
     const waterHistoryDiv = document.getElementById('water-history');
-    waterHistoryDiv.innerHTML = ''; // Clear previous entries
+    waterHistoryDiv.innerHTML = ''; 
 
     if (data.length > 0) {
         const ul = document.createElement('ul');
@@ -686,24 +639,22 @@ function toggleWaterHistory() {
     const waterHistoryElement = document.getElementById('water-history');
     const toggleButton = document.getElementById('show-water-history');
 
-    // Add null checks to prevent errors if elements are not found
     if (!waterHistoryElement || !toggleButton) {
         console.error('One or more elements are missing.');
-        return; // Exit the function if elements are not found
+        return; 
     }
 
     if (waterHistoryElement.style.display === 'none') {
         waterHistoryElement.style.display = 'block';
-        toggleButton.innerText = 'Hide Water Intakes'; // Set text to 'Hide'
-        fetchWaterHistory(); // Refresh the water history data
+        toggleButton.innerText = 'Hide Water Intakes'; 
+        fetchWaterHistory();
     } else {
         waterHistoryElement.style.display = 'none';
-        toggleButton.innerText = 'Show Water Intakes'; // Set text to 'Show'
+        toggleButton.innerText = 'Show Water Intakes';
     }
 }
 
-// Ensure the DOM is fully loaded before adding the event listener
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const toggleButton = document.getElementById('show-water-history');
     if (toggleButton) {
         toggleButton.addEventListener('click', toggleWaterHistory);
@@ -712,18 +663,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('waterButton').addEventListener('click', function() {
+document.getElementById('waterButton').addEventListener('click', function () {
     const intakeMealForm = document.getElementById('IntakeMealForm');
     const intakeIngredientForm = document.getElementById('IntakeIngredientForm');
     const waterForm = document.getElementById('water-form');
-
-    // Close the IntakeMealForm if it's open
     intakeMealForm.style.display = 'none';
-
-    // Close the IntakeIngredientForm if it's open
     intakeIngredientForm.style.display = 'none';
-
-    // Toggle visibility of WaterForm
     waterForm.style.display = waterForm.style.display === 'none' ? 'block' : 'none';
 });
 
