@@ -10,8 +10,8 @@ describe('User Creation', function() {
     describe('POST /users/signuppage', function() {
         it('should create a new user if the user does not already exist', async function() {
             const newUser = {
-                username: 'Abekat',
-                email: 'Abekat@gmail.com',
+                username: 'Abekat2',
+                email: 'Abekat@gmail.com2',
                 password: 'password',
                 fullName: 'Test User',
                 birthdate: '1900-01-01',
@@ -47,6 +47,26 @@ describe('User Creation', function() {
             res.body.should.be.an('object');
             res.body.should.have.property('message').eql('Username or email already exists');
         });
+        it('should not create a user if required fields are missing', async function() {
+            const incompleteUser = {
+                // Omitting the username and password to simulate incomplete form submission
+                email: 'newuser@example.com',
+                fullName: 'Incomplete User',
+                birthdate: '1990-01-01',
+                gender: 'male',
+                weight: 70
+            };
+
+            const res = await chai.request(server)
+                .post('/users/signuppage')
+                .send(incompleteUser);
+
+            // Assuming the server sends back a 400 Bad Request status for incomplete data
+            res.should.have.status(400);
+            res.body.should.be.an('object');
+            res.body.should.have.property('message').eql('Please fill in all required fields!');
+        });
     });
 });
-
+        
+    

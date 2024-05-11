@@ -20,17 +20,22 @@ router.get('/', async (_, res) => {
 });
 
 router.post('/signuppage', async (req, res) => {
-  const signupData = req.body;
-  console.log(`Signup Data: ${JSON.stringify(signupData)}`);
+  const { username, email, password, fullName, birthdate, gender, weight } = req.body;
+  console.log(`Signup Data: ${JSON.stringify(req.body)}`);
+
+  // Check if all required fields are filled
+  if (!username || !email || !password || !fullName || !birthdate || !gender || !weight) {
+      return res.status(400).json({ message: 'Please fill in all required fields!' });
+  }
 
   try {
       // Check if user already exists
-      const exists = await database.userExists(signupData.username, signupData.email);
+      const exists = await database.userExists(username, email);
       if (exists) {
           return res.status(409).json({ message: 'Username or email already exists' });
       }
 
-      const rowsAffected = await database.create(signupData);
+      const rowsAffected = await database.create(req.body);
       if (rowsAffected > 0) {
           res.status(201).json({ message: 'Signup successful!' });
       } else {
@@ -42,6 +47,7 @@ router.post('/signuppage', async (req, res) => {
       res.status(500).json({ error: err?.message || 'Server error during signup' });
   }
 });
+
 
 
 // I users.js
