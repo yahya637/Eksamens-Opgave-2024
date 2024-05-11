@@ -117,6 +117,22 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: err.message || 'Error during deletion' });
   }
 });
+// DELETE endpoint in your user router
+router.delete('/:id', async (req, res) => {
+  const userId = req.params.id;
+  const userExists = await database.checkUserExists(userId); // Implement this function
+
+  if (!userExists) {
+      return res.status(404).send('User not found');
+  }
+
+  const deleteResult = await database.deleteUser(userId); // Implement this function
+  if (deleteResult) {
+      res.status(204).send();
+  } else {
+      res.status(500).send('Error deleting user');
+  }
+});
 
 
 
