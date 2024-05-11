@@ -10,8 +10,8 @@ describe('User Creation', function() {
     describe('POST /users/signuppage', function() {
         it('should create a new user if the user does not already exist', async function() {
             const newUser = {
-                username: 'Abekat2',
-                email: 'Abekat@gmail.com2',
+                username: 'Hej2',
+                email: 'hej@gmail.com2',
                 password: 'password',
                 fullName: 'Test User',
                 birthdate: '1900-01-01',
