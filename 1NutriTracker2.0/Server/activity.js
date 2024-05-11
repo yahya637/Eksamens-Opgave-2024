@@ -6,14 +6,11 @@ const router = express.Router();
 
 router.use(express.json());     
 
-// From index.js the endpoint is /activities
-// Create database object
 const database = new Database(config);
 
 // GET  Activities
 router.get('/', async (_, res) => {
     try {
-      // Fetch activities from the activity tracker
       const activities = await database.getAllActivitiesFromTracker();
       console.log('Activities from fetched successfully!');
       res.status(200).json(activities);
@@ -28,7 +25,6 @@ router.get('/', async (_, res) => {
     console.log(`User Activity Data: ${JSON.stringify(userActivityData)}`);
   
     try {
-      // Check if the user exists
       const userExists = await database.userExistsById(userActivityData.user_id);
       if (!userExists) {
         return res.status(404).json({ message: 'User not found' });
@@ -82,7 +78,6 @@ router.post('/bmr', async (req, res) => {
   console.log(`BMR Data: ${JSON.stringify(bmrData)}`);
 
   try {
-    // Check if the user exists
     const userExists = await database.userExistsById(bmrData.user_id);
     if (!userExists) {
       return res.status(404).json({ message: 'User not found' });

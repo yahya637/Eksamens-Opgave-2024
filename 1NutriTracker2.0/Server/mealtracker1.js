@@ -5,7 +5,6 @@ import Database from './database.js';
 const router = express.Router();
 router.use(express.json());
 
-// Create database object
 const database = new Database(config);
 
 // GET user Meals by user ID
@@ -29,7 +28,6 @@ router.post('/:userId/register', async (req, res) => {
   console.log('Creating new intake for user', userId, ':', intakeDetails);
 
   try {
-      // Assuming database.createIntake(userId, intakeDetails) creates a new intake for the user
       const newIntake = await database.createIntake(userId, intakeDetails);
       res.status(201).json(newIntake);
   } catch (err) {
@@ -56,7 +54,7 @@ router.post('/:userId/register/ingredient', async (req, res) => {
 
 
 
-// GET User meals by user ID, optionally filtered by meal ID
+// GET User meals by user ID filtered by meal ID
 router.get('/:userId/intake', async (req, res) => {
   const userId = req.params.userId;
   const mealId = req.query.mealId; // Obtain mealId from query parameters if it exists
@@ -124,7 +122,6 @@ router.get('/:userId/water', async (req, res) => {
   console.log('getting water intake for user', userId);
 
   try {
-      // Assuming database.createIntake(userId, intakeDetails) creates a new intake for the user
       const intake = await database.getWaterIntake(userId);
       res.status(201).json(intake);
   } catch (err) {
@@ -136,12 +133,11 @@ router.get('/:userId/water', async (req, res) => {
 // POST water intake for user  
 router.post('/:userId/water', async (req, res) => {
   const userId = req.params.userId;
-  const intakeDetails = req.body; // Antages at være i formatet { date: 'YYYY-MM-DD', amount: 250 }
+  const intakeDetails = req.body; 
 
   console.log('Creating water intake', userId);
 
   try {
-    // Opretter et nyt indtag for brugeren
     await database.createWaterIntake(userId, intakeDetails);
     res.status(201).json({ message: 'Water intake created' });
   } catch (err) {

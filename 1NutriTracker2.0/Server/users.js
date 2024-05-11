@@ -5,7 +5,6 @@ import Database from './database.js';
 const router = express.Router();
 router.use(express.json());
 
-// Create database object
 const database = new Database(config);
 
 router.get('/', async (_, res) => {
@@ -39,7 +38,6 @@ router.post('/signuppage', async (req, res) => {
       if (rowsAffected > 0) {
           res.status(201).json({ message: 'Signup successful!' });
       } else {
-          // If no rows were affected, it means the user was not created.
           res.status(400).json({ message: 'Signup failed' });
       }
   } catch (err) {
@@ -50,7 +48,7 @@ router.post('/signuppage', async (req, res) => {
 
 
 
-// I users.js
+// users.js post login endpoint
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -58,7 +56,7 @@ router.post('/login', async (req, res) => {
     if (loginResult.success) {
       req.session.userId = loginResult.user_id;  
       req.session.username = loginResult.username;
-      res.status(200).json({ message: 'Login successful', username: loginResult.username, user_id: loginResult.user_id });  // Tilføj user_id til respons
+      res.status(200).json({ message: 'Login successful', username: loginResult.username, user_id: loginResult.user_id });  
     } else {
       res.status(401).json({ message: loginResult.message });
     }
@@ -119,20 +117,21 @@ router.delete('/:id', async (req, res) => {
       res.status(404).json({ message: "User not found" });
     }
   } catch (err) {
-    console.error("Deletion error:", err); // Log detailed error
+    console.error("Deletion error:", err); 
     res.status(500).json({ error: err.message || 'Error during deletion' });
   }
 });
-// DELETE endpoint in your user router
+
+// DELETE endpoint for user route
 router.delete('/:id', async (req, res) => {
   const userId = req.params.id;
-  const userExists = await database.checkUserExists(userId); // Implement this function
+  const userExists = await database.checkUserExists(userId); 
 
   if (!userExists) {
       return res.status(404).send('User not found');
   }
 
-  const deleteResult = await database.deleteUser(userId); // Implement this function
+  const deleteResult = await database.deleteUser(userId); 
   if (deleteResult) {
       res.status(204).send();
   } else {
@@ -140,22 +139,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-
-
-// FUNGERER IKKE DETTE VIRKER IKKE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Middleware til at tjekke om brugeren er logget ind
-function ensureLoggedIn(req, res, next) {
-  if (req.session.userId) {
-      next();
-  } else {
-      res.redirect('../NutriHome.html'); 
-  }
-}
-
-// Brug dette middleware på beskyttede routes DETTE VIRKER IKKE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-router.get('/protected-route', ensureLoggedIn, (req, res) => {
-  res.send('This is a protected content.');
-});
 
 
 export default router;

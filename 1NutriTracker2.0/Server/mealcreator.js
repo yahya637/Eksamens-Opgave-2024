@@ -5,7 +5,6 @@ import Database from './database.js';
 const router = express.Router();
 router.use(express.json());
 
-// Create database object
 const database = new Database(config);
 
 
@@ -14,7 +13,7 @@ router.get('/:userId', async (req, res) => {
   console.log(`Fetching meals for user ID: ${userId}`);
 
   try {
-      const createdMeals = await database.getAllMealsForMealtrackerByUserId(userId); // Reusing same function. 
+      const createdMeals = await database.getAllMealsForMealtrackerByUserId(userId); // Fetch all meals for the user
       res.status(200).json(createdMeals);
   } catch (err) {
       console.error('Error fetching user meals:', err);
@@ -27,7 +26,7 @@ router.post('/saveMeal', async (req, res) => {
   console.log("Received meal data:", req.body); // Check if the data is what you expect
     try {
       const mealData = req.body;
-      console.log('Received meal data:', mealData);  // Confirm the structure of received data
+      console.log('Received meal data:', mealData);  
   
       const saveResult = await database.saveMeal(mealData);
       if (saveResult.success) {

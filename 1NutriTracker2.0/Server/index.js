@@ -15,40 +15,14 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(session({
-  secret: 'your_secret_key', // ÆNDRES??????????????????????
+  secret: 'your_secret_key', 
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 2 } // maxAge: 2 days in milliseconds (1000ms * 60s * 60m * 24h * 2d)
+  cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24} // 1 days in milliseconds 
 }));
 
-// Alt nedenunder til næste kommentar skal rettes, fungerer ikke korrekt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.use(express.static(path.join(__dirname, "../Public")));
 
-function ensureLoggedIn(req, res, next) {
-  console.log("Checking logged in status for", req.path);
-  if (req.session.userId) {
-    next();
-  } else {
-    res.redirect('/LogInPage.html');
-  }
-}
-
-const protectedRoutes = ['/MyProfile.html', '/Daily.html', '/1NutriTracker2.0\Public\MealCreator2.0.html', '/ActivityTracker.html', '/MealTracker2.0.html'];
-
-protectedRoutes.forEach(route => {
-  app.get(route, ensureLoggedIn, (req, res) => {
-    const filePath = path.join(__dirname, '../Public', route);
-    res.sendFile(filePath, err => {
-      if (err) {
-        console.error('Error sending file:', err);
-        res.status(500).send('Internal Server Error');
-      }
-    });
-  });
-});
- // Skal rettes fungerer ikke, man kan stadig komme ind på de forskellige html sider uden at være logget ind !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-// 
 app.use("/users", users);
 app.use("/activities", activityRouter); 
 app.use("/mealcreator", mealcreator);
