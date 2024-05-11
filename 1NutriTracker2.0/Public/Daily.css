@@ -172,7 +172,7 @@ button:hover{
    display: flex;
    align-items: center;
    justify-content: center;
-   gap: 60px; /* Adjusts the gap between the links */
+   gap: 60px; 
 }
 
 .navbar a {
@@ -205,7 +205,6 @@ button:hover{
 
 
 /** Table Styling 24**/
-
 #mealDetailsTable24 {
    width: 60em;
    border-collapse: collapse;
@@ -245,7 +244,6 @@ button:hover{
 }
 
 /** Table Styling Daily**/
-
 #mealDetailsTableDaily {
    width: 60em;
    border-collapse: collapse;

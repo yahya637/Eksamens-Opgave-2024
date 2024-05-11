@@ -1,7 +1,5 @@
- /* Importing the specified font from Google Fonts */
  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
- /* Base styles for the entire page */
  body {
      font-family: 'Nunito', sans-serif;
      background-color: whitesmoke;
@@ -194,8 +192,8 @@ button:hover{
     border-radius: 10px;
     font-size: 16px;
     background-color: #F2FFF5;
-    width: calc(100% - 24px); /* Adjust width considering padding and border */
-    display: none; /* Initially hidden */
+    width: calc(100% - 24px); 
+    display: none; 
 }
 
 /* Styles for the add ingredient button */
@@ -206,7 +204,7 @@ button:hover{
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    background-color: #599bd5; /* Blue color for the button */
+    background-color: #599bd5; 
     margin-bottom: 10px;
 }
 
@@ -215,7 +213,6 @@ button:hover{
     text-decoration: underline;
 }
 
-/* Styles for the weight label */
 #ingredientWeightLabel {
     font-size: 18px;
     font-weight: bold;
@@ -223,7 +220,6 @@ button:hover{
     margin-bottom: 10px;
 }
 
-/* Styles for the Ingredient Weight input field */
 #ingredientWeightInput {
     padding: 10px;
     border: 2px solid #91c789; 
@@ -290,7 +286,7 @@ button:hover{
 }
 .meal-header, .meal-entry {
     display: grid;
-    grid-template-columns: 250px 100px 80px 80px 80px 90px 100px auto;  /* Increased width for # Ingredients */
+    grid-template-columns: 250px 100px 80px 80px 80px 90px 100px auto;
     gap: 10px;
     align-items: center;
     padding: 10px;
@@ -300,19 +296,16 @@ button:hover{
 }
 
 
-.meal-header > span, .meal-entry > div, .meal-entry > button {
+.meal-header > span, .meal-entry > div, .meal-entry > button { 
     text-align: center;
-    overflow-wrap: break-word;  /* Ensures text wraps within the cell */
-    word-break: break-word;  /* Breaks words that are too long for the line */
-    hyphens: auto;  /* Automatically add hyphens where appropriate */
+    overflow-wrap: break-word;  
+    word-break: break-word;  
+    hyphens: auto; 
 }
+
 #a{
     font-size: 16px;
 }
-
-
-
-
 
 .show-details-btn {
     border: none;
@@ -381,8 +374,7 @@ button:hover{
 }
 
 
-/* Styles for the detials boks and button */
-/* Enhanced styles for the details box and buttons */
+/* Styles for the detials box and button */
 .show-details-btn {
     padding: 12px 24px;
     border: none;
@@ -471,7 +463,6 @@ h4 {
 
 
 /* Styles for the showcase all ingredients button */
-/* Overlay container */
 #ingredientsInfo { 
     position: fixed;
     top: 50%;
@@ -502,7 +493,6 @@ h4 {
     padding: 12px 20px;
     border-bottom: 1px solid #DDD; 
     transition: background-color 0.3s ease; 
-    /* tilføjer en smooth overgnag */
 }
 
 #foodItemsContainer li:hover {

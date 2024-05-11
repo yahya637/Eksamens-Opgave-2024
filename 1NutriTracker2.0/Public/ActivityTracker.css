@@ -1,6 +1,4 @@
-  /* Importing the specified font from Google Fonts */
- @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
- /* Base styles for the entire page */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
  body {
      font-family: 'Nunito', sans-serif;
      background-color: whitesmoke;
@@ -229,8 +227,8 @@ select {
   
   section {
     display: flex; 
-    align-items: center; /* Aligns children vertically in the center */
-    gap: 10px; /* Adds space between the children */
+    align-items: center; 
+    gap: 10px; 
   }
   .auto-filled-info {
     display: none;
@@ -338,7 +336,7 @@ select {
     text-decoration: none;
 }
 
-/* test */
+
 #bmr-form {
     display: flex;
     flex-direction: column;
@@ -367,36 +365,36 @@ select {
     height: 20px; 
     border-radius: 50%;
     background-color: #eee;
-    border: 2px solid #569bd5; /* Blue border */
-    position: relative; /* Allows absolute positioning of child elements */
+    border: 2px solid #569bd5; 
+    position: relative;
     cursor: pointer;
 }
 .gender-container {
     display: flex;
-    align-items: center; /* Vertical alignment */
-    /* Remove gap if you want the label closer to the radio buttons */
+    align-items: center;
+   
 }
 
-/* Style for the gender label specifically */
+
 .gender-label {
-    margin-bottom: 0; /* Removes any margin below the label, if previously set */
-    white-space: nowrap; /* Ensures the text doesn't wrap */
+    margin-bottom: 0;
+    white-space: nowrap;
 }
-/* Inner circle, hidden by default */
+
 .radio-custom:after {
     content: '';
     position: absolute;
-    width: 12px; /* Size of inner circle */
-    height: 12px; /* Size of inner circle */
-    background-color: #569bd5; /* Blue inner circle */
+    width: 12px;
+    height: 12px;
+    background-color: #569bd5;
     border-radius: 50%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centers the inner circle */
+    transform: translate(-50%, -50%);
     display: none;
 }
 
-/* Show the inner circle when radio button is checked */
+
 .radio-option input[type="radio"]:checked + .radio-custom::after {
     display: block;
 }
@@ -457,16 +455,16 @@ select {
     float: right;
     font-size: 16px;
     padding: 0 5px;
-    margin-left: 10px; /* Adjust as needed to ensure clear separation from the slider */
+    margin-left: 10px;
     font-size: 16px;
     color: #2b2b2b;
     font-weight: bold;
     background-color: transparent;
     border: none;
     outline: none;
-    width: 60px; /* Ensure the width is enough to display the number */
+    width: 60px;
     text-align: center;
-    margin-right: 25px; /* Adjust as needed to ensure clear separation from the slider */
+    margin-right: 25px;
     
     
 }

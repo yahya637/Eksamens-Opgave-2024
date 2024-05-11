@@ -21,8 +21,8 @@ body{
 }
 
 .logo {
-    position: absolute; /* Absolute positioning to place the logo */
-    left: 40px; /* Space from the left edge */
+    position: absolute; 
+    left: 40px; 
     color: #91c789;
     font-size: 30px;
     font-weight: 700;
@@ -35,7 +35,7 @@ body{
     color: #000;
     font-size: 20px;
     font-weight: 700;
-    padding: 0 60px; /* Provides space between the links */
+    padding: 0 60px; 
     transition: all 0.3s ease;
     
 }
@@ -61,7 +61,7 @@ p {
     color: #000;
     font-size: 20px;
     font-weight: 700;
-    padding: 0 60px; /* Provides space between the links */
+    padding: 0 60px; 
     transition: all 0.3s ease;
     
 }
