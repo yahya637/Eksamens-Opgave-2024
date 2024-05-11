@@ -15,7 +15,7 @@ async function getActivities() {
         }
         const activities = await response.json();
         populateDropdown(activities);
-        fetchUserActivities(); // Fetch and display the user's existing activities after populating the dropdown
+        fetchUserActivities(); 
     } catch (error) {
         console.error('There was a problem fetching the activities:', error);
         document.getElementById('activity-select').innerHTML = '<option>Error loading activities</option>';
@@ -24,16 +24,14 @@ async function getActivities() {
 
 // We also need to display the alredy registered activities in the <ul> list
 // Therefor we need to fetch the activities from the server and display them in the list
-
-
 function populateDropdown(activities) {
     const select = document.getElementById('activity-select');
-    select.innerHTML = ''; // Clear existing options
+    select.innerHTML = ''; 
     activities.forEach(activity => {
         const option = document.createElement('option');
         option.value = activity.activity_id;
         option.textContent = `${activity.name} (${activity.kcalPerHour} kcal/h)`;
-        option.setAttribute('data-kcal', activity.kcalPerHour); // Set kcalPerHour as a data attribute
+        option.setAttribute('data-kcal', activity.kcalPerHour); 
         select.appendChild(option);
     });
 }
@@ -51,7 +49,6 @@ function handleActivitySubmission() {
 
     const caloriesBurned = (kcalPerHour / 60) * duration;
 
-    // Store the activity data including the calculated end time
     storeActivityData({
         user_id: sessionStorage.getItem('userId'),
         activity_id: activityId,
@@ -61,13 +58,12 @@ function handleActivitySubmission() {
     });
 
     alert('Meal saved and displayed successfully')
-
 }
 
 document.getElementById('add-activity').addEventListener('click', handleActivitySubmission);
 
 function storeActivityData(data) {
-    fetch('/activities', { // Adjust URL as needed based on your API endpoint setup
+    fetch('/activities', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -77,7 +73,7 @@ function storeActivityData(data) {
     .then(response => response.json())
     .then(data => {
         console.log('User tried to create an activty:', data);
-        fetchUserActivities(); // Fetch and display the updated list of user activities
+        fetchUserActivities(); 
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
@@ -85,8 +81,6 @@ function storeActivityData(data) {
 }
 
 // Lastly i need to display the activities in the <ul> list
-// Therefor i need to fetch the activities from the server and display them in the list
-
 function fetchUserActivities() {
     let user_id = sessionStorage.getItem('userId');
     if (!user_id) {
@@ -118,7 +112,7 @@ function displayUserActivities(activities) {
     activities.forEach(activity => {
         // Check if activity_name is not null or undefined
         if (activity.activity_name) {
-            const activityNameWithoutKcal = activity.activity_name.replace(/\(\d+ kcal\/h\)/, '').trim(); // Remove kcal/h from activity name
+            const activityNameWithoutKcal = activity.activity_name.replace(/\(\d+ kcal\/h\)/, '').trim(); // . trim removes kcal/h from activity name
             const listItem = document.createElement('li');
             listItem.classList.add('activity-item');
             listItem.innerHTML = `
@@ -128,14 +122,10 @@ function displayUserActivities(activities) {
             `;
             activitiesList.appendChild(listItem);
         } else {
-            // Handle the case where activity_name is null or undefined
-            // You may want to log this case or display a placeholder
             console.log('Activity name is null for activity:', activity);
         }
     });
 }
-
-// Extra functionality:
 
 const showActivityTrackerButton = document.getElementById('registerButton');
 const activityTrackerForm = document.getElementById('activity-form');
@@ -148,12 +138,12 @@ function toggleForm(formToShow, formToHide) {
     } else {
         formToShow.style.display = 'none';
     }
-    formToHide.style.display = 'none'; // Always hide the other form
+    formToHide.style.display = 'none'; 
 }
 
 showActivityTrackerButton.addEventListener('click', function() {
     toggleForm(activityTrackerForm, BMRForm);
-    // Reset the 'chose an activity' dropdown after hiding the form
+    // reset the 'chose an activity' dropdown after hiding the form
     document.getElementById('activity-select').selectedIndex = 0;
     document.getElementById('duration').value = '';
 });
@@ -182,7 +172,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Krav 4.B - BMR Calculation
-
 // Function to calculate BMR for given inputs
 function calculateBMR(sex, age, weight) {
     let factor, base;
@@ -215,41 +204,30 @@ function calculateBMR(sex, age, weight) {
 }
 function displayBmrAndPost() {
     document.addEventListener('DOMContentLoaded', function() {
-        // Add event listener to the Calculate BMR button
         document.getElementById('calc-bmr').addEventListener('click', function() {
-            // Hide any previous success messages to avoid clutter and confusion
             hideMessage('success-message');
 
-            // Get input values from the form
             let age = parseInt(document.getElementById('age').value, 10);
             let weight = parseFloat(document.getElementById('weightOutputId').textContent);
             let sex = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : null;
 
-            // Check if all the inputs are filled
             if (age && weight && sex) {
-                // Calculate BMR
                 let bmrResults = calculateBMR(sex, age, weight);
-                // Update the BMR result on the page to show both MJ/day and kcal/day
                 document.getElementById('bmr-result').textContent = `${bmrResults.bmrMJ}  MJ/day   and   ${bmrResults.bmrKcal} Kcal/day`;
             } else {
                 alert('Please fill in all the fields.');
             }
         });
 
-        // Add event listener to the Store BMR button
         document.getElementById('store-bmr').addEventListener('click', function() {
-            // Get input values from the form
             let age = parseInt(document.getElementById('age').value, 10);
             let weight = parseFloat(document.getElementById('weightOutputId').textContent);
             let sex = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : null;
 
-            // Check if all the inputs are filled
+            
             if (age && weight && sex) {
-                // Calculate BMR
                 let bmrResults = calculateBMR(sex, age, weight);
-                // Get the user ID from localStorage
                 let userId = sessionStorage.getItem('userId');
-                // Send BMR data to the server
                 const bmrData = {
                     user_id: userId,
                     bmr_mj: bmrResults.bmrMJ,
@@ -280,14 +258,12 @@ function hideMessage(elementId) {
     const successMessage = document.getElementById(elementId);
     successMessage.style.display = 'none';
 }
-
-// Call the function to initialize the BMR calculator
+// call the function
 displayBmrAndPost();
 
 
 
 // I need to save the calculated BMR, with the User_id in the database
-
 async function storeBMRData(data) {
     return fetch('/activities/bmr', {
         method: 'POST',
@@ -306,7 +282,6 @@ async function storeBMRData(data) {
 }
 
 // GET all User calculated BMR, so the user can see the BMR history
-
 async function fetchUserBMR() {
     let user_id = sessionStorage.getItem('userId');
     if (!user_id) {
@@ -334,62 +309,50 @@ async function fetchUserBMR() {
 function displayUserBMR(bmrData) {
     const bmrHistoryElement = document.getElementById('bmr-history');
     
-    // Clear any existing content in the bmr-history div
     bmrHistoryElement.innerHTML = '';
 
     if (bmrData && bmrData.length > 0) {
-        // Create an unordered list element
         const ul = document.createElement('ul');
         
-        // Iterate over each BMR data point
         bmrData.forEach(data => {
-            // Create a new list item element for each BMR data point
             const li = document.createElement('li');
             
-            // Remove the time part from the calculation_date string
-            const datePart = data.calculation_date.replace(/T.*$/, '');
+            const datePart = data.calculation_date.replace(/T.*$/, ''); // .replace removes the time part of the date
 
-            // Set the content of the list item element
             li.textContent = `${data.bmr_mj} MJ/day, ${data.bmr_kcal} Kcal/day, Date: ${datePart}`;
             
-            // Append the list item element to the unordered list
             ul.appendChild(li);
         });
 
-        // Append the unordered list to the bmr-history div
         bmrHistoryElement.appendChild(ul);
     } else {
-        // If no BMR data found, display a message
         bmrHistoryElement.textContent = 'No BMR data available for this user.';
     }
 
-    // Display the bmr-history div
     bmrHistoryElement.style.display = 'block';
 }
 
 
 function toggleBMRHistory() {
     const bmrHistoryElement = document.getElementById('bmr-history');
-    const toggleButton = document.getElementById('show-bmr-history'); // Get the button element
+    const toggleButton = document.getElementById('show-bmr-history'); 
 
     if (bmrHistoryElement.style.display === 'none') {
         bmrHistoryElement.style.display = 'block';
-        toggleButton.innerText = 'Hide BMR History'; // Change button text to 'Hide'
-        fetchUserBMR(); // Call fetchUserBMR after showing the BMR history
+        toggleButton.innerText = 'Hide BMR History'; 
+        fetchUserBMR(); 
     } else {
         bmrHistoryElement.style.display = 'none';
-        toggleButton.innerText = 'Show BMR History'; // Change button text to 'Show'
+        toggleButton.innerText = 'Show BMR History'; 
     }
 }
 
-// Add event listener to the show/hide button
 document.getElementById('show-bmr-history').addEventListener('click', toggleBMRHistory);
 
 
 
 
-// Logout functionality
-
+// logout functionality
 document.addEventListener('DOMContentLoaded', function() {
     const logoutButton = document.getElementById('logoutButton');
     logoutButton.addEventListener('click', function() {
@@ -398,26 +361,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function confirmLogout() {
-    // Display confirmation dialog
     if (confirm('Are you sure you want to log out?')) {
         logoutUser();
     }
 }
 
 function logoutUser() {
-    // Clear specific sessionStorage item
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('username');
-
-    // Optionally clear all session storage
-    // sessionStorage.clear();
-
     // Redirect to login page
     window.location.href = '/NutriHome.html';
 }
 
-
-//ekstra fis
 document.addEventListener('DOMContentLoaded', function() {
     const infoButton = document.querySelector('.info-button');
     const infoText = document.querySelector('.auto-filled-info');

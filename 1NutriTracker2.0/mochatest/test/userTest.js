@@ -1,11 +1,10 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import server from '../../Server/index.js'; // Adjust the path as necessary
+import server from '../../Server/index.js';
 
 const should = chai.should();
 chai.use(chaiHttp);
 
-// Test for user creation
 describe('User Creation', function() {
     describe('POST /users/signuppage', function() {
         it('should create a new user if the user does not already exist', async function() {
@@ -49,7 +48,6 @@ describe('User Creation', function() {
         });
         it('should not create a user if required fields are missing', async function() {
             const incompleteUser = {
-                // Omitting the username and password to simulate incomplete form submission
                 email: 'newuser@example.com',
                 fullName: 'Incomplete User',
                 birthdate: '1990-01-01',
@@ -61,7 +59,6 @@ describe('User Creation', function() {
                 .post('/users/signuppage')
                 .send(incompleteUser);
 
-            // Assuming the server sends back a 400 Bad Request status for incomplete data
             res.should.have.status(400);
             res.body.should.be.an('object');
             res.body.should.have.property('message').eql('Please fill in all required fields!');

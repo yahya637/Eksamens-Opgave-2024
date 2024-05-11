@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <script src="auth.js"></script>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MealTracker</title>
     <link rel="stylesheet" href="MealTracker2.0.css">
     <script src="MealTracker2.0.js" defer></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
     <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
     <link href='https://unpkg.com/css.gg@2.0.0/icons/css/trash.css' rel='stylesheet'>
     <link href='https://unpkg.com/css.gg@2.0.0/icons/css/pen.css' rel='stylesheet'>
@@ -23,6 +25,7 @@
     </nav>
     <button id="logoutButton">Log Out</button>
 </header>
+
 <body>
 
 
@@ -32,14 +35,14 @@
             <h2>Meal Tracker</h2>
             <div class="button-row">
                 <button id="IntakeMealButton" title="Intake Meal">
-                    <i class="gg-add"></i>                </button>
+                    <i class="gg-add"></i> </button>
                 <button id="IntakeIngredientButton" title="Intake Ingredient">
                     <i class="gg-add"></i>
                 </button>
                 <button id="waterButton" title="Intake Water">
                     <span class="material-symbols-outlined">
                         water_drop
-                        </span>
+                    </span>
                 </button>
             </div>
         </div>
@@ -51,18 +54,16 @@
                 <label for="mealSelection">Select Meal:</label>
                 <select id="mealSelection" aria-placeholder="Select Created Meal">
                     <button onclick="fetchMealsFromDatabase()">Refresh Meals</button>
-
-                <!-- From localStorage, meals can be choosen -->
-                <option value="0" disabled selected>Select Created Meal ↓</option>
+                    <option value="0" disabled selected>Select Created Meal ↓</option>
                 </select>
 
                 <label for="mealWeight">Weight consumed (g):</label> <!-- How much of the meal consumed -->
                 <input type="number" id="consumedMealWeight" placeholder="Enter weight in grams">
 
-                
+
                 <!-- Date and time of when the intake took place (Krav d). Date and time will be submitted from javascript -->
                 <label for="intakeDateTime">Date and Time of Intake will be autofilled</label>
-                
+
                 <!-- Location of the intake (Krav e). This should be fetched from browsers Geolocation -->
                 <input type="hidden" id="intakeLocation">
 
@@ -80,29 +81,27 @@
                 <input type="text" id="ingredientInput" placeholder="Search for ingredients"><br><br>
 
                 <!-- Dropdown to show search results -->
-                <label id="ingredientDropdown-label" >Select Ingredient:</label>
+                <label id="ingredientDropdown-label">Select Ingredient:</label>
                 <select id="ingredientDropdown" size="7" style="display: none;"></select><br><br>
-            
+
                 <!-- Ingriedent weight -->
                 <label id="ingredientWeightLabel">Ingredient Weight (g):</label>
                 <input type="number" id="ingredientWeightInput" placeholder="Weight in grams">
-                        
+
                 <!-- Date and time of when the intake took place (Krav d). Date and time will be submitted from javascript -->
                 <label for="ingredientIntakeDateTime">Date and Time of Intake will be autofilled</label>
-                
+
                 <!-- Location of the intake (Krav e). This should be fetched from browsers Geolocation -->
                 <input type="hidden" id="ingredientIntakeLocation">
 
                 <button id="submitIngredientIntakeMeal">Submit</button>
 
             </form>
-                <div id="confirmationMessage" style="display:none;"></div>
+            <div id="confirmationMessage" style="display:none;"></div>
 
         </div>
+        <div id="water-form" style="display: none;">
 
-        <!-- After 2.0 i add the water inatke here in (ml) -->
-         <div id="water-form" style="display: none;">
-          
             <label for="waterMl" class="labelAT"> Water (ml.):</label>
             <input type="number" id="waterMl" class="form-input" placeholder="Enter the amount of water in ml">
             <div>
@@ -113,15 +112,14 @@
                 <div id="water-history" style="display: none;"></div>
 
             </div>
-            
+
         </div>
-        
+
 
 
 
         <div class="meal-grid">
             <div class="meal-table">
-                <!-- Table Header -->
                 <div class="meal-header">
                     <span>Intake Name</span>
                     <span>Weight & Energy</span>
@@ -130,7 +128,7 @@
                     <span>Location</span>
                     <span></span>
                 </div>
-        
+
                 <!-- Dynamic Meal Entries will appear here -->
                 <div class="intake-entries">
                     <!-- Meal entries generated by JavaScript will go here -->
@@ -146,26 +144,27 @@
                     <form id="editIntakeForm" onsubmit="submitEditForm(event)">
                         <label for="editName">Name:</label>
                         <input type="text" id="editName" name="name">
-                        
+
                         <label for="editTime">Time Consumed:</label>
                         <input type="time" id="editTime" name="time">
-                        
+
                         <button type="submit" class="edit-btn">Save Changes</button>
                     </form>
                 </div>
             </div>
-            
-            
 
-            
+
+
+
 
         </div>
-        
+
 
     </div>
     </div>
-  
+
 
 
 </body>
+
 </html>

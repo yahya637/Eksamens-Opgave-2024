@@ -11,581 +11,594 @@
  }
 
  #hjem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 2%;
-    background-color: #DEF6D8;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-   }
-  
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 20px 2%;
+     background-color: #DEF6D8;
+     position: fixed;
+     top: 0;
+     left: 0;
+     right: 0;
+     z-index: 100;
+ }
+
  .navbar {
-    display: flex;
-    gap: 3em;
+     display: flex;
+     gap: 3em;
 
-}
-
-   .logo {
-    color: #91c789;
-    font-size: 30px;
-    font-weight: 700;
-    text-decoration: none;
-    margin-top: 5px;
-    padding-left: 40px;
  }
- 
- 
+
+ .logo {
+     color: #91c789;
+     font-size: 30px;
+     font-weight: 700;
+     text-decoration: none;
+     margin-top: 5px;
+     padding-left: 40px;
+ }
+
+
  .navbar a {
-    text-decoration: none;
-    color: #000;
-    font-size: 20px;
-    font-weight: 700;
-    padding: 8px;
+     text-decoration: none;
+     color: #000;
+     font-size: 20px;
+     font-weight: 700;
+     padding: 8px;
  }
- 
+
  nav a:hover {
-    color: #76b66c;
-    text-shadow: 0px 0px 1px darkgreen;
+     color: #76b66c;
+     text-shadow: 0px 0px 1px darkgreen;
  }
- 
+
  #logoutButton {
-    background-color: #91c789;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: 700;
+     background-color: #91c789;
+     color: white;
+     border: none;
+     padding: 10px 20px;
+     cursor: pointer;
+     font-weight: 700;
  }
- 
+
  #logoutButton:hover {
-    background-color: #76b66c;
+     background-color: #76b66c;
  }
 
 
-.header-row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-}
-
-#mealTracker {
-    width: 70em;
-    margin: auto;
-    padding: 20px;
-    border: 2px solid #99d9de;
-    border-radius: 10px;
-    position: relative;
-    top: 150px;
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
-}
-
-
-
-/*Style for all button in html*/
-button{
-    padding: 12px 24px;
-    border: none;
-    border-radius: 15px;
-    transition: box-shadow 0.3s ease, transform 0.2s ease;
-    font-size: 16px;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.button-row {
-    display: flex;
-    gap: 10px;
-}
-
-button:hover{
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    transform: translateY(-2px);
-    text-decoration: none;
-}
-
-#IntakeMealButton {
-    background-color: #91c789;
-}
-
-#IntakeMealButton:hover {
-    background-color: #62885d;
-}
-
-#IntakeIngredientButton {
-    background-color: #ffab40;
-}
-
-#IntakeIngredientButton:hover {
-    background-color: #ffab90;
-}
-#waterButton {
-    background-color: #569bd5;
-}
-
-#waterButton:hover {
-    background-color: #0c5692;
-}
-/*This the whole table*/
-.meal-table {
-    margin-top: 15px;
-}
-
-.meal-header {
-    padding: 8px;
-    border-radius: 10px;
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 10px; 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;   
-    width: 50em;
-}
-
-.intake-entry {
-    padding: 8px;
-    background-color: #def6d8;
-    border-radius: 10px;
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 10px; 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;   
-}
-
- .intake-entry span, .meal-header span {
-    text-align: center;
-    width: 30%;
-
-}
-
-.intake-entry span {
-    width: 30%;
-    height: 30%;
-    text-align: center;
-    
-}
-.intake-entry2 {
-    padding: 8px;
-    background-color: #def6d8;
-    border-radius: 10px;
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 10px; 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;   
-}
-
- .intake-entry2 span, .meal-header span {
-    text-align: center;
-    width: 30%;
-
-}
-
-.intake-entry2 span {
-    width: 30%;
-    height: 30%;
-    text-align: center;
-    
-}
-
-
-/*Styles for meal intake form*/
-#IntakeMealForm {
-    opacity: 1;
-    transition: opacity 0.3s ease; }
-
-/* Styles for the labels within the form */
-#IntakeMealForm label {
-    font-size: 18px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-
-
-#mealSelection{
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #91c789; 
-    border-radius: 10px; 
-    font-size: 16px; 
-    margin-bottom: 20px; 
-    background-color: white; 
-    margin-bottom: 35px; 
-
-}
-
-/* Styles input fields within the form */
-#IntakeMealForm input[type="number"],
-#IntakeMealForm input[type="datetime-local"] {
-    padding: 10px;
-    border: 2px solid #91c789; 
-    border-radius: 10px; 
-    font-size: 16px; 
-    width: calc(100% - 24px); 
-    margin-bottom: 20px; 
-    background-color: white; 
-    margin-bottom: 35px; /
-}
-
-#mealIntakeType {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #91c789; 
-    border-radius: 5px; 
-    font-size: 16px; 
-    margin-bottom: 20px; 
-    background-color: white; 
-    margin-bottom: 35px; 
-}
-
-/* Focus state for inputs to highlight active element and change background */
-#IntakeMealForm select:focus,
-#IntakeMealForm input[type="number"]:focus,
-#IntakeMealForm input[type="datetime-local"]:focus {
-    border-color: #569BD5;
-    background-color: #ffffff;
-
-}
-
-/* Styles for the button within the form */
-#intakeDateTimeButton{ 
-    background-color: #24a0ed;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-bottom: 10px; 
-    font-size: 12px;
-}
-
-#intakeDateTimeButton:hover {
-    background-color: #1e86c7; 
-}
-
-#submitIntakeMeal {
-    background-color: #f29A8A;
-    padding: 10px 20px;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 10px; 
-}
-
-#submitIntakeMeal:hover {
-    background-color: #db8a7c; 
-}
-
-/* Styles indgredients form  */
-#IntakeIngredientForm label {
-    font-size: 18px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-
-#IntakeIngredientForm input[type="number"],
-#IntakeIngredientForm input[type="datetime-local"] {
-    padding: 10px;
-    border: 2px solid #91c789;
-    border-radius: 10px;
-    font-size: 16px;
-    width: calc(100% - 24px);
-    background-color: white;
-    margin-bottom: 35px;
-}
-
-#ingredientInput{
-    width: 20em;
-    padding: 10px;
-    border: 2px solid #91c789;
-    border-radius: 10px;
-    font-size: 16px;
-    margin-bottom: 20px;
-    background-color: white;
-    margin-bottom: 35px;
-}
-#ingredientDropdown-label {
-    font-size: 18px;
-    font-weight: bold;
-    
-}
-
-/* Styles for the ingredient dropdown */
-#ingredientDropdown {
-    padding: 10px;
-    border: 2px solid #91c789;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #F2FFF5;
-    width: 20em;
-    display: none; /* initially hidden */
-}
-
-#IntakeIngredientForm select:focus,
-#IntakeIngredientForm input[type="number"]:focus{
-    border-color: #569BD5;
-    box-shadow: 0 0 8px #569BD5;
-    background-color: #F2FFF5;
-}
-
-#ingredientIntakeDateTimeButton {
-    background-color: #24a0ed;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-bottom: 10px;
-}
-
-#ingredientIntakeDateTimeButton:hover {
-    background-color: #1e86c7;
-}
-
-#submitIngredientIntakeMeal {
-    background-color: #f29A8A;
-    padding: 10px 20px;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-#submitIngredientIntakeMeal:hover {
-    background-color: #db8a7c;
-}
-
-/* Styles for the delete and edit buttons */
-/* Container for buttons */
-.intake-buttons-container {
-    display: flex; 
-    justify-content: space-around; 
-    align-items: center; 
-    margin-bottom: 10px; 
-}
-
-/* General button styles */
-.delete-intake-btn, .edit-intake-btn {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    display: inline-flex;
-    align-items: center; 
-    justify-content: center; 
-    width: 40px;
-    height: 40px;
-    margin: 0 10px; 
-    box-shadow: 0 0 0px rgba(0,0,0,0.1);
-}
-
-/* Styles for the delete button */
-.delete-intake-btn {
-    color: #E74C3C;
-}
-
-.delete-intake-btn:hover {
-    background-color: #FDEDEC;
-}
-
-/* Styles for the edit button */
-.edit-intake-btn {
-    color: #3498DB;
-}
-
-.edit-intake-btn:hover {
-    background-color: #EBF5FB;
-}
-
-/* Icon styles */
-.gg-trash, .gg-pen {
-    display: block;
-    width: 24px;
-    height: 24px;
-}
-
-/* Styles for the Edit Modal */
-.edit-modal {
-    background-color: whitesmoke; 
-    border: 5px outset #000000; 
-    border-radius: 10px; 
-    padding: 20px; 
-    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);    
-    display: none; 
-    position: fixed; 
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%); 
-    width: auto; 
-    max-width: 90%; 
-    z-index: 1000; 
-}
-
-.edit-modal h3 {
-    margin: 0; 
-    padding-bottom: 10px; 
-    border-bottom: 1px solid #ccc; 
-    font-size: 20px; 
-    font-weight: bold;
-    color: #000;
-}
-
-/* Styles for the Edit and Close Buttons */
-.edit-btn, .close-edit-btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 15px;
-    transition: box-shadow 0.3s ease, transform 0.2s ease;
-    font-size: 16px;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.edit-btn {
-    background-color: #ffab40; /* Orange button */
-}
-
-.edit-btn:hover {
-    background-color: #ffab40bf; /* Lighter orange on hover */
-}
-/* Close Button Styling */
-.close-edit-btn {
-    position: absolute; /* Positioning the button absolutely within the modal */
-    top: 10px; /* Setting top margin to align within modal padding */
-    right: 20px; /* Setting right margin to align within modal padding */
-    padding: 8px 15px; /* Adjusting padding to better fit the modal's style */
-    background-color: #DC3545; /* Red button for closing */
-    color: white; /* Text color */
-    font-size: 16px; /* Adjusting font size for better visibility */
-    border: none; /* Removing border */
-    border-radius: 15px; /* Circular button */
-    cursor: pointer; /* Cursor pointer to indicate clickable */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Adding some shadow for depth */
-}
-
-.close-edit-btn:hover {
-    background-color: darkred; /* Darker red on hover for feedback */
-}
-
-
-.close-edit-btn:hover {
-    background-color: darkred;
-    cursor: pointer;
-}
-
-/* Optional: Style Inputs Within the Modal for Consistency */
-.edit-modal input[type="text"],
-.edit-modal input[type="number"],
-.edit-modal input[type="datetime-local"] {
-    width: 100%; /* Full-width inputs */
-    padding: 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-#water-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 500px;
-}
-
-.labelAT {
-    margin-bottom: 5px;
-    font-size: 18px;
-    color: #2b2b2b; 
-    text-align: left;
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    display: block;
-}
-
-.form-input {
-    width: 500px;
-    padding: 15px;
-;
-    border: 2;
-    padding: 10px;
-    border: 2px solid #569bd5;
-    border-radius: 10px;
-    font-size: 16px;
-    width: calc(100% - 25px);
-    background-color: transparent;
-}
-
-.form-input:focus {
-    border-color: #569bd5;
-    background-color: #ffffff;
-}
-
-#waterBtn-row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 10px;
-}
-
-.form-button {
-    height: 45px;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    background-color: #569bd5;
-    width: 48%;
-    border-radius: 15px;
-    margin-top: 8px;
-    margin-bottom: 15px;
-}
-
-.form-button:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    transform: translateY(-1px);
-    text-decoration: none;
-    opacity: 0.8;
-}
-
-
-
-#water-history ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-#water-history li {
-    padding: 10px;
-    margin-bottom: 5px;
-    background-color: #e6f7ff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
+ .header-row {
+     width: 100%;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 10px;
+ }
+
+ #mealTracker {
+     width: 70em;
+     margin: auto;
+     padding: 20px;
+     border: 2px solid #99d9de;
+     border-radius: 10px;
+     position: relative;
+     top: 150px;
+     display: flex;
+     justify-content: space-evenly;
+     flex-direction: column;
+     align-items: center;
+ }
+
+
+
+ /*Style for all button in html*/
+ button {
+     padding: 12px 24px;
+     border: none;
+     border-radius: 15px;
+     transition: box-shadow 0.3s ease, transform 0.2s ease;
+     font-size: 16px;
+     color: white;
+     cursor: pointer;
+     text-align: center;
+     display: inline-block;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+
+ .button-row {
+     display: flex;
+     gap: 10px;
+ }
+
+ button:hover {
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+     transform: translateY(-2px);
+     text-decoration: none;
+ }
+
+ #IntakeMealButton {
+     background-color: #91c789;
+ }
+
+ #IntakeMealButton:hover {
+     background-color: #62885d;
+ }
+
+ #IntakeIngredientButton {
+     background-color: #ffab40;
+ }
+
+ #IntakeIngredientButton:hover {
+     background-color: #ffab90;
+ }
+
+ #waterButton {
+     background-color: #569bd5;
+ }
+
+ #waterButton:hover {
+     background-color: #0c5692;
+ }
+
+ /*This the whole table*/
+ .meal-table {
+     margin-top: 15px;
+ }
+
+ .meal-header {
+     padding: 8px;
+     border-radius: 10px;
+     font-size: 18px;
+     color: #333;
+     margin-bottom: 10px;
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+     width: 50em;
+ }
+
+ .intake-entry {
+     padding: 8px;
+     background-color: #def6d8;
+     border-radius: 10px;
+     font-size: 18px;
+     color: #333;
+     margin-bottom: 10px;
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+ }
+
+ .intake-entry span,
+ .meal-header span {
+     text-align: center;
+     width: 30%;
+
+ }
+
+ .intake-entry span {
+     width: 30%;
+     height: 30%;
+     text-align: center;
+
+ }
+
+ .intake-entry2 {
+     padding: 8px;
+     background-color: #def6d8;
+     border-radius: 10px;
+     font-size: 18px;
+     color: #333;
+     margin-bottom: 10px;
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+ }
+
+ .intake-entry2 span,
+ .meal-header span {
+     text-align: center;
+     width: 30%;
+
+ }
+
+ .intake-entry2 span {
+     width: 30%;
+     height: 30%;
+     text-align: center;
+
+ }
+
+
+ /*Styles for meal intake form*/
+ #IntakeMealForm {
+     opacity: 1;
+     transition: opacity 0.3s ease;
+ }
+
+ /* Styles for the labels within the form */
+ #IntakeMealForm label {
+     font-size: 18px;
+     font-weight: bold;
+     display: block;
+     margin-bottom: 5px;
+ }
+
+
+
+ #mealSelection {
+     width: 100%;
+     padding: 10px;
+     border: 2px solid #91c789;
+     border-radius: 10px;
+     font-size: 16px;
+     margin-bottom: 20px;
+     background-color: white;
+     margin-bottom: 35px;
+
+ }
+
+ /* Styles input fields within the form */
+ #IntakeMealForm input[type="number"],
+ #IntakeMealForm input[type="datetime-local"] {
+     padding: 10px;
+     border: 2px solid #91c789;
+     border-radius: 10px;
+     font-size: 16px;
+     width: calc(100% - 24px);
+     margin-bottom: 20px;
+     background-color: white;
+     margin-bottom: 35px;/
+ }
+
+ #mealIntakeType {
+     width: 100%;
+     padding: 10px;
+     border: 2px solid #91c789;
+     border-radius: 5px;
+     font-size: 16px;
+     margin-bottom: 20px;
+     background-color: white;
+     margin-bottom: 35px;
+ }
+
+ /* Focus state for inputs to highlight active element and change background */
+ #IntakeMealForm select:focus,
+ #IntakeMealForm input[type="number"]:focus,
+ #IntakeMealForm input[type="datetime-local"]:focus {
+     border-color: #569BD5;
+     background-color: #ffffff;
+
+ }
+
+ /* Styles for the button within the form */
+ #intakeDateTimeButton {
+     background-color: #24a0ed;
+     padding: 10px 20px;
+     border: none;
+     border-radius: 10px;
+     cursor: pointer;
+     margin-bottom: 10px;
+     font-size: 12px;
+ }
+
+ #intakeDateTimeButton:hover {
+     background-color: #1e86c7;
+ }
+
+ #submitIntakeMeal {
+     background-color: #f29A8A;
+     padding: 10px 20px;
+     border: none;
+     color: white;
+     border-radius: 5px;
+     cursor: pointer;
+     font-size: 16px;
+     margin-bottom: 10px;
+ }
+
+ #submitIntakeMeal:hover {
+     background-color: #db8a7c;
+ }
+
+ /* Styles indgredients form  */
+ #IntakeIngredientForm label {
+     font-size: 18px;
+     font-weight: bold;
+     display: block;
+     margin-bottom: 5px;
+ }
+
+
+ #IntakeIngredientForm input[type="number"],
+ #IntakeIngredientForm input[type="datetime-local"] {
+     padding: 10px;
+     border: 2px solid #91c789;
+     border-radius: 10px;
+     font-size: 16px;
+     width: calc(100% - 24px);
+     background-color: white;
+     margin-bottom: 35px;
+ }
+
+ #ingredientInput {
+     width: 20em;
+     padding: 10px;
+     border: 2px solid #91c789;
+     border-radius: 10px;
+     font-size: 16px;
+     margin-bottom: 20px;
+     background-color: white;
+     margin-bottom: 35px;
+ }
+
+ #ingredientDropdown-label {
+     font-size: 18px;
+     font-weight: bold;
+
+ }
+
+ /* Styles for the ingredient dropdown */
+ #ingredientDropdown {
+     padding: 10px;
+     border: 2px solid #91c789;
+     border-radius: 5px;
+     font-size: 16px;
+     background-color: #F2FFF5;
+     width: 20em;
+     display: none;
+     /* initially hidden */
+ }
+
+ #IntakeIngredientForm select:focus,
+ #IntakeIngredientForm input[type="number"]:focus {
+     border-color: #569BD5;
+     box-shadow: 0 0 8px #569BD5;
+     background-color: #F2FFF5;
+ }
+
+ #ingredientIntakeDateTimeButton {
+     background-color: #24a0ed;
+     padding: 10px 20px;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     font-size: 12px;
+     margin-bottom: 10px;
+ }
+
+ #ingredientIntakeDateTimeButton:hover {
+     background-color: #1e86c7;
+ }
+
+ #submitIngredientIntakeMeal {
+     background-color: #f29A8A;
+     padding: 10px 20px;
+     border: none;
+     color: white;
+     border-radius: 5px;
+     cursor: pointer;
+     font-size: 16px;
+     margin-bottom: 10px;
+ }
+
+ #submitIngredientIntakeMeal:hover {
+     background-color: #db8a7c;
+ }
+
+ /* Styles for the delete and edit buttons */
+ /* Container for buttons */
+ .intake-buttons-container {
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+     margin-bottom: 10px;
+ }
+
+ /* General button styles */
+ .delete-intake-btn,
+ .edit-intake-btn {
+     border: none;
+     background-color: transparent;
+     cursor: pointer;
+     padding: 8px;
+     border-radius: 5px;
+     transition: background-color 0.3s;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 40px;
+     height: 40px;
+     margin: 0 10px;
+     box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+ }
+
+ /* Styles for the delete button */
+ .delete-intake-btn {
+     color: #E74C3C;
+ }
+
+ .delete-intake-btn:hover {
+     background-color: #FDEDEC;
+ }
+
+ /* Styles for the edit button */
+ .edit-intake-btn {
+     color: #3498DB;
+ }
+
+ .edit-intake-btn:hover {
+     background-color: #EBF5FB;
+ }
+
+ /* Icon styles */
+ .gg-trash,
+ .gg-pen {
+     display: block;
+     width: 24px;
+     height: 24px;
+ }
+
+ /* Styles for the Edit Modal */
+ .edit-modal {
+     background-color: whitesmoke;
+     border: 5px outset #000000;
+     border-radius: 10px;
+     padding: 20px;
+     box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+     display: none;
+     position: fixed;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     width: auto;
+     max-width: 90%;
+     z-index: 1000;
+ }
+
+ .edit-modal h3 {
+     margin: 0;
+     padding-bottom: 10px;
+     border-bottom: 1px solid #ccc;
+     font-size: 20px;
+     font-weight: bold;
+     color: #000;
+ }
+
+ /* Styles for the Edit and Close Buttons */
+ .edit-btn,
+ .close-edit-btn {
+     padding: 12px 24px;
+     border: none;
+     border-radius: 15px;
+     transition: box-shadow 0.3s ease, transform 0.2s ease;
+     font-size: 16px;
+     color: white;
+     cursor: pointer;
+     text-align: center;
+     display: inline-block;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+
+ .edit-btn {
+     background-color: #ffab40;
+     /* Orange button */
+ }
+
+ .edit-btn:hover {
+     background-color: #ffab40bf;
+     /* Lighter orange on hover */
+ }
+
+ /* Close Button Styling */
+ .close-edit-btn {
+     position: absolute;
+     top: 10px;
+     right: 20px;
+     padding: 8px 15px;
+     background-color: #DC3545;
+     color: white;
+     font-size: 16px;
+     border: none;
+     border-radius: 15px;
+     cursor: pointer;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+ }
+
+ .close-edit-btn:hover {
+     background-color: darkred;
+ }
+
+
+ .close-edit-btn:hover {
+     background-color: darkred;
+     cursor: pointer;
+ }
+
+ .edit-modal input[type="text"],
+ .edit-modal input[type="number"],
+ .edit-modal input[type="datetime-local"] {
+     width: 100%;
+     padding: 10px;
+     margin: 8px 0;
+     display: inline-block;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-sizing: border-box;
+ }
+
+ #water-form {
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     width: 500px;
+ }
+
+ .labelAT {
+     margin-bottom: 5px;
+     font-size: 18px;
+     color: #2b2b2b;
+     text-align: left;
+     margin-top: 20px;
+     font-size: 18px;
+     font-weight: bold;
+     display: block;
+ }
+
+ .form-input {
+     width: 500px;
+     padding: 15px;
+     ;
+     border: 2;
+     padding: 10px;
+     border: 2px solid #569bd5;
+     border-radius: 10px;
+     font-size: 16px;
+     width: calc(100% - 25px);
+     background-color: transparent;
+ }
+
+ .form-input:focus {
+     border-color: #569bd5;
+     background-color: #ffffff;
+ }
+
+ #waterBtn-row {
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+     gap: 10px;
+ }
+
+ .form-button {
+     height: 45px;
+     color: white;
+     cursor: pointer;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     background-color: #569bd5;
+     width: 48%;
+     border-radius: 15px;
+     margin-top: 8px;
+     margin-bottom: 15px;
+ }
+
+ .form-button:hover {
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+     transform: translateY(-1px);
+     text-decoration: none;
+     opacity: 0.8;
+ }
+
+
+
+ #water-history ul {
+     list-style-type: none;
+     padding-left: 0;
+ }
+
+ #water-history li {
+     padding: 10px;
+     margin-bottom: 5px;
+     background-color: #e6f7ff;
+     border: 1px solid #ddd;
+     border-radius: 4px;
+ }

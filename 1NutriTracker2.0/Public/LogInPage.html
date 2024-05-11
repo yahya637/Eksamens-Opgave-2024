@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 sessionStorage.setItem('userId', data.user_id); 
                 sessionStorage.setItem('username', data.username); 
                 alert(`Login successful! Welcome ${data.username}`);
-                window.location.href = "../MyProfile.html"; // Omdiriger brugeren
+                window.location.href = "../MyProfile.html"; // redrict user
             } else {
                 alert('Login failed: ' + data.message);
             }
