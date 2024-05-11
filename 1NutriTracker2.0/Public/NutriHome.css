@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
-body{
+body {
     font-family: 'Nunito', sans-serif;
     background-color: whitesmoke;
     margin: 0;
@@ -10,19 +10,19 @@ body{
 
 .hjem {
     display: flex;
-    justify-content: right; /* Center the children elements (logo and navbar) */
-    padding: 20px 2%; /* Adjusted padding and set 2% to indirectly set width to 96% */
+    justify-content: right;
+    padding: 20px 2%;
     background-color: #DEF6D8;
     position: fixed;
     top: 0;
     left: 0;
-    right: 0; /* Ensures the header extends to the right edge */
+    right: 0;
     z-index: 100;
 }
 
 .logo {
-    position: absolute; /* Absolute positioning to place the logo */
-    left: 40px; /* Space from the left edge */
+    position: absolute;
+    left: 40px;
     color: #91c789;
     font-size: 30px;
     font-weight: 700;
@@ -36,15 +36,15 @@ body{
     color: #000;
     font-size: 20px;
     font-weight: 700;
-    padding: 0 60px; /* Provides space between the links */
+    padding: 0 60px;
     transition: all 0.3s ease;
-    
+
 }
 
 
 nav a:hover {
     color: #76b66c;
-    text-shadow: darkgreen   0px 0px 1px;
+    text-shadow: darkgreen 0px 0px 1px;
 }
 
 
@@ -77,29 +77,29 @@ p {
     text-decoration: underline;
 }
 
-/* Container to hold both buttons */
+
 .button-container {
     display: flex;
-    justify-content: center; /* Align buttons horizontally to the center */
-    margin-top: 20px; /* Spacing from the text above */
+    justify-content: center;
+    margin-top: 20px;
 }
 
-/* Styles for both buttons */
+
 .main-button {
     display: inline-block;
-    padding: 15px 30px; /* Size of the buttons */
-    margin: 0 10px; /* Spacing between the buttons */
-    background-color: #91c789; /* Primary green color */
-    color: white; /* Text color */
-    text-decoration: none; /* Removes underline from links */
-    font-size: 18px; /* Size of the text */
-    font-weight: bold; /* Makes the text bold */
-    border-radius: 4px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth background color transition */
-    box-shadow: 0px 4px 6px rgba(0,0,0,0.1); /* Adds shadow for depth */
+    padding: 15px 30px;
+    margin: 0 10px;
+    background-color: #91c789;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Hover effect for buttons */
+
 .main-button:hover {
-    background-color: #80a672; /* A darker shade of green for hover effect */
+    background-color: #80a672;
 }

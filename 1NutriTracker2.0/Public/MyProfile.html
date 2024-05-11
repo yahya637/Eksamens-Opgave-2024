@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <script src="auth.js"></script>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,185 +24,177 @@
 
 <body>
 
- 
 
 
-<div>
-  <div id="nutriHome">
-      <div class="lo">
-          <h1>My Profile</h1>
-          <p>Manage your profile information and settings.</p>
-          <p id="welcomeMessage"></p>
+
+    <div>
+        <div id="nutriHome">
+            <div class="lo">
+                <h1>My Profile</h1>
+                <p>Manage your profile information and settings.</p>
+                <p id="welcomeMessage"></p>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="homeButtons">
-    <form>
-        <button type="button" id="manageProfileButton">Manage profile</button>
-        <button type="button" id="deleteProfileButton">Delete Profile</button>
-    </form>
-</div>
+    <div id="homeButtons">
+        <form>
+            <button type="button" id="manageProfileButton">Manage profile</button>
+            <button type="button" id="deleteProfileButton">Delete Profile</button>
+        </form>
+    </div>
 
-<!-- Profile form -->
-<div id="profileForm" style="display: none;">
-    <form>
-    <label id="emailID">Email:</label>
-    <input type="text" id="emailInput" placeholder="Change Email" name="emailNameS">
-    
-    <label for="birthdate">Birthdate:</label>
-    <input type="date" id="birthdate" name="birthdate">
-    
-    <label for="gender">Gender:</label>
-    <select id="gender" name="gender">
-    <option value="" disabled selected>Choose a gender</option>
-    <option value="Man">Man</option>
-    <option value="Woman">Woman</option>
-    <option value="Other">Other</option>
-    </select>
-    <label for="'weight">Weight:</label>
-    <input type="number" id="weight" placeholder="Weight in kg" name="weight">
-    
-    <button id="confirmButton" type="button">Confirm</button>
-    </form>
-</div>
+    <div id="profileForm" style="display: none;">
+        <form>
+            <label id="emailID">Email:</label>
+            <input type="text" id="emailInput" placeholder="Change Email" name="emailNameS">
 
-<script>
+            <label for="birthdate">Birthdate:</label>
+            <input type="date" id="birthdate" name="birthdate">
 
-document.addEventListener('DOMContentLoaded', function() {
-    const logoutButton = document.getElementById('logoutButton');
-    logoutButton.addEventListener('click', function() {
-        confirmLogout();
-    });
-});
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="" disabled selected>Choose a gender</option>
+                <option value="Man">Man</option>
+                <option value="Woman">Woman</option>
+                <option value="Other">Other</option>
+            </select>
+            <label for="'weight">Weight:</label>
+            <input type="number" id="weight" placeholder="Weight in kg" name="weight">
 
-function confirmLogout() {
-    // Display confirmation dialog
-    if (confirm('Are you sure you want to log out?')) {
-        logoutUser();
-    }
-}
+            <button id="confirmButton" type="button">Confirm</button>
+        </form>
+    </div>
 
-function logoutUser() {
-    // Clear specific sessionStorage item
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('username');
+    <script>
 
-    // Optionally clear all session storage
-    // sessionStorage.clear();
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutButton = document.getElementById('logoutButton');
+            logoutButton.addEventListener('click', function () {
+                confirmLogout();
+            });
+        });
 
-    // Redirect to login page
-    window.location.href = '/NutriHome.html';
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    displayWelcomeMessage();
-
-    const profileForm = document.getElementById('profileForm');
-    const profileButton = document.getElementById('manageProfileButton');
-    const deleteButton = document.getElementById('deleteProfileButton');
-
-    profileButton.addEventListener('click', hideAndShowForm);
-    deleteButton.addEventListener('click', deleteProfile);
-    updateProfile();
-
-    function displayWelcomeMessage() {
-        const welcomeMessage = document.getElementById('welcomeMessage');
-        const username = sessionStorage.getItem('username');
-        if (username) {
-            welcomeMessage.textContent = `Welcome, ${username}!`;
-        }
-    }
-    function hideAndShowForm() {
-        profileForm.style.display = (profileForm.style.display === 'none' ? 'block' : 'none');
-    }
-
-    async function updateProfile() {
-    const confirmButton = document.getElementById('confirmButton');
-    confirmButton.addEventListener('click', async () => {
-        const emailInput = document.getElementById('emailInput');
-        const birthdateInput = document.getElementById('birthdate');
-        const genderInput = document.getElementById('gender');
-        const weightInput = document.getElementById('weight');
-
-        const updatedUserData = {
-            email: emailInput.value,
-            birthdate: birthdateInput.value,
-            gender: genderInput.value,
-            weight: parseFloat(weightInput.value)
-        };
-
-        const userId = sessionStorage.getItem('userId');
-
-        try {
-            const response = await updateUser(userId, updatedUserData);
-            if (response) {  // Check response for successful update
-                console.log('Profile updated:', response);
-                alert('Profile updated successfully');
-                displayWelcomeMessage();
-                
+        function confirmLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                logoutUser();
             }
-        } catch (error) {
-            console.error('Failed to update profile:', error);
-            alert('Failed to update profile: ' + error.message);
-        } finally {
-            // Nulstil formularfelterne
-            emailInput.value = '';
-            birthdateInput.value = '';
-            genderInput.value = '';
-            weightInput.value = '';
         }
-    });
-}
 
-async function updateUser(id, userData) {
-    const response = await fetch(`/users/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-    });
+        function logoutUser() {
+            sessionStorage.removeItem('userId');
+            sessionStorage.removeItem('username');
+            window.location.href = '/NutriHome.html';
+        }
 
-    console.log(response.status, response.statusText);  // Log status code and status text
-    console.log(await response.text());  // Log response body
+        document.addEventListener('DOMContentLoaded', function () {
+            displayWelcomeMessage();
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error('Failed to update user profile: ' + errorData.message);
-    }
-}
+            const profileForm = document.getElementById('profileForm');
+            const profileButton = document.getElementById('manageProfileButton');
+            const deleteButton = document.getElementById('deleteProfileButton');
 
-function deleteProfile() {
-    const userId = sessionStorage.getItem('userId');
-    if (!userId) {
-        alert('User not logged in');
-        return;
-    }
+            profileButton.addEventListener('click', hideAndShowForm);
+            deleteButton.addEventListener('click', deleteProfile);
+            updateProfile();
 
-    if (confirm('Are you sure you want to delete your profile?')) {
-        fetch(`/users/${userId}`, { method: 'DELETE' })
-        .then(response => {
-            if (response.ok) {
-                alert('Profile deleted successfully');
-                sessionStorage.removeItem('userId');
-                window.location.href = "/NutriHome.html";
-            } else {
-                response.json().then(data => {
-                    throw new Error(data.message);
+            function displayWelcomeMessage() {
+                const welcomeMessage = document.getElementById('welcomeMessage');
+                const username = sessionStorage.getItem('username');
+                if (username) {
+                    welcomeMessage.textContent = `Welcome, ${username}!`;
+                }
+            }
+            function hideAndShowForm() {
+                profileForm.style.display = (profileForm.style.display === 'none' ? 'block' : 'none');
+            }
+
+            async function updateProfile() {
+                const confirmButton = document.getElementById('confirmButton');
+                confirmButton.addEventListener('click', async () => {
+                    const emailInput = document.getElementById('emailInput');
+                    const birthdateInput = document.getElementById('birthdate');
+                    const genderInput = document.getElementById('gender');
+                    const weightInput = document.getElementById('weight');
+
+                    const updatedUserData = {
+                        email: emailInput.value,
+                        birthdate: birthdateInput.value,
+                        gender: genderInput.value,
+                        weight: parseFloat(weightInput.value)
+                    };
+
+                    const userId = sessionStorage.getItem('userId');
+
+                    try {
+                        const response = await updateUser(userId, updatedUserData);
+                        if (response) {
+                            console.log('Profile updated:', response);
+                            alert('Profile updated successfully');
+                            displayWelcomeMessage();
+
+                        }
+                    } catch (error) {
+                        console.error('Failed to update profile:', error);
+                        alert('Failed to update profile: ' + error.message);
+                    } finally {
+                        emailInput.value = '';
+                        birthdateInput.value = '';
+                        genderInput.value = '';
+                        weightInput.value = '';
+                    }
                 });
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to delete profile: ' + error.message);
+
+            async function updateUser(id, userData) {
+                const response = await fetch(`/users/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+
+                console.log(response.status, response.statusText);
+                console.log(await response.text());
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error('Failed to update user profile: ' + errorData.message);
+                }
+            }
+
+            function deleteProfile() {
+                const userId = sessionStorage.getItem('userId');
+                if (!userId) {
+                    alert('User not logged in');
+                    return;
+                }
+
+                if (confirm('Are you sure you want to delete your profile?')) {
+                    fetch(`/users/${userId}`, { method: 'DELETE' })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('Profile deleted successfully');
+                                sessionStorage.removeItem('userId');
+                                window.location.href = "/NutriHome.html";
+                            } else {
+                                response.json().then(data => {
+                                    throw new Error(data.message);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Failed to delete profile: ' + error.message);
+                        });
+                }
+            }
+
+
         });
-    }
-}
 
-
-});
-  
-  </script>
+    </script>
 
 
 </body>
+
 </html>
