@@ -556,7 +556,7 @@ VALUES (@userId, @mealId, @mealName, @consumedWeight, @consumedEnergy, @consumed
         sqlQuery += " AND meal_Id = @mealId";
       }
 
-      sqlQuery += " ORDER BY timeAdded DESC";
+      sqlQuery += " ORDER BY consumed_Id DESC";
 
       const result = await request.query(sqlQuery);
       return result.recordset;
@@ -565,6 +565,7 @@ VALUES (@userId, @mealId, @mealName, @consumedWeight, @consumedEnergy, @consumed
       throw new Error("Error fetching intake by user ID from database");
     }
   }
+  
 
   // DELETE INTAKE BY ConsumedID
   async deleteIntakeByConsumedId(consumedId) {

@@ -25,32 +25,28 @@ fetchAllData();
 
 
 function processDataHourly(data) {
-    const currentHour = new Date().getHours(); // .getHours() returns the current hour
-    const hourlySummary = Array.from({ length: 24 }, (_, index) => {
-        const hourIndex = (currentHour + index) % 24; 
-        return {
-            time: `${hourIndex}:00 - ${(hourIndex + 1) % 24}:00`, 
-            consumedEnergy: 0,
-            caloriesBurned: 0,
-            calorieSurplusDeficit: 0,
-            totalMeals: 0
-        };
-    });
-
-    data.consumedData.forEach(entry => {
-        const date = new Date(entry.TimeAdded);
-        const hour = date.getUTCHours(); // Using UTC hour to avoid timezone issues
-        hourlySummary.find(h => h.time.startsWith(`${hour}:00`)).consumedEnergy += (entry.ConsumedEnergy || 0);
-        hourlySummary.find(h => h.time.startsWith(`${hour}:00`)).totalMeals += 1;
-    });
+    const hourlySummary = Array.from({ length: 24 }, (_, index) => ({
+        time: `${index}:00 - ${(index + 1) % 24}:00`, 
+        consumedEnergy: 0,
+        caloriesBurned: 0,
+        calorieSurplusDeficit: 0,
+        totalMeals: 0
+    }));
 
     const dailyBMR = data.bmrData[0].BmrKcal;
     const hourlyBMR = dailyBMR / 24;
 
+    data.consumedData.forEach(entry => {
+        const date = new Date(entry.TimeAdded);
+        const hour = date.getUTCHours(); 
+        hourlySummary[hour].consumedEnergy += (entry.ConsumedEnergy || 0);
+        hourlySummary[hour].totalMeals += 1;
+    });
+
     data.activitiesData.forEach(entry => {
         const date = new Date(entry.TimeAdded);
         const hour = date.getUTCHours();
-        hourlySummary.find(h => h.time.startsWith(`${hour}:00`)).caloriesBurned += (entry.TotalKcalBurned + hourlyBMR);
+        hourlySummary[hour].caloriesBurned += (entry.TotalKcalBurned + hourlyBMR);
     });
 
     hourlySummary.forEach(entry => {
@@ -59,6 +55,7 @@ function processDataHourly(data) {
 
     return hourlySummary;
 }
+
 
 // Function to update the table with hourly data
 function updateTableWithHourlyData(hourlySummary) {
