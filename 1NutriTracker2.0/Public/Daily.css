@@ -244,6 +244,8 @@ button:hover{
 }
 
 /** Table Styling Daily**/
+
+
 #mealDetailsTableDaily {
    width: 60em;
    border-collapse: collapse;
@@ -258,9 +260,8 @@ button:hover{
 #mealDetailsTableDaily th, #mealDetailsTableDaily td {
    text-align: center;
    padding: 10px;
-   border: 2px solid #DEF6D8;
+   border: 2px solid #adc9a6;
 }
-
 
 #mealDetailsTableDaily th {
    border: none;

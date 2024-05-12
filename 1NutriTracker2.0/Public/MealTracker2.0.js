@@ -197,16 +197,13 @@ function displayMealIntakes(mealIntakes) {
     intakeEntriesContainer.innerHTML = ''; 
 
     mealIntakes.forEach((intake) => {
-        let formattedDate = 'N/A'; // Default value if date is not available
+        let formattedDate = 'N/A';
         let formattedTime = 'N/A'; 
 
-        // Check if dateAdded is not null before processing
         if (intake.dateAdded) {
             const dateParts = intake.dateAdded.split('T')[0].split('-');
             formattedDate = `${dateParts[1]}-${dateParts[2]}-${dateParts[0].slice(2)}`;
         }
-
-        // Check if timeAdded is not null before processing
         if (intake.timeAdded) {
             const timeParts = intake.timeAdded.split('T')[1].split('.')[0].split(':');
             formattedTime = timeParts.join(':');
