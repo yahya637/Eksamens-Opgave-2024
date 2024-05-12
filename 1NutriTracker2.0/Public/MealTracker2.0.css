@@ -204,7 +204,6 @@
 
  }
 
- /* Styles input fields within the form */
  #IntakeMealForm input[type="number"],
  #IntakeMealForm input[type="datetime-local"] {
      padding: 10px;
