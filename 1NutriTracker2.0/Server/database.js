@@ -188,6 +188,9 @@ export default class Database {
       await request.query(
         "DELETE FROM Nutri.BmrCalculations WHERE user_id = @user_id"
       );
+      await request.query(
+        "DELETE FROM Nutri.WaterIntake WHERE user_id = @user_id"
+      );
       await request.query(`DELETE FROM Nutri.Users WHERE user_id = @user_id;`);
 
       await transaction.commit();
