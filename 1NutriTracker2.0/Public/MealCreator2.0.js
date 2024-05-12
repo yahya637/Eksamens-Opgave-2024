@@ -396,7 +396,6 @@ function displayMealDetails(ingredients, mealId, mealName) {
     // Find existing title or create a new one
     let titleDiv = detailsDiv.querySelector('h3');
     if (titleDiv) {
-        // Update the title for the current meal
         titleDiv.textContent = `Meal Details for: ${mealName} (ID: ${mealId})`;
     } else {
         // Create and insert a new title if it doesn't exist
@@ -433,7 +432,7 @@ document.getElementById('closeDetailsBtn').addEventListener('click', () => {
     detailsDiv.removeAttribute('data-current-meal'); 
 });
 
-//Krav D
+//Krav e
 // An Event listener for the showcaseIngredients button
 document.getElementById('showcaseIngredientsButton').addEventListener('click', async () => {
     document.getElementById('ingredientsInfo').style.display = 'block'; 

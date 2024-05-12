@@ -9,13 +9,13 @@ describe('User Creation', function() {
     describe('POST /users/signuppage', function() {
         it('should create a new user if the user does not already exist', async function() {
             const newUser = {
-                username: 'Hej2',
-                email: 'hej@gmail.com2',
+                username: 'TestTesting',
+                email: 'Test@tmail.dk',
                 password: 'password',
-                fullName: 'Test User',
-                birthdate: '1900-01-01',
+                fullName: 'Test Testsen',
+                birthdate: '2003-12-12',
                 gender: 'Male',
-                weight: 75
+                weight: 105
             };
 
             const res = await chai.request(server)
