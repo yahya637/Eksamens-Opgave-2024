@@ -177,7 +177,7 @@ export default class Database {
 
       // Delete first from tables that refer to Users
       await request.query(
-        `DELETE FROM Nutri.consumedMeal WHERE meal_id IN (SELECT MealId FROM Nutri.Mealcreator WHERE User_id = @user_id);`
+        `DELETE FROM Nutri.consumedMeal WHERE user_id = @user_id;`
       );
       await request.query(
         `DELETE FROM Nutri.Mealcreator WHERE User_id = @user_id;`
