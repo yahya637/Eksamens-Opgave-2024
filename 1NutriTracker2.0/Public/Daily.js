@@ -114,7 +114,7 @@ async function fetchAllData30Days() {
 fetchAllData30Days();
 
 function parseConsumedDate(dateStr) {               // .split('-') splits the string into an array of strings
-    const [month, day, year] = dateStr.split('-').map(Number); // then .map(Number) converts the strings to numbers
+    const [day, month, year] = dateStr.split('-').map(Number); // then .map(Number) converts the strings to numbers
     return new Date(Date.UTC(year, month - 1, day));
 }
 

@@ -111,8 +111,7 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
     const currentDate = new Date();
     const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
     const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
-    const year = currentDate.getFullYear().toString().slice(-2); // Take the last two digits of the year
-
+    const year = currentDate.getFullYear()
     // Calculate the consumed nutrients based on the selected meal's nutrients and consumed weight
     const consumedEnergy = ((mealNutrients.energy / selectedMealWeight) * weightConsumed).toFixed(2);
     const consumedProtein = ((mealNutrients.protein / selectedMealWeight) * weightConsumed).toFixed(2);
@@ -133,7 +132,7 @@ function calculateIntakeDetails(selectedOption, weightConsumed) {
         consumedProtein,
         consumedFat,
         consumedFiber,
-        dateAdded: `${day}/${month}/${year}`,
+        dateAdded: `${year}/${month}/${day}`,
         timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
     };
 }
@@ -363,7 +362,7 @@ async function processIngredientForm() {
             const currentDate = new Date();
             const day = ('0' + currentDate.getDate()).slice(-2); 
             const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); 
-            const year = currentDate.getFullYear().toString().slice(-2); 
+            const year = currentDate.getFullYear();
 
             const intakeIngredient = {
                 ingredientCounter,
@@ -373,7 +372,7 @@ async function processIngredientForm() {
                 consumedProtein: proteinIntake.toFixed(2),
                 consumedFat: fatIntake.toFixed(2),
                 consumedFiber: fiberIntake.toFixed(2),
-                dateAdded: `${day}/${month}/${year}`,
+                dateAdded: `${year}/${month}/${day}`,
                 timeAdded: new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
                 location: `Latitude: ${latitude}, Longitude: ${longitude}`,
 
